@@ -15,7 +15,10 @@
             --drawer-w: 280px;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent;
+        }
         
         body {
             margin: 0; background-color: var(--bg);
@@ -24,24 +27,19 @@
             color: white; overflow: hidden;
         }
 
-        /* --- SIDEBARS --- */
-        #sidebar, #right-menu {
-            position: fixed; top: 0; height: 100dvh;
-            background: var(--ai-bubble); border-color: var(--accent);
+        /* --- SIDEBAR --- */
+        #sidebar {
+            position: fixed;
+            top: 0; left: calc(-1 * var(--drawer-w) - 20px); 
+            width: var(--drawer-w); height: 100dvh;
+            background: var(--ai-bubble);
+            border-right: 1px solid var(--accent);
+            transition: left 0.4s cubic-bezier(0.77, 0, 0.175, 1), visibility 0.4s;
             z-index: 2000; padding: 80px 20px;
             display: flex; flex-direction: column; gap: 15px;
-            transition: all 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+            visibility: hidden;
         }
-
-        #sidebar { left: calc(-1 * var(--drawer-w) - 20px); border-right: 1px solid var(--accent); width: var(--drawer-w); }
-        .menu-open #sidebar { left: 0; }
-
-        #right-menu { 
-            right: 0; width: 0; opacity: 0; overflow: hidden; 
-            border-left: 0 solid var(--accent); padding: 80px 0;
-            transform: scaleX(0); transform-origin: right;
-        }
-        .right-open #right-menu { width: var(--drawer-w); opacity: 1; padding: 80px 20px; border-left: 1px solid var(--accent); transform: scaleX(1); }
+        .menu-open #sidebar { left: 0; visibility: visible; }
 
         .menu-item {
             padding: 15px; border: 1px solid transparent;
@@ -50,85 +48,86 @@
         }
         .menu-item:hover { background: rgba(0, 255, 65, 0.1); border-color: var(--accent); }
 
-        /* --- BUTTONS --- */
-        .top-btn {
-            position: fixed; top: 20px; width: 48px; height: 48px; 
-            background: var(--ai-bubble); border: 1px solid var(--accent); 
-            border-radius: 50%; display: flex; flex-direction: column; 
-            justify-content: center; align-items: center; cursor: pointer; z-index: 3000;
+        /* --- MODAL --- */
+        #info-modal {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 90%; max-width: 400px;
+            background: rgba(26, 26, 26, 0.98);
+            border: 1px solid var(--accent);
+            padding: 30px; border-radius: 25px;
+            z-index: 4000; display: none; opacity: 0;
+            transition: 0.3s; text-align: center;
+            backdrop-filter: blur(15px);
         }
-        .menu-btn { left: 20px; gap: 5px; transition: left 0.4s; }
-        .dots-btn { right: 20px; gap: 4px; }
+        #info-modal.active { display: block; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+        /* --- MENU BUTTON --- */
+        .menu-btn {
+            position: fixed; top: 20px; left: 20px;
+            width: 48px; height: 48px; background: var(--ai-bubble);
+            border: 1px solid var(--accent); border-radius: 50%;
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; gap: 5px; cursor: pointer; z-index: 3000;
+            transition: left 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+        }
         .menu-open .menu-btn { left: calc(var(--drawer-w) - 60px); }
 
         .line { width: 20px; height: 2px; background: var(--accent); border-radius: 2px; transition: 0.3s; }
-        .dot { width: 4px; height: 4px; background: var(--accent); border-radius: 50%; }
-
-        /* --- MUSIC PLAYER UI --- */
-        #music-container {
-            margin-top: 20px; padding: 15px; background: #000;
-            border: 1px solid var(--accent); border-radius: 15px;
-            text-align: center;
-        }
-        #song-info { font-size: 0.8rem; margin-bottom: 10px; color: var(--accent); }
-        .controls { display: flex; justify-content: center; gap: 15px; align-items: center; margin-bottom: 10px; }
-        .play-btn { background: var(--accent); border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-weight: bold; }
-        .skip-btn { background: transparent; color: var(--accent); border: none; cursor: pointer; font-size: 1.2rem; }
-        
-        input[type="range"] {
-            width: 100%; accent-color: var(--accent); background: #333; height: 4px; border-radius: 2px; cursor: pointer;
-        }
+        .open .line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .open .line:nth-child(2) { opacity: 0; }
+        .open .line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
         /* --- CHAT AREA --- */
-        #main-content { flex: 1; display: flex; flex-direction: column; width: 100%; }
+        #main-content { flex: 1; display: flex; flex-direction: column; width: 100%; height: 100dvh; }
         #chat-window { flex: 1; overflow-y: auto; padding: 90px 15px 20px; display: flex; flex-direction: column; gap: 15px; }
 
         .bubble { max-width: 85%; padding: 12px 18px; font-size: 0.95rem; border-radius: 20px; word-wrap: break-word; }
         .ai { align-self: flex-start; background: var(--ai-bubble); color: var(--text-ai); border: 1px solid var(--accent); border-bottom-left-radius: 5px; }
         .user { align-self: flex-end; background: var(--user-bubble); color: var(--text-user); font-weight: 600; border-bottom-right-radius: 5px; white-space: pre-wrap; }
 
-        /* --- INPUT --- */
+        /* --- INPUT AREA --- */
         .input-container { padding: 10px 15px; padding-bottom: env(safe-area-inset-bottom, 25px); background: var(--bg); }
         .input-bubble { background: var(--ai-bubble); border: 1px solid var(--accent); border-radius: 30px; display: flex; align-items: center; padding: 5px 12px; max-width: 850px; margin: 0 auto; gap: 8px; }
-        input[type="text"] { flex: 1; background: transparent; border: none; color: white; outline: none; font-size: 16px; }
-        
-        .remove-file { background: var(--accent); border: none; border-radius: 50%; width: 16px; height: 16px; font-size: 10px; cursor: pointer; }
-        #file-list { display: flex; flex-wrap: wrap; gap: 8px; max-width: 850px; margin: 0 auto 8px; }
-        .file-chip { background: var(--ai-bubble); border: 1px solid var(--accent); color: var(--accent); font-size: 0.75rem; padding: 6px 12px; border-radius: 15px; display: flex; gap: 8px; }
+        input[type="text"] { flex: 1; background: transparent; border: none; color: white; outline: none; font-size: 16px; padding: 10px 0; }
+        .plus-btn { background: transparent; border: 1.5px solid var(--accent); color: var(--accent); width: 32px; height: 32px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; flex-shrink: 0; }
+        .send-btn { background: var(--user-bubble); border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; flex-shrink: 0; }
 
+        /* --- FILE LIST & CHIPS --- */
+        #file-list { display: flex; flex-wrap: wrap; gap: 8px; max-width: 850px; margin: 0 auto 8px; }
+        .file-chip { 
+            background: var(--ai-bubble); border: 1px solid var(--accent); 
+            color: var(--accent); font-size: 0.75rem; padding: 6px 12px; 
+            border-radius: 15px; display: flex; align-items: center; gap: 8px; 
+        }
+        .remove-file { 
+            background: var(--accent); color: #000; border: none; 
+            border-radius: 50%; width: 16px; height: 16px; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 10px; font-weight: bold; cursor: pointer;
+        }
+
+        #file-upload { display: none; }
         #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; z-index: 1500; }
-        .menu-open #overlay, .right-open #overlay { display: block; }
-        #yt-player { display: none; } /* Hidden player */
+        .menu-open #overlay { display: block; }
     </style>
 </head>
 <body id="app-body">
 
-    <div id="overlay" onclick="closeAll()"></div>
+    <div id="overlay" onclick="toggleMenu()"></div>
 
-    <!-- Right Sidebar (Profile & Music) -->
-    <nav id="right-menu">
-        <div style="text-align: center; margin-bottom: 20px;">
-            <div style="width: 60px; height: 60px; background: var(--accent); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; color: black; font-weight: bold;">?</div>
-            <div class="menu-item">Profile / Log In</div>
-        </div>
-        
-        <div id="music-container">
-            <div id="song-info">
-                <b id="track-name">Phonk Drift</b><br>
-                <span id="artist-name" style="opacity: 0.7;">Unknown Artist</span>
-            </div>
-            <div class="controls">
-                <button class="skip-btn" onclick="changeTrack(-1)">⏮</button>
-                <button class="play-btn" id="playToggle" onclick="togglePlay()">▶</button>
-                <button class="skip-btn" onclick="changeTrack(1)">⏭</button>
-            </div>
-            <input type="range" id="progress-bar" value="0" max="100">
-        </div>
-        <!-- Hidden YouTube Embed -->
-        <div id="yt-player"></div>
-    </nav>
+    <!-- Corrected System Information Modal -->
+    <div id="info-modal">
+        <h3 style="color: var(--accent); margin-top:0;">System Information</h3>
+        <p style="font-size: 0.9rem; line-height: 1.6; color: #ccc;">
+            This AI was developed by <b>VLAD</b>.<br><br>
+            Our systems are currently undergoing maintenance and performance upgrades over the coming months. 
+        </p>
+        <a href="https://www.instagram.com/youngvladd" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: bold;">Contact Developer</a>
+        <br><br>
+        <button onclick="toggleModal()" style="background: var(--accent); border:none; padding:10px 20px; border-radius:20px; font-weight:bold;">Close</button>
+    </div>
 
-    <!-- Left Sidebar -->
     <nav id="sidebar">
         <h2 style="color: var(--accent); font-size: 1rem; border-bottom: 1px solid var(--accent); padding-bottom: 10px; margin-top: 0;">SONIX</h2>
         <div class="menu-item">✦ New Session</div>
@@ -136,135 +135,87 @@
         <div class="menu-item">⚙ Settings</div>
     </nav>
 
-    <!-- UI Buttons -->
-    <div class="top-btn menu-btn" onclick="toggleLeft()">
+    <div class="menu-btn" id="menuToggle" onclick="toggleMenu()">
         <div class="line"></div><div class="line"></div><div class="line"></div>
-    </div>
-
-    <div class="top-btn dots-btn" onclick="toggleRight()">
-        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
     </div>
 
     <div id="main-content">
         <div id="chat-window">
-            <div class="bubble ai">SONIX Active. Developed by VLAD. Right menu for Music & Profile.</div>
+            <div class="bubble ai">SONIX Active. Developed by VLAD. How can I help you today?</div>
         </div>
 
         <div class="input-container">
             <div id="file-list"></div>
             <div class="input-bubble">
-                <button style="background:transparent; border:1.5px solid var(--accent); color:var(--accent); width:32px; height:32px; border-radius:50%;" onclick="document.getElementById('file-upload').click()">+</button>
-                <input type="file" id="file-upload" style="display:none" multiple onchange="handleFiles(this)">
+                <button class="plus-btn" onclick="document.getElementById('file-upload').click()">+</button>
+                <input type="file" id="file-upload" multiple onchange="handleFiles(this)">
                 <input type="text" id="userInput" placeholder="Message SONIX..." onkeypress="if(event.key==='Enter') sendMsg()">
-                <button style="background:var(--user-bubble); border:none; width:32px; height:32px; border-radius:50%;" onclick="sendMsg()">↑</button>
+                <button class="send-btn" onclick="sendMsg()">↑</button>
             </div>
         </div>
     </div>
 
-    <!-- System Info Modal -->
-    <div id="info-modal" style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#1a1a1a; border:1px solid var(--accent); padding:20px; border-radius:20px; display:none; z-index:4000; text-align:center;">
-        <h3 style="color:var(--accent)">System Information</h3>
-        <p>Developed by <b>VLAD</b></p>
-        <button onclick="toggleModal()" style="background:var(--accent); border:none; padding:10px 20px; border-radius:20px;">Close</button>
-    </div>
-
-    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        let player;
         let selectedFiles = [];
-        const playlist = [
-            {id: 'r_0Jduxm2E8', name: 'Brazilian Dança Phonk', artist: '6ynta'},
-            {id: 'TwZ0S4CSTX8', name: 'Raptide', artist: 'VLAD Selection'},
-            {id: '5Y6m0T_9XW8', name: 'Midnight City', artist: 'M83'}
-        ];
-        let currentTrack = 0;
 
-        // YouTube API Init
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('yt-player', {
-                height: '0', width: '0',
-                videoId: playlist[currentTrack].id,
-                events: { 'onStateChange': onPlayerStateChange }
-            });
+        function toggleMenu() {
+            document.getElementById('app-body').classList.toggle('menu-open');
+            document.getElementById('menuToggle').classList.toggle('open');
         }
-
-        function onPlayerStateChange(event) {
-            const btn = document.getElementById('playToggle');
-            if (event.data == YT.PlayerState.PLAYING) {
-                btn.innerText = "⏸";
-                updateProgress();
-            } else {
-                btn.innerText = "▶";
-            }
-        }
-
-        function togglePlay() {
-            if (player.getPlayerState() == YT.PlayerState.PLAYING) player.pauseVideo();
-            else player.playVideo();
-        }
-
-        function changeTrack(dir) {
-            currentTrack = (currentTrack + dir + playlist.length) % playlist.length;
-            player.loadVideoById(playlist[currentTrack].id);
-            document.getElementById('track-name').innerText = playlist[currentTrack].name;
-            document.getElementById('artist-name').innerText = playlist[currentTrack].artist;
-        }
-
-        function updateProgress() {
-            if (player && player.getCurrentTime) {
-                const perc = (player.getCurrentTime() / player.getDuration()) * 100;
-                document.getElementById('progress-bar').value = perc || 0;
-            }
-            if (player.getPlayerState() == YT.PlayerState.PLAYING) setTimeout(updateProgress, 1000);
-        }
-
-        // Sidebar Controls
-        function toggleLeft() { document.body.classList.toggle('menu-open'); }
-        function toggleRight() { document.body.classList.toggle('right-open'); }
-        function closeAll() { document.body.classList.remove('menu-open', 'right-open'); }
 
         function toggleModal() {
-            const m = document.getElementById('info-modal');
-            m.style.display = (m.style.display === 'block') ? 'none' : 'block';
+            const modal = document.getElementById('info-modal');
+            modal.style.display = (modal.style.display === 'block') ? 'none' : 'block';
+            setTimeout(() => modal.classList.toggle('active'), 10);
+            if(document.getElementById('app-body').classList.contains('menu-open')) toggleMenu();
         }
 
-        // Chat & Files
         function handleFiles(input) {
             const files = Array.from(input.files);
-            selectedFiles = [...selectedFiles, ...files].slice(0, 5);
+            if (selectedFiles.length + files.length > 5) { 
+                alert("Max 5 files total."); 
+                return; 
+            }
+            selectedFiles = [...selectedFiles, ...files];
+            renderFiles();
+            input.value = ""; 
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
             renderFiles();
         }
 
         function renderFiles() {
             const list = document.getElementById('file-list');
             list.innerHTML = "";
-            selectedFiles.forEach((f, i) => {
+            selectedFiles.forEach((file, index) => {
                 const chip = document.createElement('div');
                 chip.className = 'file-chip';
-                chip.innerHTML = `<span>📎 ${f.name.slice(0,8)}</span><button class="remove-file" onclick="removeFile(${i})">✕</button>`;
+                chip.innerHTML = `
+                    <span>📎 ${file.name.substring(0, 10)}${file.name.length > 10 ? '...' : ''}</span>
+                    <button class="remove-file" onclick="removeFile(${index})">✕</button>
+                `;
                 list.appendChild(chip);
             });
         }
 
-        function removeFile(i) { selectedFiles.splice(i, 1); renderFiles(); }
-
         function sendMsg() {
             const chat = document.getElementById('chat-window');
             const input = document.getElementById('userInput');
-            if (!input.value.trim() && !selectedFiles.length) return;
+            if (input.value.trim() === "" && selectedFiles.length === 0) return;
+
             const msg = document.createElement('div');
             msg.className = "bubble user";
-            msg.innerText = (selectedFiles.length ? `[Files Attached]\n` : "") + input.value;
+            let filesDisplay = selectedFiles.map(f => `[FILE: ${f.name}]`).join("\n");
+            msg.innerText = (filesDisplay ? filesDisplay + "\n" : "") + input.value;
+            
             chat.appendChild(msg);
-            input.value = ""; selectedFiles = []; renderFiles();
+            input.value = "";
+            selectedFiles = [];
+            renderFiles();
             chat.scrollTop = chat.scrollHeight;
         }
-
-        // Progress Bar Seek
-        document.getElementById('progress-bar').addEventListener('input', e => {
-            const seekTo = (e.target.value / 100) * player.getDuration();
-            player.seekTo(seekTo);
-        });
     </script>
 </body>
 </html>
