@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>AI Workspace | VLAD Sonix</title>
+    <title>SONIX</title>
     <style>
         :root {
             --bg: #000000;
@@ -17,7 +17,7 @@
 
         * { 
             box-sizing: border-box; 
-            -webkit-tap-highlight-color: transparent; /* REMOVES BLUE FLASH */
+            -webkit-tap-highlight-color: transparent;
         }
         
         body {
@@ -62,7 +62,7 @@
         }
         #info-modal.active { display: block; opacity: 1; transform: translate(-50%, -50%) scale(1); }
 
-        /* --- MENU BUTTON (FIXED) --- */
+        /* --- MENU BUTTON --- */
         .menu-btn {
             position: fixed; top: 20px; left: 20px;
             width: 48px; height: 48px; background: var(--ai-bubble);
@@ -93,8 +93,19 @@
         .plus-btn { background: transparent; border: 1.5px solid var(--accent); color: var(--accent); width: 32px; height: 32px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; flex-shrink: 0; }
         .send-btn { background: var(--user-bubble); border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; flex-shrink: 0; }
 
-        #file-list { display: flex; flex-wrap: wrap; gap: 5px; max-width: 850px; margin: 0 auto 8px; }
-        .file-chip { background: var(--ai-bubble); border: 1px solid var(--accent); color: var(--accent); font-size: 0.7rem; padding: 4px 10px; border-radius: 12px; }
+        /* --- FILE LIST & CHIPS --- */
+        #file-list { display: flex; flex-wrap: wrap; gap: 8px; max-width: 850px; margin: 0 auto 8px; }
+        .file-chip { 
+            background: var(--ai-bubble); border: 1px solid var(--accent); 
+            color: var(--accent); font-size: 0.75rem; padding: 6px 12px; 
+            border-radius: 15px; display: flex; align-items: center; gap: 8px; 
+        }
+        .remove-file { 
+            background: var(--accent); color: #000; border: none; 
+            border-radius: 50%; width: 16px; height: 16px; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 10px; font-weight: bold; cursor: pointer;
+        }
 
         #file-upload { display: none; }
         #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; z-index: 1500; }
@@ -108,16 +119,14 @@
     <div id="info-modal">
         <h3 style="color: var(--accent); margin-top:0;">System Information</h3>
         <p style="font-size: 0.9rem; line-height: 1.6; color: #ccc;">
-            This AI was developed by <b>VLAD Sonix</b>.<br><br>
+            This AI was developed by <b>SONIX</b>.<br><br>
             Systems are undergoing maintenance over the coming months. 
         </p>
-        <a href="https://www.instagram.com/youngvladd" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: bold;">@youngvladd</a>
-        <br><br>
         <button onclick="toggleModal()" style="background: var(--accent); border:none; padding:10px 20px; border-radius:20px; font-weight:bold;">Close</button>
     </div>
 
     <nav id="sidebar">
-        <h2 style="color: var(--accent); font-size: 1rem; border-bottom: 1px solid var(--accent); padding-bottom: 10px; margin-top: 0;">VLAD SONIX</h2>
+        <h2 style="color: var(--accent); font-size: 1rem; border-bottom: 1px solid var(--accent); padding-bottom: 10px; margin-top: 0;">SONIX</h2>
         <div class="menu-item">✦ New Session</div>
         <div class="menu-item" onclick="toggleModal()">ⓘ System Info</div>
         <div class="menu-item">⚙ Settings</div>
@@ -129,7 +138,7 @@
 
     <div id="main-content">
         <div id="chat-window">
-            <div class="bubble ai">VLAD Sonix Core Active. Optimization complete.</div>
+            <div class="bubble ai">SONIX Active. Ready to process files.</div>
         </div>
 
         <div class="input-container">
@@ -137,7 +146,7 @@
             <div class="input-bubble">
                 <button class="plus-btn" onclick="document.getElementById('file-upload').click()">+</button>
                 <input type="file" id="file-upload" multiple onchange="handleFiles(this)">
-                <input type="text" id="userInput" placeholder="Message..." onkeypress="if(event.key==='Enter') sendMsg()">
+                <input type="text" id="userInput" placeholder="Message SONIX..." onkeypress="if(event.key==='Enter') sendMsg()">
                 <button class="send-btn" onclick="sendMsg()">↑</button>
             </div>
         </div>
@@ -159,15 +168,31 @@
         }
 
         function handleFiles(input) {
-            const list = document.getElementById('file-list');
             const files = Array.from(input.files);
-            if (files.length > 5) { alert("Max 5 files."); return; }
-            selectedFiles = files;
+            if (selectedFiles.length + files.length > 5) { 
+                alert("Max 5 files total."); 
+                return; 
+            }
+            selectedFiles = [...selectedFiles, ...files];
+            renderFiles();
+            input.value = ""; // Clear input to allow re-selection of same file
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            renderFiles();
+        }
+
+        function renderFiles() {
+            const list = document.getElementById('file-list');
             list.innerHTML = "";
-            selectedFiles.forEach(file => {
+            selectedFiles.forEach((file, index) => {
                 const chip = document.createElement('div');
                 chip.className = 'file-chip';
-                chip.innerHTML = `📎 ${file.name.substring(0, 10)}...`;
+                chip.innerHTML = `
+                    <span>📎 ${file.name.substring(0, 10)}...</span>
+                    <button class="remove-file" onclick="removeFile(${index})">✕</button>
+                `;
                 list.appendChild(chip);
             });
         }
@@ -175,7 +200,6 @@
         function sendMsg() {
             const chat = document.getElementById('chat-window');
             const input = document.getElementById('userInput');
-            const list = document.getElementById('file-list');
             if (input.value.trim() === "" && selectedFiles.length === 0) return;
 
             const msg = document.createElement('div');
@@ -186,7 +210,7 @@
             chat.appendChild(msg);
             input.value = "";
             selectedFiles = [];
-            list.innerHTML = "";
+            renderFiles();
             chat.scrollTop = chat.scrollHeight;
         }
     </script>
