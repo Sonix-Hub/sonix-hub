@@ -116,12 +116,15 @@
 
     <div id="overlay" onclick="toggleMenu()"></div>
 
+    <!-- Corrected System Information Modal -->
     <div id="info-modal">
         <h3 style="color: var(--accent); margin-top:0;">System Information</h3>
         <p style="font-size: 0.9rem; line-height: 1.6; color: #ccc;">
-            This AI was developed by <b>SONIX</b>.<br><br>
-            Systems are undergoing maintenance over the coming months. 
+            This AI was developed by <b>VLAD</b>.<br><br>
+            Our systems are currently undergoing maintenance and performance upgrades over the coming months. 
         </p>
+        <a href="https://www.instagram.com/youngvladd" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: bold;">Contact Developer</a>
+        <br><br>
         <button onclick="toggleModal()" style="background: var(--accent); border:none; padding:10px 20px; border-radius:20px; font-weight:bold;">Close</button>
     </div>
 
@@ -138,7 +141,7 @@
 
     <div id="main-content">
         <div id="chat-window">
-            <div class="bubble ai">SONIX Active. Ready to process files.</div>
+            <div class="bubble ai">SONIX Active. Developed by VLAD. How can I help you today?</div>
         </div>
 
         <div class="input-container">
@@ -175,7 +178,7 @@
             }
             selectedFiles = [...selectedFiles, ...files];
             renderFiles();
-            input.value = ""; // Clear input to allow re-selection of same file
+            input.value = ""; 
         }
 
         function removeFile(index) {
@@ -190,7 +193,7 @@
                 const chip = document.createElement('div');
                 chip.className = 'file-chip';
                 chip.innerHTML = `
-                    <span>📎 ${file.name.substring(0, 10)}...</span>
+                    <span>📎 ${file.name.substring(0, 10)}${file.name.length > 10 ? '...' : ''}</span>
                     <button class="remove-file" onclick="removeFile(${index})">✕</button>
                 `;
                 list.appendChild(chip);
