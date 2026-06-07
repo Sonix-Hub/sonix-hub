@@ -187,9 +187,10 @@
         .fv-name { color: var(--accent); margin-top: 14px; font-size: 0.85rem; }
 
         /* SESSIONS */
-        .session-item { padding: 10px 14px; border-radius: 10px; cursor: pointer; border: 1px solid transparent; transition: 0.2s; font-size: 0.82rem; color: #aaa; display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; }
+        .session-item { padding: 10px 14px; border-radius: 10px; cursor: pointer; border: 1px solid transparent; transition: 0.2s; font-size: 0.82rem; color: #aaa; display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; user-select: none; -webkit-user-select: none; }
         .session-item:hover { background: rgba(0,255,65,0.06); border-color: rgba(0,255,65,0.2); color: var(--accent); }
         .session-item.active-session { border-color: rgba(0,255,65,0.4); color: var(--accent); background: rgba(0,255,65,0.05); }
+        .session-item.long-pressing { background: rgba(0,255,65,0.12); border-color: var(--accent); transform: scale(0.98); }
         .session-item-content { overflow: hidden; flex: 1; min-width: 0; }
         .session-item-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .session-item-date { font-size: 0.62rem; color: #333; margin-top: 2px; letter-spacing: 0.5px; }
@@ -197,6 +198,53 @@
         .session-item.active-session .session-item-date { color: rgba(0,255,65,0.4); }
         .session-del { background: transparent; border: none; color: #333; cursor: pointer; font-size: 0.75rem; padding: 2px 5px; border-radius: 4px; flex-shrink: 0; }
         .session-del:hover { color: #ff4444; }
+        .session-tag { font-size: 0.55rem; padding: 1px 6px; border-radius: 6px; font-weight: 700; letter-spacing: 0.5px; flex-shrink: 0; }
+        .tag-favorite { background: rgba(255,191,0,0.15); color: #ffbf00; border: 1px solid rgba(255,191,0,0.3); }
+        .tag-saved { background: rgba(0,191,255,0.15); color: #00bfff; border: 1px solid rgba(0,191,255,0.3); }
+        .session-badges { display: flex; gap: 4px; align-items: center; flex-shrink: 0; }
+
+        /* CONTEXT MENU (long press) */
+        #ctx-menu { position: fixed; background: #111; border: 1px solid var(--accent); border-radius: 16px; padding: 6px; z-index: 8000; display: none; min-width: 200px; box-shadow: 0 8px 32px rgba(0,0,0,0.8); animation: ctxIn 0.15s ease; }
+        @keyframes ctxIn { from { opacity:0; transform: scale(0.92); } to { opacity:1; transform: scale(1); } }
+        #ctx-menu.show { display: block; }
+        .ctx-item { padding: 11px 14px; border-radius: 10px; cursor: pointer; font-size: 0.84rem; color: #ccc; display: flex; align-items: center; gap: 10px; transition: 0.15s; }
+        .ctx-item:hover { background: rgba(0,255,65,0.1); color: var(--accent); }
+        .ctx-item.danger { color: #ff6666; }
+        .ctx-item.danger:hover { background: rgba(255,68,68,0.1); color: #ff4444; }
+        .ctx-item svg { width: 15px; height: 15px; flex-shrink: 0; }
+        .ctx-divider { height: 1px; background: #222; margin: 4px 8px; }
+        .ctx-title { font-size: 0.65rem; color: #444; letter-spacing: 1.5px; padding: 6px 14px 2px; }
+        #ctx-backdrop { position: fixed; inset: 0; z-index: 7999; display: none; }
+        #ctx-backdrop.show { display: block; }
+
+        /* RENAME INLINE */
+        .session-rename-input { background: #0d0d0d; border: 1px solid var(--accent); border-radius: 8px; padding: 4px 8px; color: var(--accent); font-size: 0.82rem; width: 100%; outline: none; }
+
+        /* INBOX MODAL */
+        #inbox-modal .inbox-tabs { display: flex; border-bottom: 1px solid #1a1a1a; margin-bottom: 12px; }
+        .inbox-tab { flex: 1; padding: 10px 4px; text-align: center; font-size: 0.65rem; color: #444; cursor: pointer; letter-spacing: 0.5px; border-bottom: 2px solid transparent; transition: 0.2s; }
+        .inbox-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+        .inbox-section { display: none; }
+        .inbox-section.active { display: block; }
+        .inbox-item { padding: 12px 14px; border: 1px solid #1a1a1a; border-radius: 12px; margin-bottom: 8px; cursor: pointer; transition: 0.2s; }
+        .inbox-item:hover { border-color: rgba(0,255,65,0.3); background: rgba(0,255,65,0.04); }
+        .inbox-item-name { font-size: 0.85rem; color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
+        .inbox-item-meta { font-size: 0.65rem; color: #444; display: flex; justify-content: space-between; gap: 8px; }
+        .inbox-item-meta .countdown { color: #ff6666; }
+        .inbox-empty { text-align: center; color: #333; font-size: 0.78rem; padding: 30px 0; letter-spacing: 1px; }
+        .inbox-restore-btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); border-radius: 8px; padding: 4px 10px; font-size: 0.7rem; cursor: pointer; transition: 0.2s; flex-shrink: 0; }
+        .inbox-restore-btn:hover { background: rgba(0,255,65,0.1); }
+        .inbox-perm-del-btn { background: transparent; border: 1px solid #ff4444; color: #ff4444; border-radius: 8px; padding: 4px 10px; font-size: 0.7rem; cursor: pointer; transition: 0.2s; flex-shrink: 0; }
+        .inbox-perm-del-btn:hover { background: rgba(255,68,68,0.1); }
+        /* Inline delete confirm inside inbox item */
+        .inbox-del-confirm { background: rgba(255,68,68,0.08); border: 1px solid rgba(255,68,68,0.3); border-radius: 10px; padding: 10px 12px; margin-top: 8px; display: none; }
+        .inbox-del-confirm.show { display: block; }
+        .inbox-del-confirm-text { font-size: 0.75rem; color: #ff8888; margin-bottom: 8px; }
+        .inbox-del-confirm-btns { display: flex; gap: 8px; }
+        .inbox-del-yes { background: #ff4444; border: none; color: #fff; border-radius: 8px; padding: 6px 14px; font-size: 0.75rem; font-weight: 700; cursor: pointer; }
+        .inbox-del-no { background: transparent; border: 1px solid #444; color: #aaa; border-radius: 8px; padding: 6px 14px; font-size: 0.75rem; cursor: pointer; }
+        /* Inline rename input inside inbox item */
+        .inbox-rename-input { background: #0d0d0d; border: 1px solid var(--accent); border-radius: 8px; padding: 5px 10px; color: var(--accent); font-size: 0.85rem; width: 100%; outline: none; margin-bottom: 2px; }
 
         /* GUEST BANNER */
         #guest-banner { background: #111; border-bottom: 1px solid #1a1a1a; padding: 6px 15px; text-align: center; font-size: 0.72rem; color: #555; display: none; }
@@ -439,6 +487,57 @@
     </div>
 </div>
 
+<!-- CONTEXT MENU (long press on session) -->
+<div id="ctx-backdrop" onclick="closeCtxMenu()"></div>
+<div id="ctx-menu">
+    <div class="ctx-title" id="ctx-session-label">SESSION</div>
+    <div class="ctx-item" onclick="ctxRename()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Rename
+    </div>
+    <div class="ctx-item" id="ctx-fav-item" onclick="ctxToggleFavorite()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span id="ctx-fav-label">Add to Favorites</span>
+    </div>
+    <div class="ctx-item" id="ctx-save-item" onclick="ctxToggleSaved()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        <span id="ctx-save-label">Save</span>
+    </div>
+    <div class="ctx-item" id="ctx-archive-item" onclick="ctxToggleArchive()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+        <span id="ctx-archive-label">Archive</span>
+    </div>
+    <div class="ctx-divider"></div>
+    <div class="ctx-item" onclick="ctxExport()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export Chat
+    </div>
+    <div class="ctx-divider"></div>
+    <div class="ctx-item danger" onclick="ctxDelete()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        Delete
+    </div>
+</div>
+
+<!-- INBOX MODAL -->
+<div class="modal-base" id="inbox-modal">
+    <h3 class="modal-title">INBOX</h3>
+    <div class="inbox-tabs">
+        <div class="inbox-tab active" onclick="switchInboxTab('saved')">SAVED</div>
+        <div class="inbox-tab" onclick="switchInboxTab('favorite')">FAVORITES</div>
+        <div class="inbox-tab" onclick="switchInboxTab('archived')">ARCHIVED</div>
+        <div class="inbox-tab" onclick="switchInboxTab('deleted')">DELETED</div>
+    </div>
+    <div class="inbox-section active" id="inbox-saved"></div>
+    <div class="inbox-section" id="inbox-favorite"></div>
+    <div class="inbox-section" id="inbox-archived"></div>
+    <div class="inbox-section" id="inbox-deleted">
+        <div style="color:#555;font-size:0.72rem;margin-bottom:10px;line-height:1.6;">Conversations are permanently deleted after 24 hours.</div>
+        <div id="inbox-deleted-list"></div>
+    </div>
+    <button class="modal-close-btn" onclick="closeModal('inbox-modal')">Close</button>
+</div>
+
 <!-- SETTINGS MODAL -->
 <div class="modal-base" id="settings-modal">
     <h3 class="modal-title">SETTINGS</h3>
@@ -502,13 +601,6 @@
         <div class="toggle-switch on" id="toggle-enter" onclick="toggleSetting('enter',this)"><div class="toggle-knob"></div></div>
     </div>
 
-
-    <div class="section-head">DATA</div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;padding:8px 0;">
-        <button class="btn-outline" style="font-size:0.78rem;padding:8px 14px;" onclick="exportAllData()">Export All Data</button>
-        <button class="btn-danger" style="font-size:0.78rem;padding:8px 14px;" onclick="clearAllDataConfirm()">Clear All Data</button>
-        <button class="btn-danger" style="font-size:0.78rem;padding:8px 14px;" onclick="clearChatFromSettings()">Clear Chat</button>
-    </div>
 
     <div class="section-head">SYSTEM & SECURITY</div>
     <div class="setting-row" style="cursor:pointer;" onclick="switchModal('settings-modal','info-modal')">
@@ -580,6 +672,22 @@
         <div class="toggle-switch" id="toggle-auto-clear" onclick="toggleSecSetting('autoClear',this)"><div class="toggle-knob"></div></div>
     </div>
 
+    <div class="section-head">DATA</div>
+    <div style="display:flex;flex-direction:column;gap:8px;padding:4px 0 8px;">
+        <button class="settings-acct-action-btn" onclick="exportAllData()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export All Data
+        </button>
+        <button class="settings-acct-action-btn" onclick="clearChatFromSettings()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Clear Current Chat
+        </button>
+        <button class="settings-acct-action-btn danger" onclick="clearAllDataConfirm()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+            Clear All Data
+        </button>
+    </div>
+
     <button class="modal-close-btn" style="margin-top:8px;" onclick="closeModal('security-modal')">Done</button>
 </div>
 
@@ -607,8 +715,18 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Export Chat
         </div>
+        <div class="menu-item" id="inbox-menu-item" onclick="openInbox()" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+            Inbox
+            <span id="inbox-badge" style="margin-left:auto;background:var(--accent);color:#000;border-radius:10px;padding:1px 7px;font-size:0.65rem;font-weight:800;display:none;"></span>
+        </div>
 
-        <div class="sidebar-section">SESSIONS</div>
+        <div class="sidebar-section" style="display:flex;align-items:center;justify-content:space-between;padding-right:15px;">
+            SESSIONS
+            <button onclick="refreshSessions()" title="Refresh" style="background:transparent;border:none;color:#444;cursor:pointer;padding:2px 4px;border-radius:6px;display:flex;align-items:center;transition:0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#444'">
+                <svg id="refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            </button>
+        </div>
         <input class="search-input" id="session-search" placeholder="Search sessions..." oninput="filterSessions(this.value)">
         <div id="session-list"></div>
 
@@ -893,21 +1011,31 @@ function saveCurrentUser() {
 
 function startApp(guest = false) {
     updateSidebarProfile();
-    // Show account actions in settings only for logged-in users
     const acctActions = document.getElementById('settings-account-actions');
     if (acctActions) acctActions.style.display = (!guest && !isGuest) ? 'block' : 'none';
-    // Show security row only for logged-in users
     const secRow = document.getElementById('security-row');
     if (secRow) secRow.style.display = (!guest && !isGuest) ? 'flex' : 'none';
+    const inboxItem = document.getElementById('inbox-menu-item');
+    if (inboxItem) inboxItem.style.display = (!guest && !isGuest) ? 'flex' : 'none';
     checkBirthday();
-    const w = document.getElementById('welcome-msg');
-    if (w) w.textContent = 'SONIX Active. Welcome' + (guest ? '' : ', ' + currentUser.name) + '. How can I help you today?';
-    if (!guest && !currentSessionId) newSession(true);
-    else if (!guest) renderSessionList();
+
+    if (guest) {
+        // Guest always gets a fresh welcome
+        const w = document.getElementById('welcome-msg');
+        if (w) w.textContent = 'SONIX Active. Welcome. How can I help you today?';
+    } else if (!currentSessionId) {
+        // Logged in but no sessions yet — create one
+        newSession(true);
+    } else {
+        // Logged in and has sessions — load the most recent one into chat
+        loadSession(currentSessionId, true);
+    }
+
     document.getElementById('info-sessions').textContent = sessions.length;
-    // Set platform info
     const platEl = document.getElementById('info-platform');
     if (platEl) platEl.textContent = navigator.platform || 'Web Browser';
+    if (!guest && !isGuest) { purgeExpiredDeleted(); updateInboxBadge(); }
+    if (!guest && !isGuest) setInterval(() => { purgeExpiredDeleted(); updateInboxBadge(); }, 3600000);
 }
 
 function checkBirthday() {
@@ -1028,7 +1156,7 @@ function _populateModal(id) {
 
 function openModal(id) {
     // Login-only guards
-    const loginRequired = ['profile-modal', 'security-modal', 'reset-pass-modal', 'delete-step-modal'];
+    const loginRequired = ['profile-modal', 'security-modal', 'reset-pass-modal', 'delete-step-modal', 'inbox-modal'];
     if (loginRequired.includes(id) && !_isLoggedIn()) {
         showToast('Log in to access this feature');
         return;
@@ -1060,6 +1188,9 @@ function closeModal(id) {
     setTimeout(() => { m.style.display = 'none'; }, 300);
     document.getElementById('modal-backdrop').classList.remove('active');
     activeModalId = null;
+    if (id === 'inbox-modal' && typeof _inboxTimerInterval !== 'undefined' && _inboxTimerInterval) {
+        clearInterval(_inboxTimerInterval); _inboxTimerInterval = null;
+    }
 }
 
 function backdropClose() { if (activeModalId) closeModal(activeModalId); }
@@ -1219,8 +1350,16 @@ function loadSessions() {
     if (isGuest) return;
     const key = 'sonix_sessions_' + currentUser.email;
     sessions = JSON.parse(localStorage.getItem(key) || '[]');
-    if (sessions.length > 0 && !currentSessionId) currentSessionId = sessions[sessions.length-1].id;
+    purgeExpiredDeleted();
+    const active = sessions.filter(s => !s._deleted && !s._archived);
+    if (active.length > 0) {
+        // Always resume the most recent active session
+        currentSessionId = active[active.length - 1].id;
+    } else {
+        currentSessionId = null;
+    }
     renderSessionList();
+    updateInboxBadge();
 }
 
 function saveSessions() {
@@ -1241,7 +1380,13 @@ function newSession(silent = false) {
     currentSessionId = id;
     saveSessions();
     renderSessionList();
-    document.getElementById('chat-window').innerHTML = '<div class="bubble ai" id="welcome-msg">SONIX Active. New session started, ' + (currentUser?.name||'User') + '.</div><div class="typing-bubble" id="typing-indicator"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
+    const chat = document.getElementById('chat-window');
+    chat.innerHTML = '<div class="typing-bubble" id="typing-indicator"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
+    const welcome = document.createElement('div');
+    welcome.className = 'bubble ai';
+    welcome.id = 'welcome-msg';
+    welcome.textContent = 'SONIX Active. New session started, ' + (currentUser?.name || 'User') + '. How can I help you today?';
+    chat.insertBefore(welcome, document.getElementById('typing-indicator'));
     if (!silent) { toggleMenu(); showToast('New session started'); }
 }
 
@@ -1263,11 +1408,20 @@ function formatSessionDate(isoStr) {
 function renderSessionList(filter = '') {
     const list = document.getElementById('session-list');
     list.innerHTML = '';
-    const filtered = [...sessions].reverse().filter(s => !filter || s.name.toLowerCase().includes(filter.toLowerCase())).slice(0, 12);
+    const activeSessions = sessions.filter(s => !s._deleted && !s._archived);
+    // Sort: most recently updated/created first
+    const sorted = [...activeSessions].sort((a, b) => {
+        const ta = new Date(a.updated || a.created || 0).getTime();
+        const tb = new Date(b.updated || b.created || 0).getTime();
+        return tb - ta;
+    });
+    const filtered = sorted.filter(s => !filter || s.name.toLowerCase().includes(filter.toLowerCase())).slice(0, 20);
     filtered.forEach(s => {
         const d = document.createElement('div');
         d.className = 'session-item' + (s.id === currentSessionId ? ' active-session' : '');
+        d.dataset.sessionId = s.id;
 
+        // Left: name + date stacked
         const content = document.createElement('div');
         content.className = 'session-item-content';
 
@@ -1281,24 +1435,90 @@ function renderSessionList(filter = '') {
 
         content.appendChild(nameSpan);
         content.appendChild(dateSpan);
+        d.appendChild(content);
 
-        const del = document.createElement('button');
-        del.className = 'session-del'; del.textContent = 'x';
-        del.onclick = (e) => { e.stopPropagation(); deleteSession(s.id); };
+        // Right: badges column (★ and/or SAVED)
+        if (s._favorite || s._saved) {
+            const badges = document.createElement('div');
+            badges.className = 'session-badges';
+            if (s._favorite) {
+                const t = document.createElement('span');
+                t.className = 'session-tag tag-favorite'; t.textContent = '★';
+                badges.appendChild(t);
+            }
+            if (s._saved) {
+                const t = document.createElement('span');
+                t.className = 'session-tag tag-saved'; t.textContent = 'SAVED';
+                badges.appendChild(t);
+            }
+            d.appendChild(badges);
+        }
 
-        d.appendChild(content); d.appendChild(del);
-        d.onclick = () => loadSession(s.id);
+        d.onclick = (e) => { if (d._longPressed) { d._longPressed = false; return; } loadSession(s.id); };
+
+        // Long press support — clean, no stuck highlight
+        let pressTimer = null;
+        let _didLongPress = false;
+
+        const startPress = (e) => {
+            _didLongPress = false;
+            pressTimer = setTimeout(() => {
+                _didLongPress = true;
+                d._longPressed = true;
+                d.classList.add('long-pressing');
+                openCtxMenu(s.id, e);
+                if (navigator.vibrate) navigator.vibrate(40);
+                // Always clean up the highlight after menu opens
+                setTimeout(() => d.classList.remove('long-pressing'), 200);
+            }, 500);
+        };
+        const cancelPress = () => {
+            clearTimeout(pressTimer);
+            pressTimer = null;
+            d.classList.remove('long-pressing');
+        };
+        d.addEventListener('mousedown', startPress);
+        d.addEventListener('touchstart', startPress, { passive: true });
+        d.addEventListener('mouseup', cancelPress);
+        d.addEventListener('touchend', cancelPress);
+        d.addEventListener('touchcancel', cancelPress);
+        // Don't use mouseleave — it fires too easily and causes jitter
+
         list.appendChild(d);
     });
 }
 
 function filterSessions(val) { renderSessionList(val); }
 
+function refreshSessions() {
+    loadSessions();
+    updateInboxBadge();
+    // Spin the refresh icon briefly
+    const icon = document.getElementById('refresh-icon');
+    if (icon) {
+        icon.style.transition = 'transform 0.5s ease';
+        icon.style.transform = 'rotate(360deg)';
+        setTimeout(() => { icon.style.transition = 'none'; icon.style.transform = 'rotate(0deg)'; }, 520);
+    }
+    showToast('Sessions refreshed');
+}
+
 function deleteSession(id) {
-    sessions = sessions.filter(s => s.id !== id);
-    if (currentSessionId === id) { currentSessionId = sessions.length ? sessions[sessions.length-1].id : null; if (!currentSessionId) newSession(true); else loadSession(currentSessionId, true); }
-    saveSessions(); renderSessionList();
-    showToast('Session deleted');
+    if (isGuest) { sessions = sessions.filter(s => s.id !== id); renderSessionList(); return; }
+    const s = sessions.find(x => x.id === id);
+    if (!s) return;
+    s._deleted = true;
+    s._deletedAt = Date.now();
+    s._favorite = false; s._saved = false; s._archived = false;
+    saveSessions();
+    if (currentSessionId === id) {
+        const active = sessions.filter(x => !x._deleted && !x._archived);
+        currentSessionId = active.length ? active[active.length-1].id : null;
+        if (!currentSessionId) newSession(true); else loadSession(currentSessionId, true);
+    }
+    renderSessionList();
+    showToast('Session deleted — restoreable for 24h');
+    updateInboxBadge();
 }
 
 function loadSession(id, skipMenu = false) {
@@ -1307,17 +1527,29 @@ function loadSession(id, skipMenu = false) {
     if (!s) return;
     const chat = document.getElementById('chat-window');
     chat.innerHTML = '<div class="typing-bubble" id="typing-indicator"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
-    s.messages.forEach(m => {
-        const b = document.createElement('div');
-        b.className = 'bubble ' + m.role;
-        b.textContent = m.text;
-        chat.insertBefore(b, document.getElementById('typing-indicator'));
-    });
+
     if (s.messages.length === 0) {
         const empty = document.createElement('div');
-        empty.className = 'system-msg'; empty.textContent = '— Empty session —';
+        empty.className = 'bubble ai';
+        empty.id = 'welcome-msg';
+        empty.textContent = 'SONIX Active. New session started, ' + (currentUser?.name || 'User') + '. How can I help you today?';
         chat.insertBefore(empty, document.getElementById('typing-indicator'));
+    } else {
+        // Show a small session header
+        const header = document.createElement('div');
+        header.className = 'system-msg';
+        header.textContent = '— ' + s.name + ' —';
+        chat.insertBefore(header, document.getElementById('typing-indicator'));
+
+        s.messages.forEach(m => {
+            const b = document.createElement('div');
+            b.className = 'bubble ' + m.role;
+            b.textContent = m.text;
+            chat.insertBefore(b, document.getElementById('typing-indicator'));
+        });
     }
+
+    chat.scrollTop = chat.scrollHeight;
     renderSessionList();
     if (!skipMenu) toggleMenu();
 }
@@ -1327,163 +1559,244 @@ function saveMessageToSession(role, text) {
     const s = sessions.find(x => x.id === currentSessionId);
     if (!s) return;
     s.messages.push({ role, text, ts: Date.now() });
-    if (s.messages.length === 1) s.name = text.substring(0, 30) + (text.length > 30 ? '...' : '');
+    // Update session name from first user message
+    if (s.messages.length === 1 && role === 'user') {
+        s.name = text.substring(0, 30) + (text.length > 30 ? '...' : '');
+    }
+    // Update the last activity timestamp so ordering stays fresh
+    s.updated = new Date().toISOString();
     saveSessions();
+    renderSessionList(); // keep sidebar in sync live
 }
 
-// FILES
-function handleFiles(input) {
-    const files = Array.from(input.files);
-    if (selectedFiles.length + files.length > 5) { showToast('Max 5 files!'); return; }
-    selectedFiles = [...selectedFiles, ...files];
-    renderFiles(); input.value = '';
+// CONTEXT MENU
+let ctxTargetId = null;
+
+function openCtxMenu(sessionId, e) {
+    if (isGuest) return;
+    ctxTargetId = sessionId;
+    const s = sessions.find(x => x.id === sessionId);
+    if (!s) return;
+    const menu = document.getElementById('ctx-menu');
+    const backdrop = document.getElementById('ctx-backdrop');
+    document.getElementById('ctx-session-label').textContent = s.name.length > 22 ? s.name.substring(0,22)+'…' : s.name;
+    document.getElementById('ctx-fav-label').textContent = s._favorite ? 'Remove from Favorites' : 'Add to Favorites';
+    document.getElementById('ctx-save-label').textContent = s._saved ? 'Unsave' : 'Save';
+    document.getElementById('ctx-archive-label').textContent = s._archived ? 'Unarchive' : 'Archive';
+    const touch = e.touches ? e.touches[0] : e;
+    const x = Math.min(touch.clientX, window.innerWidth - 220);
+    const y = Math.min(touch.clientY, window.innerHeight - 280);
+    menu.style.left = x + 'px'; menu.style.top = y + 'px';
+    backdrop.classList.add('show'); menu.classList.add('show');
 }
 
-function removeFile(index) { selectedFiles.splice(index, 1); renderFiles(); }
-
-function renderFiles() {
-    const list = document.getElementById('file-list');
-    list.innerHTML = '';
-    selectedFiles.forEach((file, index) => {
-        const chip = document.createElement('div');
-        chip.className = 'file-chip';
-        const isImg = file.type.startsWith('image/');
-        const icon = isImg ? '[IMG]' : '[FILE]';
-        chip.innerHTML = '<span>' + icon + ' ' + file.name.substring(0,12) + (file.name.length>12?'...':'') + '</span><button class="remove-file" onclick="removeFile(' + index + ')">x</button>';
-        list.appendChild(chip);
-    });
+function closeCtxMenu() {
+    document.getElementById('ctx-menu').classList.remove('show');
+    document.getElementById('ctx-backdrop').classList.remove('show');
+    // Remove from every element that might have it, not just session-item
+    document.querySelectorAll('.long-pressing').forEach(el => el.classList.remove('long-pressing'));
+    ctxTargetId = null;
 }
 
-function showFileInChat(file) {
-    const chat = document.getElementById('chat-window');
-    const typing = document.getElementById('typing-indicator');
-    if (file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = e => {
-            const wrap = document.createElement('div');
-            wrap.className = 'file-preview-bubble';
-            wrap.onclick = () => openFileViewer(e.target.result, file.name);
-            wrap.innerHTML = '<img src="' + e.target.result + '" alt="' + file.name + '"><div class="file-info"><div class="file-info-name">' + file.name + '</div><div class="file-info-size">' + (file.size/1024).toFixed(1) + ' KB - tap to view</div></div>';
-            chat.insertBefore(wrap, typing);
-            chat.scrollTop = chat.scrollHeight;
-        };
-        reader.readAsDataURL(file);
-    } else {
-        const wrap = document.createElement('div');
-        wrap.className = 'file-preview-bubble';
-        wrap.innerHTML = '<div style="font-size:1.6rem;font-weight:700;color:var(--accent);">DOC</div><div class="file-info"><div class="file-info-name">' + file.name + '</div><div class="file-info-size">' + (file.size/1024).toFixed(1) + ' KB</div></div>';
-        chat.insertBefore(wrap, typing);
-        chat.scrollTop = chat.scrollHeight;
+function ctxRename() {
+    if (!ctxTargetId) return;
+    const id = ctxTargetId;
+    closeCtxMenu();
+    const s = sessions.find(x => x.id === id);
+    if (!s) return;
+    // Find by data-session-id (reliable, not name text)
+    const item = document.querySelector('.session-item[data-session-id="' + id + '"]');
+    if (!item) return;
+    const nameDiv = item.querySelector('.session-item-name');
+    if (!nameDiv) return;
+    const input = document.createElement('input');
+    input.className = 'session-rename-input';
+    input.value = s.name;
+    nameDiv.replaceWith(input);
+    input.focus(); input.select();
+    let committed = false;
+    const commit = () => {
+        if (committed) return;
+        committed = true;
+        const newName = input.value.trim() || s.name;
+        s.name = newName;
+        saveSessions(); renderSessionList();
+        showToast('Renamed');
+    };
+    input.onblur = commit;
+    input.onkeydown = (e) => {
+        if (e.key === 'Enter') { input.blur(); }
+        if (e.key === 'Escape') { committed = true; input.replaceWith(nameDiv); }
+    };
+}
+
+function ctxToggleFavorite() {
+    const s = sessions.find(x => x.id === ctxTargetId);
+    if (!s) return;
+    s._favorite = !s._favorite;
+    saveSessions(); renderSessionList(); updateInboxBadge();
+    showToast(s._favorite ? '★ Added to Favorites' : 'Removed from Favorites');
+    closeCtxMenu();
+}
+
+function ctxToggleSaved() {
+    const s = sessions.find(x => x.id === ctxTargetId);
+    if (!s) return;
+    s._saved = !s._saved;
+    saveSessions(); renderSessionList(); updateInboxBadge();
+    showToast(s._saved ? 'Session saved' : 'Session unsaved');
+    closeCtxMenu();
+}
+
+function ctxToggleArchive() {
+    const s = sessions.find(x => x.id === ctxTargetId);
+    if (!s) return;
+    s._archived = !s._archived;
+    saveSessions(); renderSessionList(); updateInboxBadge();
+    showToast(s._archived ? 'Session archived' : 'Session unarchived');
+    closeCtxMenu();
+    if (s._archived && currentSessionId === s.id) {
+        const active = sessions.filter(x => !x._deleted && !x._archived);
+        currentSessionId = active.length ? active[active.length-1].id : null;
+        if (!currentSessionId) newSession(true); else loadSession(currentSessionId, true);
     }
 }
 
-function openFileViewer(src, name) {
-    document.getElementById('fv-img').src = src;
-    document.getElementById('fv-name').textContent = name;
-    document.getElementById('file-viewer').classList.add('show');
-}
-function closeFileViewer() { document.getElementById('file-viewer').classList.remove('show'); }
-
-// SEND MESSAGE
-function handleEnter(event) {
-    if (event.key === 'Enter' && settings.enter) sendMsg();
-}
-
-function sendMsg() {
-    if (_sendLock) return;
-    _sendLock = true;
-    setTimeout(() => { _sendLock = false; }, 800);
-
-    const chat = document.getElementById('chat-window');
-    const input = document.getElementById('userInput');
-    const typing = document.getElementById('typing-indicator');
-    if (input.value.trim() === '' && selectedFiles.length === 0) return;
-
-    selectedFiles.forEach(f => { showFileInChat(f); fileCount++; });
-
-    if (input.value.trim()) {
-        const msg = document.createElement('div');
-        msg.className = 'bubble user';
-        msg.textContent = input.value;
-        chat.insertBefore(msg, typing);
-        saveMessageToSession('user', input.value);
-        msgCount++;
-    }
-
-    const userText = input.value;
-    input.value = ''; selectedFiles = []; renderFiles();
-    chat.scrollTop = chat.scrollHeight;
-
-    if (settings.typing) { typing.style.display = 'block'; chat.scrollTop = chat.scrollHeight; }
-
-    SonixModel.setPersona(settings.persona || 'default');
-    if (currentUser && currentUser.name) SonixModel.setUserName(currentUser.name);
-
-    SonixModel.chat(userText || '').then(reply => {
-        typing.style.display = 'none';
-        addAIMessage(reply);
-        renderSessionList();
-    }).catch(() => {
-        typing.style.display = 'none';
-        addAIMessage('SONIX model error. Please try again.');
-        renderSessionList();
-    });
-}
-
-function addAIMessage(text) {
-    const chat = document.getElementById('chat-window');
-    const typing = document.getElementById('typing-indicator');
-    const reply = document.createElement('div');
-    reply.className = 'bubble ai';
-    reply.textContent = text;
-    chat.insertBefore(reply, typing);
-    saveMessageToSession('ai', text);
-    chat.scrollTop = chat.scrollHeight;
-}
-
-function getAIReply(text) {
-    SonixModel.setPersona(settings.persona || 'default');
-    if (currentUser && !isGuest) SonixModel.setUserName(currentUser.name);
-    return '...';
-}
-
-// VOICE
-function toggleVoice() {
-    if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) { showToast('Voice not supported'); return; }
-    if (isRecording) { recognition?.stop(); return; }
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    recognition = new SR();
-    recognition.lang = 'en-US'; recognition.continuous = false; recognition.interimResults = false;
-    recognition.onstart = () => { isRecording = true; document.getElementById('voiceBtn').classList.add('recording'); showToast('Listening...'); };
-    recognition.onresult = e => { document.getElementById('userInput').value = e.results[0][0].transcript; };
-    recognition.onend = () => { isRecording = false; document.getElementById('voiceBtn').classList.remove('recording'); };
-    recognition.onerror = () => { isRecording = false; document.getElementById('voiceBtn').classList.remove('recording'); showToast('Voice error'); };
-    recognition.start();
-}
-
-// UTILS
-function toggleMenu() {
-    document.getElementById('app-body').classList.toggle('menu-open');
-    document.getElementById('menuToggle').classList.toggle('open');
-}
-
-function exportChat() {
-    if (isGuest) { showToast('Login to export chats'); return; }
-    const s = sessions.find(x => x.id === currentSessionId);
+function ctxExport() {
+    if (!ctxTargetId) return;
+    closeCtxMenu();
+    const s = sessions.find(x => x.id === ctxTargetId);
     if (!s || s.messages.length === 0) { showToast('No messages to export'); return; }
     const text = s.messages.map(m => '[' + m.role.toUpperCase() + ']: ' + m.text).join('\n\n');
     const blob = new Blob([text], { type: 'text/plain' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
     a.download = 'SONIX_' + s.name + '.txt'; a.click();
-    toggleMenu(); showToast('Chat exported');
+    showToast('Chat exported');
 }
 
-function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg; t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2500);
+function ctxDelete() {
+    if (!ctxTargetId) return;
+    const id = ctxTargetId;
+    const s = sessions.find(x => x.id === id);
+    if (!s) return;
+    closeCtxMenu();
+    showInlineConfirm(
+        'Move "' + (s.name.length > 22 ? s.name.substring(0,22)+'…' : s.name) + '" to deleted?',
+        () => deleteSession(id)
+    );
 }
-</script>
-</body>
-</html>
+
+// INBOX
+function openInbox() {
+    if (isGuest) { showToast('Login to access Inbox'); return; }
+    purgeExpiredDeleted();
+    const isMenuOpen = document.getElementById('app-body').classList.contains('menu-open');
+    if (isMenuOpen) toggleMenu();
+    setTimeout(() => {
+        // Reset to first tab
+        const tabOrder = ['saved','favorite','archived','deleted'];
+        document.querySelectorAll('.inbox-tab').forEach((t,i) => t.classList.toggle('active', i===0));
+        document.querySelectorAll('.inbox-section').forEach((s,i) => s.classList.toggle('active', i===0));
+        openModal('inbox-modal');
+        renderInbox();
+    }, isMenuOpen ? 420 : 0);
+}
+
+function switchInboxTab(tab) {
+    const tabOrder = ['saved','favorite','archived','deleted'];
+    document.querySelectorAll('.inbox-tab').forEach((t, i) => {
+        t.classList.toggle('active', tabOrder[i] === tab);
+    });
+    document.querySelectorAll('.inbox-section').forEach(s => s.classList.remove('active'));
+    document.getElementById('inbox-' + tab).classList.add('active');
+    renderInbox(tab);
+}
+
+let _inboxTimerInterval = null;
+
+function renderInbox(tab = null) {
+    const tabs = tab ? [tab] : ['saved','favorite','archived','deleted'];
+    tabs.forEach(t => {
+        const container = document.getElementById(t === 'deleted' ? 'inbox-deleted-list' : 'inbox-' + t);
+        if (!container) return;
+        let items = [];
+        if (t === 'saved') items = sessions.filter(s => s._saved && !s._deleted);
+        else if (t === 'favorite') items = sessions.filter(s => s._favorite && !s._deleted);
+        else if (t === 'archived') items = sessions.filter(s => s._archived && !s._deleted);
+        else if (t === 'deleted') items = sessions.filter(s => s._deleted);
+
+        if (items.length === 0) {
+            container.innerHTML = '<div class="inbox-empty">— Empty —</div>';
+            return;
+        }
+        container.innerHTML = '';
+        items.forEach(s => {
+            const row = document.createElement('div');
+            row.className = 'inbox-item';
+            row.dataset.sessionId = s.id;
+
+            const nameDiv = document.createElement('div');
+            nameDiv.className = 'inbox-item-name';
+            nameDiv.textContent = s.name;
+            row.appendChild(nameDiv);
+
+            const meta = document.createElement('div');
+            meta.className = 'inbox-item-meta';
+
+            // Date created (shown on all tabs)
+            const dateSpan = document.createElement('span');
+            const createdDate = s.created ? new Date(s.created).toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit' }) : '—';
+            dateSpan.textContent = createdDate;
+
+            if (t === 'deleted') {
+                const countdown = document.createElement('span');
+                countdown.className = 'countdown';
+                countdown.dataset.deletedAt = s._deletedAt;
+                countdown.id = 'countdown-' + s.id;
+                meta.appendChild(dateSpan);
+                meta.appendChild(countdown);
+                row.appendChild(meta);
+
+                const actions = document.createElement('div');
+                actions.style.cssText = 'display:flex;gap:8px;margin-top:8px;';
+                const restoreBtn = document.createElement('button');
+                restoreBtn.className = 'inbox-restore-btn'; restoreBtn.textContent = 'Restore';
+                restoreBtn.onclick = (e) => { e.stopPropagation(); restoreSession(s.id); };
+                const permDelBtn = document.createElement('button');
+                permDelBtn.className = 'inbox-perm-del-btn'; permDelBtn.textContent = 'Delete Now';
+                permDelBtn.onclick = (e) => { e.stopPropagation(); permanentlyDelete(s.id); };
+                actions.appendChild(restoreBtn); actions.appendChild(permDelBtn);
+                row.appendChild(actions);
+            } else {
+                const msgsSpan = document.createElement('span');
+                msgsSpan.textContent = s.messages.length + ' msgs';
+                meta.appendChild(dateSpan); meta.appendChild(msgsSpan);
+                row.appendChild(meta);
+            }
+
+            // Long press on inbox item for context menu — no stuck highlight
+            let pressTimer = null;
+            const startPress = (e) => {
+                pressTimer = setTimeout(() => {
+                    row._longPressed = true;
+                    row.style.background = 'rgba(0,255,65,0.1)';
+                    openInboxCtxMenu(s.id, e);
+                    if (navigator.vibrate) navigator.vibrate(40);
+                    setTimeout(() => { row.style.background = ''; }, 200);
+                }, 500);
+            };
+            const cancelPress = () => {
+                clearTimeout(pressTimer);
+                pressTimer = null;
+                row.style.background = '';
+            };
+            if (t !== 'deleted') {
+                row.onclick = (e) => { if (row._longPressed) { row._longPressed = false; return; } closeModal('inbox-modal'); setTimeout(() => loadSession(s.id), 350); };
+            }
+            row.addEventListener('mousedown', startPress);
+            row.addEventListener('touchstart', startPress, { passive: true });
+            row.addEventListener('mouseup', cancelPress);
+            row.addEventListener('touchend', cancelPress);
+            row.addEventListener('touchcancel', cancelPress);
+
+    
