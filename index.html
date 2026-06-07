@@ -125,35 +125,18 @@
         .color-dot.active { border-color: white !important; transform: scale(1.15); }
         .section-head { color: var(--accent); font-size: 0.7rem; letter-spacing: 2px; margin: 16px 0 6px; }
 
-        /* ACCOUNT MODAL */
-        #account-modal .acct-action-btn {
+        /* ACCOUNT SETTINGS ACTIONS (moved from account modal into settings) */
+        .settings-acct-action-btn {
             display: flex; align-items: center; gap: 12px; width: 100%;
             background: transparent; border: 1px solid #222; border-radius: 12px;
             padding: 14px 16px; color: #ccc; font-size: 0.88rem; cursor: pointer;
             transition: 0.2s; margin-bottom: 8px; text-align: left;
         }
-        #account-modal .acct-action-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,255,65,0.05); }
-        #account-modal .acct-action-btn.danger { color: #ff4444; border-color: #2a1111; }
-        #account-modal .acct-action-btn.danger:hover { border-color: #ff4444; background: rgba(255,68,68,0.05); }
-        #account-modal .acct-action-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
-        .acct-user-card { display: flex; align-items: center; gap: 14px; background: #0d0d0d; border: 1px solid #222; border-radius: 14px; padding: 14px; margin-bottom: 20px; }
-        .acct-user-card .acct-avatar { width: 52px; height: 52px; border-radius: 50%; border: 1.5px solid var(--accent); background: #111; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; overflow: hidden; flex-shrink: 0; }
-        .acct-user-card .acct-avatar img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* DELETE ACCOUNT STEPS */
-        #delete-step-modal .del-step { display: none; }
-        #delete-step-modal .del-step.active { display: block; }
-        .del-step-indicator { display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; }
-        .del-step-dot { width: 8px; height: 8px; border-radius: 50%; background: #333; transition: 0.3s; }
-        .del-step-dot.active { background: #ff4444; }
-        .del-step-dot.done { background: #ff4444; opacity: 0.5; }
-        .del-confirm-input { background: #0d0d0d; border: 1px solid #333; border-radius: 10px; padding: 12px 16px; color: white; font-size: 0.95rem; width: 100%; outline: none; text-align: center; letter-spacing: 2px; margin: 14px 0; }
-        .del-confirm-input:focus { border-color: #ff4444; }
-        .del-warning-box { background: rgba(255,68,68,0.07); border: 1px solid rgba(255,68,68,0.25); border-radius: 12px; padding: 14px 16px; margin: 14px 0; font-size: 0.82rem; color: #ff8888; line-height: 1.6; }
-        .del-warning-box strong { color: #ff4444; display: block; margin-bottom: 4px; }
-
-        /* RESET PASSWORD MODAL */
-        #reset-pass-modal .reset-info { color: #555; font-size: 0.8rem; line-height: 1.6; margin-bottom: 16px; }
+        .settings-acct-action-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,255,65,0.05); }
+        .settings-acct-action-btn.danger { color: #ff4444; border-color: #2a1111; }
+        .settings-acct-action-btn.danger:hover { border-color: #ff4444; background: rgba(255,68,68,0.05); }
+        .settings-acct-action-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+        .settings-acct-action-btn.hidden-guest { display: none; }
 
         /* INFO MODAL */
         .info-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #1a1a1a; font-size: 0.85rem; }
@@ -183,11 +166,14 @@
         /* INPUT AREA */
         .input-container { padding: 10px 15px; padding-bottom: env(safe-area-inset-bottom, 25px); background: var(--bg); }
         .input-bubble { background: var(--ai-bubble); border: 1px solid var(--accent); border-radius: 30px; display: flex; align-items: center; padding: 5px 12px; max-width: 850px; margin: 0 auto; gap: 8px; }
-        input[type="text"] { flex: 1; background: transparent; border: none; color: white; outline: none; font-size: 16px; padding: 10px 0; }
-        .plus-btn { background: transparent; border: 1.5px solid var(--accent); color: var(--accent); width: 32px; height: 32px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; flex-shrink: 0; }
-        .send-btn { background: var(--user-bubble); border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; flex-shrink: 0; font-size: 1rem; font-weight: 700; }
-        .voice-btn { background: transparent; border: 1.5px solid #333; color: #555; width: 32px; height: 32px; border-radius: 50%; font-size: 0.9rem; cursor: pointer; flex-shrink: 0; transition: 0.2s; }
+        input[type="text"] { flex: 1; background: transparent; border: none; color: white; outline: none; font-size: 16px; padding: 10px 0; min-width: 0; }
+        .plus-btn { background: transparent; border: 1.5px solid var(--accent); color: var(--accent); width: 34px; height: 34px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; line-height: 1; }
+        .send-btn { background: var(--user-bubble); border: none; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+        .send-btn svg { width: 16px; height: 16px; fill: #000; }
+        .voice-btn { background: transparent; border: 1.5px solid #333; color: #555; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; flex-shrink: 0; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+        .voice-btn svg { width: 15px; height: 15px; }
         .voice-btn.recording { border-color: #ff4444; color: #ff4444; animation: pulse 1s infinite; }
+        .voice-btn.recording svg { fill: #ff4444; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
         #file-list { display: flex; flex-wrap: wrap; gap: 8px; max-width: 850px; margin: 0 auto 8px; }
         .file-chip { background: var(--ai-bubble); border: 1px solid var(--accent); color: var(--accent); font-size: 0.75rem; padding: 6px 12px; border-radius: 15px; display: flex; align-items: center; gap: 8px; }
@@ -221,6 +207,21 @@
         .search-input:focus { border-color: var(--accent); }
         .search-input::placeholder { color: #444; }
 
+        /* DELETE ACCOUNT STEPS */
+        #delete-step-modal .del-step { display: none; }
+        #delete-step-modal .del-step.active { display: block; }
+        .del-step-indicator { display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; }
+        .del-step-dot { width: 8px; height: 8px; border-radius: 50%; background: #333; transition: 0.3s; }
+        .del-step-dot.active { background: #ff4444; }
+        .del-step-dot.done { background: #ff4444; opacity: 0.5; }
+        .del-confirm-input { background: #0d0d0d; border: 1px solid #333; border-radius: 10px; padding: 12px 16px; color: white; font-size: 0.95rem; width: 100%; outline: none; text-align: center; letter-spacing: 2px; margin: 14px 0; }
+        .del-confirm-input:focus { border-color: #ff4444; }
+        .del-warning-box { background: rgba(255,68,68,0.07); border: 1px solid rgba(255,68,68,0.25); border-radius: 12px; padding: 14px 16px; margin: 14px 0; font-size: 0.82rem; color: #ff8888; line-height: 1.6; }
+        .del-warning-box strong { color: #ff4444; display: block; margin-bottom: 4px; }
+
+        /* RESET PASSWORD MODAL */
+        #reset-pass-modal .reset-info { color: #555; font-size: 0.8rem; line-height: 1.6; margin-bottom: 16px; }
+
         /* MISC */
         #file-upload { display: none; }
         #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; z-index: 1500; }
@@ -236,6 +237,7 @@
         .btn-danger:hover { background: rgba(255,68,68,0.08); }
         .btn-full { width: 100%; text-align: center; }
     </style>
+    <script src="https://raw.githack.com/VLAD-CODED/sonix-ai/main/sonix-model.js"></script>
 </head>
 <body id="app-body">
 
@@ -244,7 +246,7 @@
 <!-- AUTH SCREEN -->
 <div id="auth-screen">
     <div class="auth-logo">SONIX</div>
-    <div class="auth-tagline">AI · DEVELOPED BY VLAD</div>
+    <div class="auth-tagline">AI CHAT INTERFACE</div>
     <div class="auth-box">
         <div class="auth-tabs">
             <button class="auth-tab active" onclick="switchTab('login')">Login</button>
@@ -257,6 +259,9 @@
         <input class="auth-input" id="auth-pass2" type="password" placeholder="Confirm password" style="display:none">
         <button class="auth-btn" id="auth-submit" onclick="handleAuth()">Login</button>
         <div class="guest-link" onclick="continueAsGuest()">Continue as Guest</div>
+        <div style="color:#333;font-size:0.7rem;text-align:center;line-height:1.6;padding:0 4px;">
+            Log in or register to unlock all features — including saved conversations, account settings, and security options. As a guest, your conversations will not be saved.
+        </div>
     </div>
 </div>
 
@@ -272,8 +277,6 @@
         <div class="avatar-upload-hint">Tap to upload a photo</div>
         <div class="setup-label">YOUR NAME</div>
         <input class="auth-input" id="setup-name" type="text" placeholder="How should SONIX call you?" style="width:100%">
-        <div class="setup-label">BIO (optional)</div>
-        <input class="auth-input" id="setup-bio" type="text" placeholder="Something about you..." style="width:100%">
         <div class="setup-label">BIRTHDAY (optional)</div>
         <div class="bday-row" style="width:100%;">
             <input class="bday-field" id="setup-bday-dd" type="text" inputmode="numeric" maxlength="2" placeholder="DD" oninput="bdayAutoTab(this,'setup-bday-mm')">
@@ -297,13 +300,13 @@
 <div id="overlay" onclick="toggleMenu()"></div>
 <div class="toast" id="toast"></div>
 
-<!-- PROFILE MODAL -->
+<!-- ACCOUNT MODAL (view account info + edit name/birthday + upload photo) -->
 <div class="modal-base" id="profile-modal">
-    <h3 class="modal-title">MY PROFILE</h3>
+    <h3 class="modal-title">MY ACCOUNT</h3>
     <div class="pf-avatar-wrap">
         <div class="pf-avatar-circle" id="modalAvatar" onclick="document.getElementById('pf-avatar-input').click()">
             <span id="modalAvatarContent">?</span>
-            <input type="file" id="pf-avatar-input" accept="image/*" onchange="handleProfileAvatarUpload(this)">
+            <input type="file" id="pf-avatar-input" accept="image/*" style="display:none" onchange="handleProfileAvatarUpload(this)">
         </div>
         <div class="pf-avatar-label">TAP TO CHANGE PHOTO</div>
     </div>
@@ -312,10 +315,8 @@
         <div class="pf-stat"><div class="pf-stat-num" id="statFiles">0</div><div class="pf-stat-lbl">FILES</div></div>
         <div class="pf-stat"><div class="pf-stat-num" id="statSessions">0</div><div class="pf-stat-lbl">SESSIONS</div></div>
     </div>
-    <div class="pf-field-label">NICKNAME</div>
+    <div class="pf-field-label">DISPLAY NAME</div>
     <input class="pf-edit-input" id="pf-edit-name" type="text" placeholder="Display name">
-    <div class="pf-field-label">BIO</div>
-    <input class="pf-edit-input" id="pf-edit-bio" type="text" placeholder="Something about you...">
     <div class="pf-field-label">BIRTHDAY</div>
     <div class="bday-row" style="margin-bottom:12px;">
         <input class="bday-field" id="pf-bday-dd" type="text" inputmode="numeric" maxlength="2" placeholder="DD" oninput="bdayAutoTab(this,'pf-bday-mm')">
@@ -326,59 +327,44 @@
     </div>
     <div class="pf-field-label">EMAIL</div>
     <div style="color:#555;font-size:0.82rem;margin-bottom:12px;padding:10px 14px;background:#0a0a0a;border-radius:10px;" id="pf-email-display">—</div>
-    <div class="pf-field-label" style="margin-bottom:6px;">BADGES</div>
-    <div class="pf-badge-row" id="pf-badges"></div>
+    <div class="pf-field-label">MEMBER SINCE</div>
+    <div style="color:#555;font-size:0.82rem;margin-bottom:16px;padding:10px 14px;background:#0a0a0a;border-radius:10px;" id="pf-joined-display">—</div>
     <div style="display:flex;gap:10px;margin-top:6px;">
-        <button class="auth-btn" style="flex:1;padding:12px" onclick="saveProfile()">Save</button>
+        <button class="auth-btn" style="flex:1;padding:12px" onclick="saveProfile()">Save Changes</button>
         <button class="btn-outline" onclick="closeModal('profile-modal')">Cancel</button>
     </div>
+
+    <div class="divider" style="margin:18px 0 10px;"></div>
+    <div class="section-head" style="margin-top:0;">ACCOUNT ACTIONS</div>
+    <button class="settings-acct-action-btn" style="margin-top:6px;" onclick="switchModal('profile-modal','reset-pass-modal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Reset Password
+    </button>
+    <button class="settings-acct-action-btn" onclick="closeModal('profile-modal');setTimeout(()=>logout(),320)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Log Out
+    </button>
+    <button class="settings-acct-action-btn danger" onclick="closeModal('profile-modal');setTimeout(()=>startDeleteAccount(),320)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        Delete Account
+    </button>
 </div>
 
-<!-- INFO MODAL -->
+<!-- APP DETAILS MODAL -->
 <div class="modal-base" id="info-modal">
-    <h3 class="modal-title">SYSTEM INFO</h3>
+    <h3 class="modal-title">APP DETAILS</h3>
     <div class="info-row"><span class="info-label">App Name</span><span class="info-val">SONIX</span></div>
-    <div class="info-row"><span class="info-label">Developer</span><span class="info-val">VLAD</span></div>
     <div class="info-row"><span class="info-label">Version</span><span class="info-val">2.0.0</span></div>
-    <div class="info-row"><span class="info-label">AI Model</span><span class="info-val">SONIX-Core</span></div>
-    <div class="info-row"><span class="info-label">Status</span><span class="info-val" style="color:#00ff41">ONLINE</span></div>
+    <div class="info-row"><span class="info-label">Engine</span><span class="info-val">SONIX-Core</span></div>
+    <div class="info-row"><span class="info-label">Status</span><span class="info-val" style="color:#00ff41">● ONLINE</span></div>
     <div class="info-row"><span class="info-label">Sessions Stored</span><span class="info-val" id="info-sessions">0</span></div>
-    <div class="info-row"><span class="info-label">Build</span><span class="info-val" id="info-build">—</span></div>
-    <div class="info-row"><span class="info-label">Contact</span><span><a href="https://www.instagram.com/youngvladd" target="_blank" style="color:var(--accent);text-decoration:none;font-weight:bold;">@youngvladd</a></span></div>
+    <div class="info-row"><span class="info-label">Storage</span><span class="info-val">Local Device</span></div>
+    <div class="info-row"><span class="info-label">Build Date</span><span class="info-val" id="info-build">—</span></div>
+    <div class="info-row"><span class="info-label">Platform</span><span class="info-val" id="info-platform">—</span></div>
     <div style="margin-top:16px;padding:12px;background:#0a0a0a;border-radius:12px;font-size:0.75rem;color:#444;line-height:1.6;">
         SONIX is an AI assistant interface. All data is stored locally on your device. No data is transmitted to external servers.
     </div>
     <button class="modal-close-btn" onclick="closeModal('info-modal')">Close</button>
-</div>
-
-<!-- ACCOUNT MODAL -->
-<div class="modal-base" id="account-modal">
-    <h3 class="modal-title">ACCOUNT</h3>
-    <div class="acct-user-card">
-        <div class="acct-avatar" id="acct-avatar"></div>
-        <div style="flex:1;min-width:0;">
-            <div style="color:var(--accent);font-weight:700;font-size:0.95rem;" id="acct-name">User</div>
-            <div style="color:#555;font-size:0.72rem;" id="acct-email">—</div>
-        </div>
-    </div>
-    <button class="acct-action-btn" onclick="closeModal('account-modal');setTimeout(()=>openModal('profile-modal'),320)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/></svg>
-        View &amp; Edit Profile
-    </button>
-    <button class="acct-action-btn" onclick="openResetPassword()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        Reset Password
-    </button>
-    <button class="acct-action-btn" onclick="closeModal('account-modal');setTimeout(()=>logout(),320)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        Log Out
-    </button>
-    <div class="divider" style="margin:8px 0 12px;"></div>
-    <button class="acct-action-btn danger" onclick="startDeleteAccount()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-        Delete Account
-    </button>
-    <button class="modal-close-btn" onclick="closeModal('account-modal')">Close</button>
 </div>
 
 <!-- RESET PASSWORD MODAL -->
@@ -394,7 +380,7 @@
     <div id="reset-err" style="color:#ff4444;font-size:0.78rem;display:none;margin-bottom:8px;"></div>
     <div style="display:flex;gap:10px;">
         <button class="auth-btn" style="flex:1;padding:12px" onclick="doResetPassword()">Update Password</button>
-        <button class="btn-outline" onclick="closeModal('reset-pass-modal');setTimeout(()=>openModal('account-modal'),320)">Back</button>
+        <button class="btn-outline" onclick="switchModal('reset-pass-modal','profile-modal')">Cancel</button>
     </div>
 </div>
 
@@ -413,12 +399,12 @@
             Do you want to delete your account?
         </div>
         <div class="del-warning-box">
-            <strong>⚠ Warning</strong>
+            <strong>Warning</strong>
             This action is permanent and cannot be undone. All your sessions, messages, and profile data will be lost.
         </div>
         <div style="display:flex;gap:10px;margin-top:16px;">
             <button class="btn-danger btn-full" onclick="goDelStep(2)">Yes, Continue</button>
-            <button class="btn-outline" onclick="closeModal('delete-step-modal');setTimeout(()=>openModal('account-modal'),320)">Cancel</button>
+            <button class="btn-outline" onclick="closeModal('delete-step-modal')">Cancel</button>
         </div>
     </div>
 
@@ -440,7 +426,7 @@
     <div class="del-step" id="del-step-3">
         <h3 class="modal-title" style="color:#ff4444;">FINAL CONFIRMATION</h3>
         <div class="del-warning-box">
-            <strong>🚨 Are you sure you want to delete this account?</strong>
+            <strong>Are you sure you want to delete this account?</strong>
             This account cannot be recovered once deleted. A final confirmation will be sent to your email to complete the deletion process.
         </div>
         <div style="color:#555;font-size:0.75rem;margin:12px 0 16px;line-height:1.6;">
@@ -458,26 +444,40 @@
     <h3 class="modal-title">SETTINGS</h3>
 
     <div class="section-head">ACCOUNT</div>
-    <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #111;cursor:pointer;" onclick="closeModal('settings-modal');setTimeout(()=>openModal('account-modal'),320)">
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #111;cursor:pointer;" onclick="switchModal('settings-modal','profile-modal')" id="settings-acct-row">
         <div id="settings-avatar" style="width:44px;height:44px;border-radius:50%;border:1.5px solid var(--accent);background:#111;display:flex;align-items:center;justify-content:center;font-size:1.2rem;overflow:hidden;flex-shrink:0;"></div>
         <div style="flex:1;">
             <div style="font-size:0.88rem;color:var(--accent);font-weight:600;" id="settings-name">User</div>
             <div style="font-size:0.7rem;color:#555;" id="settings-email">—</div>
         </div>
-        <div style="color:#555;font-size:0.72rem;letter-spacing:1px;">ACCOUNT &rsaquo;</div>
+        <div style="color:#555;font-size:0.72rem;letter-spacing:1px;" id="settings-acct-label">MY ACCOUNT &rsaquo;</div>
     </div>
 
-    <div class="section-head">AI PERSONALITY</div>
-    <div class="setting-row">
-        <div><div class="setting-label">SONIX Persona</div><div class="setting-sub">Changes how SONIX responds</div></div>
-        <select id="ai-persona" class="setting-select">
-            <option value="default">Default</option>
-            <option value="coder">Coder</option>
-            <option value="friend">Friendly</option>
-            <option value="formal">Formal</option>
-            <option value="savage">Savage</option>
-        </select>
+    <!-- Guest context note — shown only when NOT logged in -->
+    <div id="settings-guest-note" style="display:none;background:#0a0a0a;border:1px solid #1a1a1a;border-radius:12px;padding:14px 16px;margin-top:10px;">
+        <div style="color:var(--accent);font-size:0.72rem;font-weight:700;letter-spacing:1px;margin-bottom:6px;">GUEST MODE</div>
+        <div style="color:#555;font-size:0.76rem;line-height:1.7;">
+            You're browsing as a guest. Log in or create an account to unlock:
+        </div>
+        <div style="color:#444;font-size:0.72rem;line-height:1.9;margin-top:4px;">
+            ✦ &nbsp;Saved conversation history<br>
+            ✦ &nbsp;Account settings &amp; profile<br>
+            ✦ &nbsp;Password &amp; security controls<br>
+            ✦ &nbsp;Data export &amp; session management
+        </div>
+        <div style="color:#333;font-size:0.68rem;margin-top:8px;line-height:1.6;">
+            Staying as a guest means your conversations will not be saved and will be lost when you close the app.
+        </div>
+        <button onclick="closeModal('settings-modal');document.getElementById('auth-screen').classList.remove('hidden');" style="margin-top:12px;background:var(--accent);color:#000;border:none;border-radius:10px;padding:9px 18px;font-weight:700;font-size:0.78rem;cursor:pointer;width:100%;">
+            Log In / Create Account
+        </button>
     </div>
+
+    <!-- Account actions shown only when logged in (not guest) -->
+    <div id="settings-account-actions" style="padding-top:10px;display:none;">
+    </div>
+
+
 
     <div class="section-head">APPEARANCE</div>
     <div class="setting-row">
@@ -501,10 +501,7 @@
         <div><div class="setting-label">Enter to Send</div><div class="setting-sub">Press Enter to send messages</div></div>
         <div class="toggle-switch on" id="toggle-enter" onclick="toggleSetting('enter',this)"><div class="toggle-knob"></div></div>
     </div>
-    <div class="setting-row">
-        <div><div class="setting-label">Sound Effects</div><div class="setting-sub">Audio feedback on actions</div></div>
-        <div class="toggle-switch" id="toggle-sound" onclick="toggleSetting('sound',this)"><div class="toggle-knob"></div></div>
-    </div>
+
 
     <div class="section-head">DATA</div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;padding:8px 0;">
@@ -513,23 +510,87 @@
         <button class="btn-danger" style="font-size:0.78rem;padding:8px 14px;" onclick="clearChatFromSettings()">Clear Chat</button>
     </div>
 
-    <div class="section-head">SYSTEM</div>
-    <div class="setting-row" style="cursor:pointer;" onclick="closeModal('settings-modal');setTimeout(()=>openModal('info-modal'),320)">
-        <div><div class="setting-label">System Info</div><div class="setting-sub">App version and build info</div></div>
+    <div class="section-head">SYSTEM & SECURITY</div>
+    <div class="setting-row" style="cursor:pointer;" onclick="switchModal('settings-modal','info-modal')">
+        <div><div class="setting-label">App Details & Build Info</div><div class="setting-sub">Version, storage info, and platform details</div></div>
+        <div style="color:#333;">&rsaquo;</div>
+    </div>
+    <div id="security-row" class="setting-row" style="cursor:pointer;display:none;" onclick="switchModal('settings-modal','security-modal')">
+        <div><div class="setting-label">Account Security</div><div class="setting-sub">Password, active sessions, and login activity</div></div>
         <div style="color:#333;">&rsaquo;</div>
     </div>
 
     <button class="modal-close-btn" style="margin-top:8px;" onclick="closeModal('settings-modal')">Done</button>
 </div>
 
+<!-- SECURITY MODAL (login-only) -->
+<div class="modal-base" id="security-modal">
+    <h3 class="modal-title">ACCOUNT SECURITY</h3>
+
+    <div class="section-head">PASSWORD</div>
+    <div class="setting-row" style="cursor:pointer;" onclick="switchModal('security-modal','reset-pass-modal')">
+        <div>
+            <div class="setting-label">Change Password</div>
+            <div class="setting-sub">Update your account password</div>
+        </div>
+        <div style="color:#333;">&rsaquo;</div>
+    </div>
+
+    <div class="section-head">LOGIN ACTIVITY</div>
+    <div style="background:#0a0a0a;border-radius:12px;padding:14px 16px;margin-bottom:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="font-size:0.82rem;color:#aaa;">Current Session</div>
+            <div style="font-size:0.72rem;color:#00ff41;font-weight:700;">ACTIVE</div>
+        </div>
+        <div style="font-size:0.72rem;color:#555;" id="sec-current-device">—</div>
+        <div style="font-size:0.72rem;color:#555;margin-top:2px;" id="sec-current-time">—</div>
+    </div>
+
+    <div class="section-head">TWO-FACTOR AUTH</div>
+    <div class="setting-row">
+        <div>
+            <div class="setting-label">2FA Verification</div>
+            <div class="setting-sub">Require email code on login</div>
+        </div>
+        <div class="toggle-switch" id="toggle-2fa" onclick="toggleSecSetting('2fa',this)"><div class="toggle-knob"></div></div>
+    </div>
+
+    <div class="section-head">LOGIN ALERTS</div>
+    <div class="setting-row">
+        <div>
+            <div class="setting-label">New Login Notification</div>
+            <div class="setting-sub">Alert when account is accessed</div>
+        </div>
+        <div class="toggle-switch" id="toggle-login-alert" onclick="toggleSecSetting('loginAlert',this)"><div class="toggle-knob"></div></div>
+    </div>
+
+    <div class="section-head">DATA PRIVACY</div>
+    <div class="setting-row">
+        <div>
+            <div class="setting-label">Save Chat History</div>
+            <div class="setting-sub">Store sessions on this device</div>
+        </div>
+        <div class="toggle-switch on" id="toggle-save-history" onclick="toggleSecSetting('saveHistory',this)"><div class="toggle-knob"></div></div>
+    </div>
+    <div class="setting-row">
+        <div>
+            <div class="setting-label">Auto-Clear on Logout</div>
+            <div class="setting-sub">Wipe session data when you log out</div>
+        </div>
+        <div class="toggle-switch" id="toggle-auto-clear" onclick="toggleSecSetting('autoClear',this)"><div class="toggle-knob"></div></div>
+    </div>
+
+    <button class="modal-close-btn" style="margin-top:8px;" onclick="closeModal('security-modal')">Done</button>
+</div>
+
 <!-- SIDEBAR -->
 <nav id="sidebar">
-    <div class="sidebar-profile" onclick="openAccountFromSidebar()">
+    <div class="sidebar-profile" onclick="openProfileFromSidebar()">
         <div class="sidebar-avatar" id="sidebarAvatar"></div>
         <div style="min-width:0;">
             <div class="sidebar-name" id="sidebarName">User</div>
             <div class="sidebar-email" id="sidebarEmail">—</div>
-            <div class="sidebar-tap-hint">TAP TO OPEN ACCOUNT</div>
+            <div class="sidebar-tap-hint" id="sidebar-tap-hint">TAP TO VIEW ACCOUNT</div>
         </div>
     </div>
     <div class="sidebar-menu">
@@ -565,7 +626,7 @@
         Guest mode — conversations are not saved. <span style="color:var(--accent);cursor:pointer;" onclick="document.getElementById('auth-screen').classList.remove('hidden');document.getElementById('guest-banner').classList.remove('show');">Log in to save</span>
     </div>
     <div id="chat-window">
-        <div class="bubble ai" id="welcome-msg">SONIX Active. Developed by VLAD. How can I help you today?</div>
+        <div class="bubble ai" id="welcome-msg">SONIX Active. How can I help you today?</div>
         <div class="typing-bubble" id="typing-indicator">
             <div class="typing-dots"><span></span><span></span><span></span></div>
         </div>
@@ -576,8 +637,22 @@
             <button class="plus-btn" onclick="document.getElementById('file-upload').click()">+</button>
             <input type="file" id="file-upload" multiple accept="image/*,.pdf,.txt,.doc,.docx" onchange="handleFiles(this)">
             <input type="text" id="userInput" placeholder="Message SONIX..." onkeypress="handleEnter(event)">
-            <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()">&#x1F3A4;</button>
-            <button class="send-btn" onclick="sendMsg()">&#x2191;</button>
+            <!-- Voice button with SVG mic icon -->
+            <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="2" width="6" height="11" rx="3"/>
+                    <path d="M5 10a7 7 0 0 0 14 0"/>
+                    <line x1="12" y1="19" x2="12" y2="22"/>
+                    <line x1="9" y1="22" x2="15" y2="22"/>
+                </svg>
+            </button>
+            <!-- Send button with SVG arrow icon -->
+            <button class="send-btn" onclick="sendMsg()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="19" x2="12" y2="5"/>
+                    <polyline points="5 12 12 5 19 12"/>
+                </svg>
+            </button>
         </div>
     </div>
 </div>
@@ -594,9 +669,11 @@ let currentSessionId = null;
 let authMode = 'login';
 let isRecording = false;
 let recognition = null;
-let settings = { typing: true, enter: true, sound: false, persona: 'default', accent: '#00ff41' };
+let settings = { typing: true, enter: true, accent: '#00ff41', securitySettings: { twoFA: false, loginAlert: false, saveHistory: true, autoClear: false } };
 let activeModalId = null;
 let delCurrentStep = 1;
+let _sendLock = false;
+let _authLock = false;
 
 // INIT
 window.onload = () => {
@@ -605,6 +682,7 @@ window.onload = () => {
     const saved = localStorage.getItem('sonix_user');
     if (saved) {
         currentUser = JSON.parse(saved);
+        document.getElementById('auth-screen').classList.add('hidden');
         loadSessions();
         startApp();
     }
@@ -624,15 +702,23 @@ function applySettings() {
     document.querySelectorAll('.color-dot').forEach(d => {
         d.classList.toggle('active', d.style.background === settings.accent);
     });
-    ['typing','enter','sound'].forEach(key => {
+    ['typing','enter'].forEach(key => {
         const el = document.getElementById('toggle-' + key);
         if (el) el.classList.toggle('on', settings[key]);
     });
-    const pSelect = document.getElementById('ai-persona');
-    if (pSelect) pSelect.value = settings.persona;
+    // Apply security settings toggles
+    const sec = settings.securitySettings || {};
+    const twoFAEl = document.getElementById('toggle-2fa');
+    if (twoFAEl) twoFAEl.classList.toggle('on', !!sec.twoFA);
+    const loginEl = document.getElementById('toggle-login-alert');
+    if (loginEl) loginEl.classList.toggle('on', !!sec.loginAlert);
+    const histEl = document.getElementById('toggle-save-history');
+    if (histEl) histEl.classList.toggle('on', sec.saveHistory !== false);
+    const clearEl = document.getElementById('toggle-auto-clear');
+    if (clearEl) clearEl.classList.toggle('on', !!sec.autoClear);
 }
 
-// BIRTHDAY HELPERS - DD/MM/YY
+// BIRTHDAY HELPERS
 function bdayAutoTab(input, nextId) {
     input.value = input.value.replace(/[^0-9]/g, '');
     if (input.value.length >= 2) {
@@ -660,6 +746,7 @@ function getField(id) { const el = document.getElementById(id); return el ? el.v
 // AUTH
 function switchTab(mode) {
     authMode = mode;
+    _authLock = false;
     document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active', (i===0&&mode==='login')||(i===1&&mode==='register')));
     document.getElementById('auth-name').style.display = mode === 'register' ? '' : 'none';
     document.getElementById('auth-pass2').style.display = mode === 'register' ? '' : 'none';
@@ -668,6 +755,10 @@ function switchTab(mode) {
 }
 
 function handleAuth() {
+    if (_authLock) return;
+    _authLock = true;
+    setTimeout(() => { _authLock = false; }, 1500);
+
     const email = document.getElementById('auth-email').value.trim();
     const pass = document.getElementById('auth-pass').value;
     if (!email || !pass) { showAuthErr('Fill in all fields.'); return; }
@@ -683,6 +774,8 @@ function handleAuth() {
         users[email] = { email, name, pass, avatar: null, bio: '', birthday: '', joined: new Date().toISOString() };
         localStorage.setItem('sonix_users', JSON.stringify(users));
         currentUser = users[email];
+        isGuest = false;
+        localStorage.setItem('sonix_user', JSON.stringify(currentUser));
         document.getElementById('setup-name').value = name;
         document.getElementById('auth-screen').classList.add('hidden');
         document.getElementById('profile-screen').classList.add('show');
@@ -690,6 +783,8 @@ function handleAuth() {
         const users = JSON.parse(localStorage.getItem('sonix_users') || '{}');
         if (!users[email] || users[email].pass !== pass) { showAuthErr('Invalid email or password.'); return; }
         currentUser = users[email];
+        isGuest = false;
+        document.getElementById('guest-banner').classList.remove('show');
         saveCurrentUser();
         loadSessions();
         document.getElementById('auth-screen').classList.add('hidden');
@@ -740,7 +835,7 @@ function handleProfileAvatarUpload(input) {
 function renderAllAvatars() {
     const src = currentUser ? currentUser.avatar : null;
     const letter = currentUser ? (currentUser.name || 'U')[0].toUpperCase() : '?';
-    ['sidebarAvatar','settings-avatar','acct-avatar'].forEach(id => {
+    ['sidebarAvatar','settings-avatar'].forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;
         if (src) el.innerHTML = '<img src="' + src + '" style="width:100%;height:100%;object-fit:cover;">';
@@ -756,16 +851,18 @@ function renderAllAvatars() {
 // PROFILE SETUP
 function finishSetup() {
     const name = document.getElementById('setup-name').value.trim() || currentUser.name;
-    const bio = document.getElementById('setup-bio').value.trim();
     const bday = getBdayString(getField('setup-bday-dd'), getField('setup-bday-mm'), getField('setup-bday-yy'));
     currentUser.name = name;
-    currentUser.bio = bio;
     currentUser.birthday = bday;
     if (currentUser._avatarDataUrl) { currentUser.avatar = currentUser._avatarDataUrl; delete currentUser._avatarDataUrl; }
     persistUser();
     saveCurrentUser();
+    isGuest = false;
+    document.getElementById('guest-banner').classList.remove('show');
     loadSessions();
     document.getElementById('profile-screen').classList.remove('show');
+    document.getElementById('auth-screen').classList.add('hidden');
+    showToast('Welcome to SONIX, ' + currentUser.name + '!');
     startApp();
 }
 
@@ -773,8 +870,12 @@ function skipSetup() {
     if (currentUser._avatarDataUrl) { delete currentUser._avatarDataUrl; }
     persistUser();
     saveCurrentUser();
+    isGuest = false;
+    document.getElementById('guest-banner').classList.remove('show');
     loadSessions();
     document.getElementById('profile-screen').classList.remove('show');
+    document.getElementById('auth-screen').classList.add('hidden');
+    showToast('Welcome to SONIX, ' + currentUser.name + '!');
     startApp();
 }
 
@@ -792,12 +893,21 @@ function saveCurrentUser() {
 
 function startApp(guest = false) {
     updateSidebarProfile();
+    // Show account actions in settings only for logged-in users
+    const acctActions = document.getElementById('settings-account-actions');
+    if (acctActions) acctActions.style.display = (!guest && !isGuest) ? 'block' : 'none';
+    // Show security row only for logged-in users
+    const secRow = document.getElementById('security-row');
+    if (secRow) secRow.style.display = (!guest && !isGuest) ? 'flex' : 'none';
     checkBirthday();
     const w = document.getElementById('welcome-msg');
     if (w) w.textContent = 'SONIX Active. Welcome' + (guest ? '' : ', ' + currentUser.name) + '. How can I help you today?';
     if (!guest && !currentSessionId) newSession(true);
     else if (!guest) renderSessionList();
     document.getElementById('info-sessions').textContent = sessions.length;
+    // Set platform info
+    const platEl = document.getElementById('info-platform');
+    if (platEl) platEl.textContent = navigator.platform || 'Web Browser';
 }
 
 function checkBirthday() {
@@ -812,6 +922,14 @@ function checkBirthday() {
     }
 }
 
+function toggleSecSetting(key, el) {
+    if (!settings.securitySettings) settings.securitySettings = {};
+    settings.securitySettings[key] = !settings.securitySettings[key];
+    el.classList.toggle('on', settings.securitySettings[key]);
+    saveSettings();
+    showToast('Security setting updated');
+}
+
 function logout() {
     localStorage.removeItem('sonix_user');
     currentUser = null; isGuest = false; sessions = []; currentSessionId = null;
@@ -820,9 +938,13 @@ function logout() {
     document.getElementById('app-body').classList.remove('menu-open');
     document.getElementById('menuToggle').classList.remove('open');
     document.getElementById('guest-banner').classList.remove('show');
-    document.getElementById('chat-window').innerHTML = '<div class="bubble ai" id="welcome-msg">SONIX Active. Developed by VLAD. How can I help you today?</div><div class="typing-bubble" id="typing-indicator"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
+    document.getElementById('chat-window').innerHTML = '<div class="bubble ai" id="welcome-msg">SONIX Active. How can I help you today?</div><div class="typing-bubble" id="typing-indicator"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
     document.getElementById('auth-email').value = '';
     document.getElementById('auth-pass').value = '';
+    const acctActions = document.getElementById('settings-account-actions');
+    if (acctActions) acctActions.style.display = 'none';
+    const secRow = document.getElementById('security-row');
+    if (secRow) secRow.style.display = 'none';
     if (document.getElementById('app-body').classList.contains('menu-open')) toggleMenu();
 }
 
@@ -833,53 +955,102 @@ function updateSidebarProfile() {
     document.getElementById('sidebarEmail').textContent = currentUser.email || (isGuest ? 'Guest Mode' : '—');
     document.getElementById('settings-name').textContent = currentUser.name || 'User';
     document.getElementById('settings-email').textContent = currentUser.email || (isGuest ? 'Guest Mode' : '—');
+    const hint = document.getElementById('sidebar-tap-hint');
+    if (hint) hint.textContent = isGuest ? 'TAP TO VIEW SETTINGS' : 'TAP TO VIEW ACCOUNT';
     renderAllAvatars();
-}
-
-function openAccountFromSidebar() {
-    toggleMenu();
-    setTimeout(() => openModal('account-modal'), 400);
 }
 
 function openProfileFromSidebar() {
     toggleMenu();
-    setTimeout(() => openModal('profile-modal'), 400);
+    if (isGuest) {
+        setTimeout(() => openModal('settings-modal'), 400);
+    } else {
+        setTimeout(() => openModal('profile-modal'), 400);
+    }
 }
 
-// MODALS
-function openModal(id) {
-    if (activeModalId && activeModalId !== id) closeModal(activeModalId);
-    activeModalId = id;
+// MODALS — simple, no race conditions
+function _isLoggedIn() {
+    return !isGuest && currentUser && !!currentUser.email;
+}
 
+function _populateModal(id) {
     if (id === 'profile-modal') {
-        document.getElementById('pf-edit-name').value = currentUser ? (currentUser.name || '') : '';
-        document.getElementById('pf-edit-bio').value = currentUser ? (currentUser.bio || '') : '';
-        setBdayFields('pf-bday', currentUser ? (currentUser.birthday || '') : '');
-        document.getElementById('pf-email-display').textContent = currentUser ? (currentUser.email || 'Guest') : '—';
+        document.getElementById('pf-edit-name').value = currentUser.name || '';
+        setBdayFields('pf-bday', currentUser.birthday || '');
+        document.getElementById('pf-email-display').textContent = currentUser.email || '—';
+        const joinedEl = document.getElementById('pf-joined-display');
+        if (joinedEl) {
+            joinedEl.textContent = currentUser.joined
+                ? new Date(currentUser.joined).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' })
+                : '—';
+        }
         document.getElementById('statMsgs').textContent = msgCount;
         document.getElementById('statFiles').textContent = fileCount;
         document.getElementById('statSessions').textContent = sessions.length;
         renderAllAvatars();
-        renderBadges();
     }
     if (id === 'info-modal') {
         document.getElementById('info-sessions').textContent = sessions.length;
+        const platEl = document.getElementById('info-platform');
+        if (platEl) platEl.textContent = navigator.platform || 'Web Browser';
     }
     if (id === 'settings-modal') {
         applySettings();
         renderAllAvatars();
+        const loggedIn = _isLoggedIn();
+        const acctActions = document.getElementById('settings-account-actions');
+        if (acctActions) acctActions.style.display = loggedIn ? 'block' : 'none';
+        const secRow = document.getElementById('security-row');
+        if (secRow) secRow.style.display = loggedIn ? 'flex' : 'none';
+        const guestNote = document.getElementById('settings-guest-note');
+        if (guestNote) guestNote.style.display = loggedIn ? 'none' : 'block';
+        // MY ACCOUNT row: only show arrow/tappable when logged in
+        const acctLabel = document.getElementById('settings-acct-label');
+        if (acctLabel) acctLabel.textContent = loggedIn ? 'MY ACCOUNT ›' : '';
+        const acctRow = document.getElementById('settings-acct-row');
+        if (acctRow) acctRow.style.cursor = loggedIn ? 'pointer' : 'default';
     }
-    if (id === 'account-modal') {
-        document.getElementById('acct-name').textContent = currentUser ? (currentUser.name || 'User') : 'User';
-        document.getElementById('acct-email').textContent = currentUser ? (currentUser.email || 'Guest') : '—';
-        renderAllAvatars();
+    if (id === 'security-modal') {
+        const devEl = document.getElementById('sec-current-device');
+        if (devEl) devEl.textContent = navigator.userAgent.substring(0, 60) + '...';
+        const timeEl = document.getElementById('sec-current-time');
+        if (timeEl) timeEl.textContent = 'Started: ' + new Date().toLocaleString();
+        applySettings();
+    }
+    if (id === 'reset-pass-modal') {
+        document.getElementById('reset-current').value = '';
+        document.getElementById('reset-new').value = '';
+        document.getElementById('reset-confirm').value = '';
+        document.getElementById('reset-err').style.display = 'none';
+    }
+}
+
+function openModal(id) {
+    // Login-only guards
+    const loginRequired = ['profile-modal', 'security-modal', 'reset-pass-modal', 'delete-step-modal'];
+    if (loginRequired.includes(id) && !_isLoggedIn()) {
+        showToast('Log in to access this feature');
+        return;
     }
 
-    document.getElementById('modal-backdrop').classList.add('active');
+    // Close any open modal instantly (no animation delay conflict)
+    document.querySelectorAll('.modal-base.active').forEach(m => {
+        m.classList.remove('active');
+        m.style.display = 'none';
+    });
+    activeModalId = id;
+
+    _populateModal(id);
+
     const m = document.getElementById(id);
-    m.style.display = 'block';
-    setTimeout(() => m.classList.add('active'), 10);
+    if (!m) { activeModalId = null; return; }
+
     if (document.getElementById('app-body').classList.contains('menu-open')) toggleMenu();
+
+    document.getElementById('modal-backdrop').classList.add('active');
+    m.style.display = 'block';
+    requestAnimationFrame(() => requestAnimationFrame(() => m.classList.add('active')));
 }
 
 function closeModal(id) {
@@ -893,19 +1064,23 @@ function closeModal(id) {
 
 function backdropClose() { if (activeModalId) closeModal(activeModalId); }
 
-function openInfoModal() {
-    document.getElementById('info-sessions').textContent = sessions.length;
-    openModal('info-modal');
+// Navigate from one modal to another without any timing bugs
+function switchModal(fromId, toId) {
+    // Close the source modal immediately
+    const from = fromId ? document.getElementById(fromId) : null;
+    if (from) { from.classList.remove('active'); from.style.display = 'none'; }
+    activeModalId = null;
+
+    if (toId) {
+        openModal(toId);
+    } else {
+        document.getElementById('modal-backdrop').classList.remove('active');
+    }
 }
 
-// ACCOUNT ACTIONS
+// ACCOUNT ACTIONS (now triggered from Settings)
 function openResetPassword() {
-    closeModal('account-modal');
-    document.getElementById('reset-current').value = '';
-    document.getElementById('reset-new').value = '';
-    document.getElementById('reset-confirm').value = '';
-    document.getElementById('reset-err').style.display = 'none';
-    setTimeout(() => openModal('reset-pass-modal'), 320);
+    openModal('reset-pass-modal');
 }
 
 function doResetPassword() {
@@ -922,22 +1097,19 @@ function doResetPassword() {
     currentUser.pass = newP;
     persistUser();
     saveCurrentUser();
-    closeModal('reset-pass-modal');
+    switchModal('reset-pass-modal','profile-modal');
     showToast('Password updated');
-    setTimeout(() => openModal('account-modal'), 320);
 }
 
 // DELETE ACCOUNT FLOW
 function startDeleteAccount() {
-    closeModal('account-modal');
-    setTimeout(() => {
-        delCurrentStep = 1;
-        document.getElementById('del-type-input').value = '';
-        document.getElementById('del-type-err').style.display = 'none';
-        document.getElementById('del-email-display').textContent = currentUser ? (currentUser.email || 'Guest') : '—';
-        showDelStep(1);
-        openModal('delete-step-modal');
-    }, 320);
+    if (!_isLoggedIn()) { showToast('Log in to delete your account'); return; }
+    delCurrentStep = 1;
+    document.getElementById('del-type-input').value = '';
+    document.getElementById('del-type-err').style.display = 'none';
+    document.getElementById('del-email-display').textContent = currentUser.email;
+    showDelStep(1);
+    openModal('delete-step-modal');
 }
 
 function showDelStep(step) {
@@ -988,7 +1160,7 @@ function renderBadges() {
         { id: 'birthday', label: 'Birthday Star', earned: !!(currentUser && currentUser.birthday) },
         { id: 'profile_set', label: 'Profile Set', earned: !!(currentUser && currentUser.avatar) },
     ];
-    wrap.innerHTML = all.map(b => `<div class="pf-badge${b.earned?' earned':''}">${b.earned?'&#10003; ':''}${b.label}</div>`).join('');
+    wrap.innerHTML = all.map(b => '<div class="pf-badge' + (b.earned?' earned':'') + '">' + (b.earned?'&#10003; ':'') + b.label + '</div>').join('');
 }
 
 // SETTINGS
@@ -1032,15 +1204,14 @@ function clearChatFromSettings() {
 
 // PROFILE SAVE
 function saveProfile() {
-    if (!currentUser) return;
+    if (!currentUser || isGuest) { showToast('Login to edit your account'); return; }
     currentUser.name = document.getElementById('pf-edit-name').value.trim() || currentUser.name;
-    currentUser.bio = document.getElementById('pf-edit-bio').value.trim();
     currentUser.birthday = getBdayString(getField('pf-bday-dd'), getField('pf-bday-mm'), getField('pf-bday-yy'));
     persistUser();
     saveCurrentUser();
     updateSidebarProfile();
     closeModal('profile-modal');
-    showToast('Profile saved');
+    showToast('Account updated');
 }
 
 // SESSIONS
@@ -1060,7 +1231,7 @@ function saveSessions() {
 
 function newSession(silent = false) {
     if (isGuest) {
-        document.getElementById('chat-window').innerHTML = '<div class="bubble ai">New conversation started. Note: messages won\'t be saved in Guest mode.</div><div class="typing-bubble" id="typing-indicator"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
+        document.getElementById('chat-window').innerHTML = '<div class="bubble ai">New conversation started. Note: messages will not be saved in Guest mode.</div><div class="typing-bubble" id="typing-indicator"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
         if (!silent) { toggleMenu(); showToast('New session (not saved)'); }
         return;
     }
@@ -1192,7 +1363,7 @@ function showFileInChat(file) {
             const wrap = document.createElement('div');
             wrap.className = 'file-preview-bubble';
             wrap.onclick = () => openFileViewer(e.target.result, file.name);
-            wrap.innerHTML = '<img src="' + e.target.result + '" alt="' + file.name + '"><div class="file-info"><div class="file-info-name">' + file.name + '</div><div class="file-info-size">' + (file.size/1024).toFixed(1) + ' KB · tap to view</div></div>';
+            wrap.innerHTML = '<img src="' + e.target.result + '" alt="' + file.name + '"><div class="file-info"><div class="file-info-name">' + file.name + '</div><div class="file-info-size">' + (file.size/1024).toFixed(1) + ' KB - tap to view</div></div>';
             chat.insertBefore(wrap, typing);
             chat.scrollTop = chat.scrollHeight;
         };
@@ -1219,6 +1390,10 @@ function handleEnter(event) {
 }
 
 function sendMsg() {
+    if (_sendLock) return;
+    _sendLock = true;
+    setTimeout(() => { _sendLock = false; }, 800);
+
     const chat = document.getElementById('chat-window');
     const input = document.getElementById('userInput');
     const typing = document.getElementById('typing-indicator');
@@ -1241,12 +1416,18 @@ function sendMsg() {
 
     if (settings.typing) { typing.style.display = 'block'; chat.scrollTop = chat.scrollHeight; }
 
-    const delay = 800 + Math.random() * 700;
-    setTimeout(() => {
+    SonixModel.setPersona(settings.persona || 'default');
+    if (currentUser && currentUser.name) SonixModel.setUserName(currentUser.name);
+
+    SonixModel.chat(userText || '').then(reply => {
         typing.style.display = 'none';
-        addAIMessage(getAIReply(userText));
+        addAIMessage(reply);
         renderSessionList();
-    }, delay);
+    }).catch(() => {
+        typing.style.display = 'none';
+        addAIMessage('SONIX model error. Please try again.');
+        renderSessionList();
+    });
 }
 
 function addAIMessage(text) {
@@ -1261,23 +1442,9 @@ function addAIMessage(text) {
 }
 
 function getAIReply(text) {
-    const persona = settings.persona;
-    const t = (text||'').toLowerCase();
-    if (!text) return 'I received your file. How can I help with it?';
-    if (t.includes('hello')||t.includes('hi')||t.includes('hey')) {
-        const greets = ['Hey! SONIX here. What can I do for you?','Hello! Ready to assist.','Hi there! What\'s on your mind?'];
-        return greets[Math.floor(Math.random()*greets.length)];
-    }
-    if (t.includes('your name')||t.includes('who are you')) return 'I\'m SONIX, an AI assistant developed by VLAD.';
-    if (t.includes('how are you')) return 'Running at full capacity. Ready to assist!';
-    if (t.includes('birthday')) return 'Birthdays are special! Did you set yours in your profile? SONIX remembers.';
-    if (t.includes('help')) return 'I\'m here to help. What do you need?';
-    if (t.includes('thank')) return 'You\'re welcome! Anything else I can do?';
-    if (persona === 'coder') return 'Let me analyze: "' + text.substring(0,40) + '"...\n\nHere\'s my technical breakdown...';
-    if (persona === 'friend') return 'omg yes totally! About "' + text.substring(0,30) + '" — I totally get you.';
-    if (persona === 'formal') return 'Thank you for your inquiry. Regarding "' + text.substring(0,40) + '", I will provide assistance accordingly.';
-    if (persona === 'savage') return 'Alright, listen. "' + text.substring(0,30) + '"? Let\'s be real here...';
-    return 'SONIX received: "' + text.substring(0,60) + (text.length>60?'...':'') + '". Processing your request...';
+    SonixModel.setPersona(settings.persona || 'default');
+    if (currentUser && !isGuest) SonixModel.setUserName(currentUser.name);
+    return '...';
 }
 
 // VOICE
@@ -1298,13 +1465,6 @@ function toggleVoice() {
 function toggleMenu() {
     document.getElementById('app-body').classList.toggle('menu-open');
     document.getElementById('menuToggle').classList.toggle('open');
-}
-
-function clearChat() {
-    const s = sessions.find(x => x.id === currentSessionId);
-    if (s) { s.messages = []; saveSessions(); }
-    document.getElementById('chat-window').innerHTML = '<div class="bubble ai">Chat cleared. Ready for a new conversation.</div><div class="typing-bubble" id="typing-indicator"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
-    toggleMenu(); showToast('Chat cleared');
 }
 
 function exportChat() {
