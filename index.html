@@ -285,7 +285,6 @@
         .btn-danger:hover { background: rgba(255,68,68,0.08); }
         .btn-full { width: 100%; text-align: center; }
     </style>
-    <script src="https://raw.githack.com/VLAD-CODED/sonix-ai/main/sonix-model.js"></script>
 </head>
 <body id="app-body">
 
@@ -491,7 +490,7 @@
 <div id="ctx-backdrop" onclick="closeCtxMenu()"></div>
 <div id="ctx-menu">
     <div class="ctx-title" id="ctx-session-label">SESSION</div>
-    <div class="ctx-item" onclick="ctxRename()">
+    <div class="ctx-item" id="ctx-rename-item" onclick="ctxRename()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         Rename
     </div>
@@ -678,6 +677,11 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Export All Data
         </button>
+        <button class="settings-acct-action-btn" onclick="document.getElementById('import-data-input').click()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/><line x1="12" y1="3" x2="12" y2="15"/><polyline points="17 8 12 3 7 8"/></svg>
+            Import Data
+        </button>
+        <input type="file" id="import-data-input" accept=".json" style="display:none" onchange="importData(this)">
         <button class="settings-acct-action-btn" onclick="clearChatFromSettings()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             Clear Current Chat
@@ -715,6 +719,11 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Export Chat
         </div>
+        <div class="menu-item" onclick="document.getElementById('import-chat-input').click()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Import Chat
+        </div>
+        <input type="file" id="import-chat-input" accept=".txt" style="display:none" onchange="importChat(this)">
         <div class="menu-item" id="inbox-menu-item" onclick="openInbox()" style="display:none;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
             Inbox
@@ -775,8 +784,11 @@
     </div>
 </div>
 
+
 <script>
-// STATE
+// ═══════════════════════════════════════════
+// SONIX APP
+// ═══════════════════════════════════════════
 let currentUser = null;
 let isGuest = false;
 let selectedFiles = [];
@@ -787,7 +799,7 @@ let currentSessionId = null;
 let authMode = 'login';
 let isRecording = false;
 let recognition = null;
-let settings = { typing: true, enter: true, accent: '#00ff41', securitySettings: { twoFA: false, loginAlert: false, saveHistory: true, autoClear: false } };
+let settings = { typing: true, enter: true, persona: 'default', accent: '#00ff41', securitySettings: { twoFA: false, loginAlert: false, saveHistory: true, autoClear: false } };
 let activeModalId = null;
 let delCurrentStep = 1;
 let _sendLock = false;
@@ -1319,6 +1331,60 @@ function exportAllData() {
     showToast('Data exported');
 }
 
+function importData(input) {
+    const file = input.files[0];
+    if (!file) return;
+    input.value = '';
+    const reader = new FileReader();
+    reader.onload = e => {
+        try {
+            const data = JSON.parse(e.target.result);
+            // Validate it's a SONIX export
+            if (!data.sessions || !Array.isArray(data.sessions)) {
+                showToast('Invalid SONIX export file'); return;
+            }
+            let imported = 0, skipped = 0, updated = 0;
+            data.sessions.forEach(importedSession => {
+                // Must have id and messages array
+                if (!importedSession.id || !Array.isArray(importedSession.messages)) { skipped++; return; }
+                const existing = sessions.find(s => s.id === importedSession.id);
+                if (existing) {
+                    // Merge: preserve flags, update messages if imported has more
+                    if (importedSession.messages.length > existing.messages.length) {
+                        existing.messages = importedSession.messages;
+                    }
+                    // Restore saved/favorite/archived flags from import
+                    if (importedSession._saved) existing._saved = true;
+                    if (importedSession._favorite) existing._favorite = true;
+                    if (importedSession._archived) existing._archived = true;
+                    existing.name = importedSession.name || existing.name;
+                    updated++;
+                } else {
+                    // New session — add it with all its flags intact
+                    sessions.push({
+                        id: importedSession.id,
+                        name: importedSession.name || 'Imported Session',
+                        messages: importedSession.messages,
+                        created: importedSession.created || new Date().toISOString(),
+                        updated: importedSession.updated || null,
+                        _saved: !!importedSession._saved,
+                        _favorite: !!importedSession._favorite,
+                        _archived: !!importedSession._archived,
+                        _deleted: false,
+                    });
+                    imported++;
+                }
+            });
+            saveSessions(); renderSessionList(); updateInboxBadge();
+            if (activeModalId) closeModal(activeModalId);
+            showToast(`Imported ${imported} new, ${updated} updated, ${skipped} skipped`);
+        } catch(err) {
+            showToast('Failed to read file — make sure it\'s a SONIX export');
+        }
+    };
+    reader.readAsText(file);
+}
+
 function clearAllDataConfirm() {
     if (!confirm('Clear ALL data? This cannot be undone.')) return;
     localStorage.clear(); logout();
@@ -1329,7 +1395,7 @@ function clearChatFromSettings() {
     const s = sessions.find(x => x.id === currentSessionId);
     if (s) { s.messages = []; saveSessions(); }
     document.getElementById('chat-window').innerHTML = '<div class="bubble ai">Chat cleared. Ready for a new conversation.</div><div class="typing-bubble" id="typing-indicator"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
-    closeModal('settings-modal');
+    if (activeModalId) closeModal(activeModalId);
     showToast('Chat cleared');
 }
 
@@ -1723,80 +1789,4 @@ function renderInbox(tab = null) {
         if (t === 'saved') items = sessions.filter(s => s._saved && !s._deleted);
         else if (t === 'favorite') items = sessions.filter(s => s._favorite && !s._deleted);
         else if (t === 'archived') items = sessions.filter(s => s._archived && !s._deleted);
-        else if (t === 'deleted') items = sessions.filter(s => s._deleted);
-
-        if (items.length === 0) {
-            container.innerHTML = '<div class="inbox-empty">— Empty —</div>';
-            return;
-        }
-        container.innerHTML = '';
-        items.forEach(s => {
-            const row = document.createElement('div');
-            row.className = 'inbox-item';
-            row.dataset.sessionId = s.id;
-
-            const nameDiv = document.createElement('div');
-            nameDiv.className = 'inbox-item-name';
-            nameDiv.textContent = s.name;
-            row.appendChild(nameDiv);
-
-            const meta = document.createElement('div');
-            meta.className = 'inbox-item-meta';
-
-            // Date created (shown on all tabs)
-            const dateSpan = document.createElement('span');
-            const createdDate = s.created ? new Date(s.created).toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit' }) : '—';
-            dateSpan.textContent = createdDate;
-
-            if (t === 'deleted') {
-                const countdown = document.createElement('span');
-                countdown.className = 'countdown';
-                countdown.dataset.deletedAt = s._deletedAt;
-                countdown.id = 'countdown-' + s.id;
-                meta.appendChild(dateSpan);
-                meta.appendChild(countdown);
-                row.appendChild(meta);
-
-                const actions = document.createElement('div');
-                actions.style.cssText = 'display:flex;gap:8px;margin-top:8px;';
-                const restoreBtn = document.createElement('button');
-                restoreBtn.className = 'inbox-restore-btn'; restoreBtn.textContent = 'Restore';
-                restoreBtn.onclick = (e) => { e.stopPropagation(); restoreSession(s.id); };
-                const permDelBtn = document.createElement('button');
-                permDelBtn.className = 'inbox-perm-del-btn'; permDelBtn.textContent = 'Delete Now';
-                permDelBtn.onclick = (e) => { e.stopPropagation(); permanentlyDelete(s.id); };
-                actions.appendChild(restoreBtn); actions.appendChild(permDelBtn);
-                row.appendChild(actions);
-            } else {
-                const msgsSpan = document.createElement('span');
-                msgsSpan.textContent = s.messages.length + ' msgs';
-                meta.appendChild(dateSpan); meta.appendChild(msgsSpan);
-                row.appendChild(meta);
-            }
-
-            // Long press on inbox item for context menu — no stuck highlight
-            let pressTimer = null;
-            const startPress = (e) => {
-                pressTimer = setTimeout(() => {
-                    row._longPressed = true;
-                    row.style.background = 'rgba(0,255,65,0.1)';
-                    openInboxCtxMenu(s.id, e);
-                    if (navigator.vibrate) navigator.vibrate(40);
-                    setTimeout(() => { row.style.background = ''; }, 200);
-                }, 500);
-            };
-            const cancelPress = () => {
-                clearTimeout(pressTimer);
-                pressTimer = null;
-                row.style.background = '';
-            };
-            if (t !== 'deleted') {
-                row.onclick = (e) => { if (row._longPressed) { row._longPressed = false; return; } closeModal('inbox-modal'); setTimeout(() => loadSession(s.id), 350); };
-            }
-            row.addEventListener('mousedown', startPress);
-            row.addEventListener('touchstart', startPress, { passive: true });
-            row.addEventListener('mouseup', cancelPress);
-            row.addEventListener('touchend', cancelPress);
-            row.addEventListener('touchcancel', cancelPress);
-
-    
+        else if (t ==
