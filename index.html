@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>SONIX</title>
+
+    <script>
+        if (localStorage.getItem('sonix_welcomed') !== '1') {
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.innerHTML = `
+                <div style="position:fixed;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;font-family:Inter,sans-serif;">
+                        <div style="font-size:2rem;font-weight:900;color:#00ff41;letter-spacing:8px;">SONIX</div>
+                        <div style="color:#444;font-size:0.85rem;letter-spacing:2px;">ACCESS RESTRICTED</div>
+                        <div style="color:#333;font-size:0.75rem;text-align:center;max-width:260px;line-height:1.7;">Please open SONIX from the main link.</div>
+                        <a href="index.html" style="margin-top:8px;background:#00ff41;color:#000;border-radius:12px;padding:14px 32px;font-weight:800;font-size:0.9rem;text-decoration:none;">Go to SONIX →</a>
+                    </div>
+                `;
+            });
+        }
+    </script>
+    
     <style>
         :root {
             --bg: #000000;
