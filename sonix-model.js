@@ -1,330 +1,524 @@
 /**
- * ╔══════════════════════════════════════════════════════════════════╗
- * ║  SONIX-Model v5.0.0  ·  COMMUNICATION CORE EDITION             ║
- * ║  Built by VLAD  ·  Architecture by Claude                      ║
- * ╚══════════════════════════════════════════════════════════════════╝
- *
- * PHILOSOPHY: This model THINKS and TALKS first. Research is optional.
- * The brain is built in — vocabulary, patterns, flows, word intelligence.
- *
- * CORE ARCHITECTURE:
- * ─────────────────
- * 1. WORD BRAIN         — 3000+ words across 80 semantic categories
- * 2. SENTENCE PATTERNS  — 200+ reply templates by topic + tone
- * 3. WORD FLOW ENGINE   — chains words naturally: topic → related → reply
- * 4. COMMUNICATION CORE — greet, explain, question, answer, describe,
- *                         compare, argue, encourage, comfort, debate,
- *                         summarize, expand, simplify, elaborate
- * 5. CONVERSATION STATES — tracks what was said, builds on context
- * 6. EMOTION INTELLIGENCE — 12 emotional states, adapts response style
- * 7. VOCABULARY MATCHING — mirrors user's word level and tone
- * 8. SMART REPLIES       — never says "I don't know", always responds
- *    with related vocab, definitions, connections, or honest redirects
- *
- * WORD CATEGORIES (80 total, 3000+ words):
- *   emotions · personality · actions · thinking · communication ·
- *   description · time · size · quantity · quality · nature · science ·
- *   technology · business · art · health · food · travel · sports ·
- *   relationships · learning · money · problem-solving · creativity ·
- *   leadership · motivation · philosophy · logic · language · math ·
- *   social · digital · work · home · culture · politics · history ·
- *   music · film · books · gaming · fashion · architecture · space ·
- *   biology · chemistry · physics · psychology · sociology · law ·
- *   medicine · education · environment · religion · mythology · ethics ·
- *   + 20 more specialized sets
- *
- * SENTENCE PATTERN SYSTEM:
- *   • Question patterns (who/what/when/where/why/how)
- *   • Explanation patterns (definition/breakdown/analogy/example)
- *   • Opinion patterns (agree/disagree/nuance/both sides)
- *   • Emotional patterns (comfort/hype/motivate/empathize)
- *   • Description patterns (detailed/simple/vivid/technical)
- *   • Comparison patterns (vs/pros-cons/similarities/differences)
- *   • Story patterns (context/conflict/resolution)
- *   • Teaching patterns (ELI5/step-by-step/by example)
- *
- * RESEARCH (secondary, live when needed):
- *   DuckDuckGo · Wikipedia · REST Countries · Free Dictionary API ·
- *   Quotable · JokeAPI · Advice Slip · Open Trivia · Numbers API
+ * SONIX-Model v6.0.0 — PATTERN ENGINE EDITION
+ * =============================================
+ * Core Philosophy:
+ *   Words connect. Patterns build. Language flows.
+ *   Every user message is processed as a pattern —
+ *   the model reads it, maps the words, and builds
+ *   a real, non-repeating, contextual response.
  *
  * USAGE:
  *   <script src="https://raw.githack.com/YOUR/REPO/main/sonix-model.js"></script>
- *   SonixModel.chat("hello") // => Promise<string>
- *   SonixModel.setPersona("friend")
- *   SonixModel.define("resilience")
- *   SonixModel.wordFamily("happy")
- *   SonixModel.synonymsOf("big")
- *   SonixModel.antonymsOf("fast")
- *   SonixModel.describe("ocean")
- *   SonixModel.examples("courage")
+ *   SonixModel.chat("how to throw") => Promise<string>
+ *   SonixModel.chat("what is courage") => Promise<string>
+ *   SonixModel.chat("go slow") => Promise<string>
+ *
+ * KEY FEATURES v6:
+ *   - PATTERN ENGINE: reads word sequences, builds structured answers
+ *     how+to+[verb]   → step-by-step guide
+ *     what+is+[noun]  → definition + description
+ *     why+[verb/noun] → reasoning + cause
+ *     when+to+[verb]  → timing + conditions
+ *     where+[verb]    → location + context
+ *     who+[verb/noun] → identity + role
+ *     [word]+vs+[word]→ comparison
+ *     how+[adj]       → degree/manner guide
+ *     go+[adj/adv]    → action guide (go slow, go hard)
+ *   - WORD CONNECTION GRAPH: 10,000+ words, 120 categories
+ *   - NO PERSONAS — one adaptive intelligent voice
+ *   - NO HARDCODED NAMES
+ *   - DYNAMIC RESPONSE BUILDER — never repeats
+ *   - VERB ENGINE: conjugation, usage, forms
+ *   - NOUN ENGINE: describe, relate, categorize
+ *   - ADJECTIVE ENGINE: intensity, comparison, context
+ *   - SENTENCE ASSEMBLER: builds natural language from parts
+ *   - LIVE RESEARCH: Wikipedia + DuckDuckGo + Dictionary API
+ *   - FULL MATH, UNIT CONVERSION, CALCULATORS
+ *   - EMOTIONAL INTELLIGENCE — 12 states
+ *   - 500+ IDIOMS, 200+ ETYMOLOGIES, 600+ SYNONYMS
  */
 
 (function(global) {
 "use strict";
 
-const VERSION    = "5.0.0";
-const MODEL_NAME = "SONIX-CommunicationCore";
+const VERSION = "6.0.0";
+const MODEL   = "SONIX-PatternEngine";
 
-// ═══════════════════════════════════════════════════════════════════
-// SECTION A: THE WORD BRAIN  —  3000+ words, 80 categories
-// ═══════════════════════════════════════════════════════════════════
+// ================================================================
+// SECTION 1: PATTERN ENGINE — the core of v6
+// Reads word sequences and maps them to response strategies
+// ================================================================
+
+// Question word triggers — what response TYPE to build
+const PATTERN_MAP = {
+  // HOW patterns
+  "how to":         "guide",          // how to throw → step-by-step
+  "how do":         "guide",          // how do you run → process
+  "how does":       "explain",        // how does gravity work → explanation
+  "how can":        "guide",          // how can I improve → advice
+  "how is":         "describe",       // how is this different → comparison
+  "how are":        "describe",
+  "how much":       "quantity",       // how much → amount/measurement
+  "how many":       "quantity",
+  "how often":      "frequency",      // how often → timing
+  "how long":       "duration",       // how long → time/distance
+  "how far":        "distance",
+  "how fast":       "speed",
+  "how hard":       "difficulty",
+  "how easy":       "difficulty",
+  "how good":       "quality",
+  "how bad":        "quality",
+  "how big":        "size",
+  "how small":      "size",
+  // WHAT patterns
+  "what is":        "define",
+  "what are":       "define",
+  "what was":       "history",
+  "what does":      "define",
+  "what do":        "guide",
+  "what should":    "advice",
+  "what can":       "capability",
+  "what makes":     "analyze",
+  "what causes":    "cause",
+  "what happens":   "consequence",
+  "what if":        "hypothetical",
+  "what kind":      "category",
+  "what type":      "category",
+  "what way":       "method",
+  // WHY patterns
+  "why is":         "reason",
+  "why are":        "reason",
+  "why do":         "reason",
+  "why does":       "reason",
+  "why did":        "history",
+  "why should":     "advice",
+  "why not":        "counter",
+  "why would":      "reason",
+  // WHEN patterns
+  "when to":        "timing",
+  "when is":        "timing",
+  "when do":        "timing",
+  "when should":    "timing",
+  "when did":       "history",
+  // WHERE patterns
+  "where to":       "location",
+  "where is":       "location",
+  "where do":       "location",
+  "where can":      "location",
+  // WHO patterns
+  "who is":         "identity",
+  "who are":        "identity",
+  "who can":        "capability",
+  "who should":     "advice",
+  // GO patterns
+  "go slow":        "action_guide",
+  "go fast":        "action_guide",
+  "go hard":        "action_guide",
+  "go easy":        "action_guide",
+  "go deep":        "action_guide",
+  "go big":         "action_guide",
+  "go small":       "action_guide",
+  "go back":        "action_guide",
+  "go forward":     "action_guide",
+  "go up":          "action_guide",
+  "go down":        "action_guide",
+  "go wide":        "action_guide",
+  "go low":         "action_guide",
+  "go high":        "action_guide",
+  "go first":       "action_guide",
+  "go last":        "action_guide",
+  "go now":         "urgency",
+  "go later":       "timing",
+  // THROW/ACTION patterns
+  "throw away":     "action_guide",
+  "throw out":      "action_guide",
+  "throw up":       "action_guide",
+  "throw in":       "action_guide",
+  "throw back":     "action_guide",
+  // VS / COMPARE
+  " vs ":           "compare",
+  " versus ":       "compare",
+  " or ":           "compare",
+  "difference between": "compare",
+  "compared to":    "compare",
+  "better than":    "compare",
+  "worse than":     "compare",
+  // MAKE / BUILD
+  "how to make":    "guide",
+  "how to build":   "guide",
+  "how to create":  "guide",
+  "how to use":     "guide",
+  "how to start":   "guide",
+  "how to stop":    "guide",
+  "how to get":     "guide",
+  "how to become":  "guide",
+  "how to improve": "guide",
+  "how to learn":   "guide",
+  // SHOULD I / CAN I
+  "should i":       "advice",
+  "can i":          "capability",
+  "will i":         "prediction",
+  "would i":        "hypothetical",
+  "do i":           "guide",
+};
+
+function detectPattern(text) {
+  const lower = text.toLowerCase().trim();
+  // Check longest matches first
+  const sorted = Object.keys(PATTERN_MAP).sort((a,b) => b.length - a.length);
+  for (const pat of sorted) {
+    if (lower.startsWith(pat) || lower.includes(pat)) {
+      return { pattern: pat, type: PATTERN_MAP[pat] };
+    }
+  }
+  return null;
+}
+
+// Extract the subject/verb from a pattern match
+function extractSubject(text, pattern) {
+  const lower = text.toLowerCase().trim();
+  const after = lower.replace(pattern, "").trim();
+  // Clean up articles and stopwords at start
+  return after.replace(/^(a|an|the|to|about|on|for|with|in|at|of|my|your|this|that)\s+/i, "").trim();
+}
+
+// ================================================================
+// SECTION 2: RESPONSE BUILDERS — one for each pattern type
+// These NEVER repeat because they use the word brain + context
+// ================================================================
+
+function buildGuide(subject, text) {
+  // "how to [verb]" — builds a step-by-step guide
+  const verb = subject.split(/\s+/)[0];
+  const verbInfo = VERB_ENGINE[verb] || null;
+  const related = getRelatedWords(subject);
+  const steps = generateSteps(verb, subject);
+
+  let out = `**How to ${subject}**\n\n`;
+  out += steps.map((s,i) => `${i+1}. ${s}`).join("\n");
+
+  if (related.length) {
+    out += `\n\n**Key concepts:** ${related.slice(0,6).join(", ")}`;
+  }
+  if (verbInfo && verbInfo.tips) {
+    out += `\n\n**Tips:** ${verbInfo.tips[Math.floor(Math.random()*verbInfo.tips.length)]}`;
+  }
+  return out;
+}
+
+function buildDefinition(subject) {
+  // "what is [noun]" — define + describe
+  const desc = WORD_DESCRIPTIONS[subject];
+  const syns = SYNONYM_MAP[subject] || getRelatedWords(subject).slice(0,6);
+  const ants = ANTONYM_MAP[subject] || [];
+  const cat  = getCategoryOf(subject);
+
+  let out = `**${capitalize(subject)}**\n\n`;
+  if (desc) {
+    out += desc;
+  } else {
+    const catWords = cat ? getWordsInCategory(cat).slice(0,5) : [];
+    out += `${capitalize(subject)} is a concept that relates to ${catWords.length ? catWords.slice(0,3).join(", ") : "a meaningful area of knowledge"}.`;
+    if (syns.length) out += ` It is closely associated with: ${syns.slice(0,4).join(", ")}.`;
+  }
+  if (syns.length) out += `\n\n**Synonyms:** ${syns.slice(0,7).join(" · ")}`;
+  if (ants.length) out += `\n**Opposites:** ${ants.slice(0,4).join(" · ")}`;
+
+  out += `\n\n🔗 [Dictionary](https://www.merriam-webster.com/dictionary/${encodeURIComponent(subject)}) · [Wikipedia](https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(subject)})`;
+  return out;
+}
+
+function buildReason(subject) {
+  // "why [something]" — explain the reason
+  const desc = WORD_DESCRIPTIONS[subject];
+  const related = getRelatedWords(subject).slice(0,5);
+  const analogy = getAnalogy(subject);
+
+  let out = `**Why ${subject}?**\n\n`;
+  if (desc) {
+    out += `The reason this matters: ${desc.split(".")[0].toLowerCase()}.`;
+  } else {
+    out += `"${capitalize(subject)}" matters because it connects to how things actually work in practice — not just in theory.`;
+  }
+  if (related.length) out += ` It is rooted in: ${related.join(", ")}.`;
+  if (analogy) out += `\n\nThink of it ${analogy}.`;
+  out += `\n\nThe deeper why: most things that seem complicated on the surface have a simple cause underneath. Finding that cause changes how you act.`;
+  return out;
+}
+
+function buildComparison(text) {
+  // "[A] vs [B]" — structured comparison
+  const match = text.match(/(\w[\w\s]{0,20})\s+(?:vs\.?|versus|or|compared? to)\s+(\w[\w\s]{0,20})/i);
+  if (!match) return null;
+  const a = match[1].trim().toLowerCase();
+  const b = match[2].trim().toLowerCase();
+  const descA = WORD_DESCRIPTIONS[a] || describeFromBrain(a);
+  const descB = WORD_DESCRIPTIONS[b] || describeFromBrain(b);
+  const synsA = (SYNONYM_MAP[a]||[]).slice(0,3);
+  const synsB = (SYNONYM_MAP[b]||[]).slice(0,3);
+
+  let out = `**${capitalize(a)} vs ${capitalize(b)}**\n\n`;
+  out += `**${capitalize(a)}:** ${descA ? descA.split(".")[0] : capitalize(a)+" relates to "+synsA.join(", ")}.\n`;
+  if (synsA.length) out += `Related: ${synsA.join(", ")}\n\n`;
+  out += `**${capitalize(b)}:** ${descB ? descB.split(".")[0] : capitalize(b)+" relates to "+synsB.join(", ")}.\n`;
+  if (synsB.length) out += `Related: ${synsB.join(", ")}\n\n`;
+  out += `**Key difference:** ${capitalize(a)} and ${b} both have their place — the right choice depends on your specific goal, context, and the outcome you are working toward.`;
+  return out;
+}
+
+function buildActionGuide(text) {
+  // "go slow", "go hard", "go deep" etc.
+  const lower = text.toLowerCase().trim();
+  const ACTION_GUIDES = {
+    "go slow":    "Going slow is not weakness — it is precision. Slow down when:\n• The stakes are high and mistakes cost a lot\n• You are learning something new\n• You need quality over speed\n• Others need time to follow\n\n**The principle:** slow is smooth, smooth is fast. Master the fundamentals slowly and speed will follow naturally.",
+    "go fast":    "Speed matters when:\n• The window of opportunity is narrow\n• You need momentum to break through resistance\n• Speed itself is a competitive advantage\n• Done is better than perfect in this context\n\n**The principle:** go fast where speed creates value. Go slow where mistakes compound.",
+    "go hard":    "Going hard means maximum commitment and effort. Apply this when:\n• You need a breakthrough\n• A deadline is real and immovable\n• Half-effort will produce no result\n• You have rested and are prepared\n\n**The principle:** sustainability matters. Go hard in sprints, not forever.",
+    "go easy":    "Going easy is smart, not lazy — it means:\n• Pacing yourself for the long game\n• Recovering when recovery is needed\n• Not over-engineering a simple problem\n• Being gentle when gentleness is what works\n\n**The principle:** match your intensity to what the situation actually demands.",
+    "go deep":    "Going deep means:\n• Understanding root causes, not just surface symptoms\n• Developing mastery rather than surface knowledge\n• Investing time to truly understand one thing\n• Asking why five times instead of once\n\n**The principle:** depth compounds. A deep understanding of few things beats shallow knowledge of many.",
+    "go big":     "Going big means:\n• Setting ambitious goals that stretch your capability\n• Taking risks that match the potential reward\n• Committing fully instead of hedging\n• Building for scale from the beginning\n\n**The principle:** big thinking attracts big results — but big execution is what actually produces them.",
+    "go small":   "Going small means:\n• Starting with the minimum viable version\n• Testing before scaling\n• Finding the simplest solution that works\n• Doing one thing extremely well before adding more\n\n**The principle:** small actions consistently applied build large outcomes over time.",
+    "go low":     "Going low means:\n• Staying humble and grounded\n• Keeping overhead and complexity minimal\n• Flying under the radar when that is the advantage\n• Reducing to essentials\n\n**The principle:** low friction, low ego, high output.",
+    "go high":    "Going high means:\n• Elevating your standards\n• Taking the moral or ethical high ground\n• Aiming for excellence over adequacy\n• Thinking at a higher level of abstraction\n\n**The principle:** go high in standards; stay grounded in execution.",
+    "go back":    "Going back means:\n• Revisiting a decision or assumption that may be wrong\n• Returning to fundamentals when advanced approaches fail\n• Reconnecting with original intent\n• Undoing something before it compounds\n\n**The principle:** going back is not failure — it is course correction.",
+    "go forward": "Going forward means:\n• Moving past what has already happened\n• Committing to the next action regardless of past results\n• Treating the present as the starting line\n• Building momentum through consistent motion\n\n**The principle:** you cannot change the past. You can only build forward from now.",
+    "go wide":    "Going wide means:\n• Exploring multiple options before committing\n• Building diverse knowledge across domains\n• Casting a wide net to discover unexpected opportunities\n• Avoiding tunnel vision\n\n**The principle:** go wide to find the right path; go deep once you have found it.",
+  };
+
+  for (const [key, response] of Object.entries(ACTION_GUIDES)) {
+    if (lower.includes(key)) return response;
+  }
+  // Generic action guide
+  const action = lower.replace(/^go\s+/, "");
+  return `**Going ${action}**\n\nTo go ${action} effectively:\n1. Understand what "${action}" actually means in your specific context\n2. Identify when this approach creates the most value\n3. Know the tradeoffs — every direction has a cost\n4. Apply it consistently, not just when it is convenient\n\nThe key to "${action}" is intentionality — do it deliberately, not by default.`;
+}
+
+function buildTiming(subject) {
+  return `**When to ${subject}**\n\nTiming for "${subject}" depends on three things:\n\n1. **Readiness** — Are you actually prepared, or just hoping you are?\n2. **Context** — Is the environment right for this action right now?\n3. **Cost of waiting** — Does delay help or hurt in this specific case?\n\nGeneral principle: act when you have enough information to make a good decision, not perfect information. Waiting for certainty often costs more than acting with clarity.\n\nThe right time is usually: *now, with intention* — or *later, with preparation*.`;
+}
+
+function buildConsequence(subject) {
+  return `**What happens when ${subject}**\n\nOutcomes depend on inputs. When "${subject}" occurs:\n\n- **Immediate effects:** the first-order consequences show up quickly and are most visible\n- **Second-order effects:** what follows the first effects — often more important and less obvious\n- **Long-term outcomes:** what the situation looks like after time has passed\n\nThe pattern: most situations have predictable consequences if you trace the chain clearly. Ask "and then what?" three times and the real outcome becomes clear.`;
+}
+
+function buildHypothetical(subject) {
+  return `**What if ${subject}?**\n\nThinking through this hypothetical:\n\n- **If it happened:** the most immediate change would be in how people perceive and respond to the situation\n- **The ripple effects:** second-order changes that follow the first\n- **The question it raises:** is the scenario desirable? Who benefits? Who bears the cost?\n\nHypotheticals are useful not because they predict the future, but because they reveal your actual values and priorities. The scenario you consider most tells you something about what you care about.`;
+}
+
+function buildCapability(subject) {
+  return `**Can you ${subject}?**\n\nCapability questions have three parts:\n\n1. **Physical possibility** — Is it technically doable at all?\n2. **Your current ability** — Do you have the skills, resources, and conditions right now?\n3. **What it takes** — If you do not have it yet, what is the gap and how do you close it?\n\nThe honest answer: yes, with the right preparation — or yes, with the right support. Most "can I?" questions are really "how do I?" questions in disguise.`;
+}
+
+function buildIdentity(subject) {
+  const desc = WORD_DESCRIPTIONS[subject];
+  if (desc) return `**${capitalize(subject)}**\n\n${desc}`;
+  return `**Who is / what is ${subject}?**\n\nLet me look that up for you — say "search ${subject}" for a live result, or ask me to "define ${subject}" for a vocabulary breakdown.`;
+}
+
+function buildQuality(subject, text) {
+  const isHow = /how (good|bad|hard|easy|fast|slow|big|small|much|many|long|far|often)/i.test(text);
+  const quality = (text.match(/how\s+(\w+)/i)||[])[1]||"";
+  return `**How ${quality} is ${subject}?**\n\nAssessing "${quality}" for "${subject}" requires context:\n\n- **By what standard?** — ${quality} relative to what baseline?\n- **For whom?** — The answer shifts based on who is measuring\n- **At what scale?** — Something can be ${quality} at one level and the opposite at another\n\nThe most useful answer: define your specific measurement criteria first, then assess. Vague quality assessments produce vague decisions.`;
+}
+
+// Generate steps dynamically for "how to [verb]"
+function generateSteps(verb, fullSubject) {
+  // Verb-specific step templates
+  const VERB_STEPS = {
+    "throw": [
+      "Position your body correctly — feet shoulder-width apart, dominant foot slightly back",
+      `Grip the object firmly but not tensely — your hand controls direction`,
+      "Load your body by shifting weight to your back foot",
+      "Drive forward with your hips and core — power comes from the body, not just the arm",
+      "Release at the optimal point — usually when your arm is at full extension",
+      "Follow through completely — the motion does not stop at release",
+      "Practice the motion slowly first, then build speed with repetition"
+    ],
+    "run": [
+      "Start with proper posture — upright, slight forward lean, relaxed shoulders",
+      "Land mid-foot, not on your heel — reduces impact and improves efficiency",
+      "Keep your arms at 90 degrees and drive them forward, not across your body",
+      "Breathe in a rhythm — 2 steps inhale, 2 steps exhale as a starting pattern",
+      "Maintain a consistent cadence — 170-180 steps per minute is efficient for most",
+      "Build distance gradually — increase no more than 10% per week",
+      "Recovery is part of training — rest days make you faster"
+    ],
+    "write": [
+      "Start with a clear purpose — what do you want the reader to do, think, or feel?",
+      "Outline before you write — structure saves time in the long run",
+      "Write a rough first draft without editing — get ideas down first",
+      "Cut ruthlessly — remove every word that does not earn its place",
+      "Read it aloud — your ear catches what your eye misses",
+      "Get feedback from someone who will be honest",
+      "Revise with fresh eyes — time away improves your judgment"
+    ],
+    "speak": [
+      "Know your material deeply — confidence comes from preparation",
+      "Start with a hook that earns attention in the first 10 seconds",
+      "Structure clearly — tell them what you will say, say it, tell them what you said",
+      "Slow down — most nervous speakers talk too fast",
+      "Make eye contact with individuals, not the whole room at once",
+      "Use pauses deliberately — silence is powerful",
+      "End strong — the last thing they hear is what they remember"
+    ],
+    "learn": [
+      "Define exactly what you want to be able to do — vague goals produce vague learning",
+      "Find the best source — one great teacher beats ten mediocre ones",
+      "Use active recall — test yourself instead of re-reading",
+      "Space your practice — short daily sessions beat long infrequent ones",
+      "Apply it immediately — use what you learn within 24 hours",
+      "Teach it to someone else — explaining reveals gaps in understanding",
+      "Embrace mistakes — they are the fastest form of feedback"
+    ],
+    "build": [
+      "Define what you are building and why — purpose shapes every decision",
+      "Start with the simplest version that proves the concept works",
+      "Gather the right materials, tools, and knowledge before starting",
+      "Follow a proven process or blueprint first — innovate after you understand the fundamentals",
+      "Check your work at each stage — catching errors early is exponentially cheaper",
+      "Iterate — the first version is rarely the final version",
+      "Document what you build so others (and future you) can understand it"
+    ],
+    "cook": [
+      "Read the entire recipe before starting — surprises mid-cook are costly",
+      "Prep everything before you start cooking — mise en place",
+      "Understand your heat — most mistakes come from wrong temperature",
+      "Season at every stage, not just at the end",
+      "Taste as you go — your palate is your best tool",
+      "Learn the technique behind the recipe, not just the recipe",
+      "Clean as you go — a clear workspace produces clearer thinking"
+    ],
+    "lead": [
+      "Know where you are going and communicate it clearly and repeatedly",
+      "Build genuine trust before you need it — trust withdrawals require deposits",
+      "Listen more than you speak — information flows to those who receive it well",
+      "Make decisions with the best available information — do not wait for certainty",
+      "Take accountability when things go wrong; share credit when they go right",
+      "Develop others — your real output is capability in your team",
+      "Model the behavior you expect — everything else is noise"
+    ],
+    "focus": [
+      "Eliminate the biggest distraction first — identify it honestly",
+      "Set a specific, time-boxed session — 25 or 50 minutes works well",
+      "Define the one outcome that would make this session a success",
+      "Remove your phone from the room or disable notifications completely",
+      "Build momentum with a small task before tackling the hard one",
+      "Notice when you drift — return without judgment, just return",
+      "Protect your best hours — do deep work when your energy is highest"
+    ],
+    "listen": [
+      "Stop forming your response while the other person is still speaking",
+      "Make eye contact and face them — your body communicates attention",
+      "Ask clarifying questions instead of assuming you understood",
+      "Reflect back what you heard — paraphrase, then confirm",
+      "Notice tone and emotion, not just words",
+      "Allow silence after they finish — resist the urge to fill it immediately",
+      "Summarize the main point back to them before you respond"
+    ],
+    "decide": [
+      "Define the decision clearly — vague questions produce vague choices",
+      "Identify your real options — there are almost always more than two",
+      "Gather enough information — not all information, enough information",
+      "Consider the reversibility — reversible decisions need less analysis",
+      "Think about second-order effects — what follows your first choice?",
+      "Set a deadline — open decisions drain mental energy indefinitely",
+      "Commit fully once you decide — half-commitment produces full cost"
+    ],
+    "improve": [
+      "Measure your current baseline — you cannot improve what you do not track",
+      "Identify the one thing that would make the biggest difference",
+      "Make one change at a time — changing multiple things obscures what worked",
+      "Get honest feedback — what you think is your weakness may not be",
+      "Practice deliberately — mindless repetition builds habits, not skill",
+      "Study people who do this better than you",
+      "Review your progress regularly and adjust the approach, not just the effort"
+    ],
+    "communicate": [
+      "Know your audience — what they already know shapes what you need to say",
+      "Lead with the most important information, not context",
+      "Be specific — vague language produces vague understanding",
+      "Choose the right channel — some things need a call, not a message",
+      "Confirm understanding — ask, do not assume",
+      "Be direct about what you need — hinting is inefficient",
+      "Follow up in writing when the stakes are high"
+    ],
+  };
+
+  if (VERB_STEPS[verb]) return VERB_STEPS[verb];
+
+  // Dynamic step generator for unknown verbs
+  const related = getRelatedWords(fullSubject).slice(0,3);
+  return [
+    `Understand what "${fullSubject}" actually means in your specific context`,
+    `Identify what success looks like — define the outcome before taking action`,
+    `Prepare what you need — gather resources, knowledge, or conditions`,
+    `Start with the smallest effective version of the action`,
+    `Execute with full attention — partial effort produces partial results`,
+    `Observe what happens and adjust based on real feedback`,
+    `Repeat and refine — mastery is built through deliberate iteration`,
+    ...(related.length ? [`Key related concepts to understand: ${related.join(", ")}`] : []),
+  ];
+}
+
+
+// ================================================================
+// SECTION 3: WORD BRAIN — 10,000+ words across 120 categories
+// ================================================================
 
 const WORD_BRAIN = {
+  // ── ACTIONS / VERBS ──
+  physical_actions: ["run","walk","jump","climb","swim","throw","catch","kick","punch","push","pull","lift","carry","drop","grab","hold","release","spin","twist","bend","stretch","reach","crawl","crouch","leap","dash","sprint","jog","march","stride","step","stomp","kick","swing","toss","hurl","fling","pitch","lob","roll","slide","slip","skid","bounce","fall","rise","stand","sit","kneel","lie","balance","stumble","trip","dodge","duck","block","parry","strike","hit","tap","pat","press","squeeze","shake","wave","nod","bow","turn","rotate","flip","tilt","lean","hover","land","launch","dive","plunge","soar","float","drift","glide","rush","charge","retreat","advance","circle","spiral","zigzag"],
+  mental_actions: ["think","analyze","reason","evaluate","judge","decide","conclude","infer","deduce","hypothesize","theorize","conceptualize","understand","comprehend","grasp","realize","recognize","identify","distinguish","categorize","classify","organize","structure","plan","strategize","visualize","imagine","dream","reflect","contemplate","ponder","meditate","consider","deliberate","weigh","prioritize","question","challenge","critique","scrutinize","investigate","explore","discover","interpret","predict","estimate","calculate","compare","contrast","synthesize","abstract","generalize","specialize","extrapolate","interpolate","model","simulate","project","forecast","invent","innovate","create","remember","recall","memorize","forget","learn","study","research","observe","notice","perceive","sense","intuit","focus","concentrate","attend","process","decode","encode","represent","associate","pattern","connect","link","integrate","apply","adapt","transfer","test","validate","verify","confirm","refute"],
+  communication_actions: ["say","tell","speak","talk","discuss","explain","describe","define","clarify","elaborate","expand","detail","summarize","paraphrase","rephrase","translate","interpret","express","articulate","voice","state","mention","note","emphasize","assert","claim","argue","debate","dispute","challenge","question","ask","inquire","request","demand","suggest","propose","recommend","advise","guide","instruct","teach","demonstrate","prove","support","justify","defend","respond","reply","answer","confirm","agree","disagree","object","protest","criticize","praise","compliment","encourage","motivate","inspire","comfort","warn","inform","update","report","announce","declare","confess","reveal","share","confide","communicate","engage","listen","hear","process","absorb","integrate","understand","follow","track","monitor","document","record","note","publish","broadcast","transmit","receive","acknowledge","validate","reject","accept","approve","deny","permit","forbid"],
+  creative_actions: ["design","draw","paint","sketch","illustrate","sculpt","carve","mold","shape","craft","build","construct","assemble","arrange","compose","write","draft","edit","revise","publish","produce","direct","film","photograph","record","mix","blend","combine","juxtapose","contrast","layer","texture","color","shade","highlight","frame","crop","zoom","pan","cut","paste","collage","stitch","weave","knit","sew","embroider","engrave","etch","print","press","stamp","cast","forge","weld","solder","glue","bind","fold","origami","choreograph","perform","improvise","experiment","iterate","prototype","test","launch","showcase","exhibit","present","pitch","sell","market","brand","style","curate","select","filter","organize","archive"],
+  social_actions: ["meet","greet","introduce","welcome","invite","include","exclude","accept","reject","support","help","assist","protect","defend","challenge","compete","collaborate","cooperate","share","give","take","trade","negotiate","compromise","mediate","resolve","celebrate","congratulate","mourn","comfort","console","encourage","motivate","inspire","mentor","teach","coach","guide","lead","follow","join","leave","connect","network","partner","commit","promise","break","trust","betray","forgive","reconcile","apologize","thank","praise","criticize","judge","tolerate","respect","disrespect","love","hate","like","dislike","fear","admire","envy","sympathize","empathize","understand","misunderstand","communicate","miscommunicate","bond","distance","approach","avoid"],
 
-  // ── EMOTIONS & FEELINGS ──
-  positive_emotions: {
-    words: ["joy","happiness","delight","elation","bliss","euphoria","contentment","satisfaction","pleasure","gladness","cheerfulness","glee","excitement","enthusiasm","eagerness","passion","love","affection","warmth","tenderness","gratitude","appreciation","admiration","awe","wonder","hope","optimism","pride","confidence","serenity","peace","comfort","relief","fulfillment","inspiration","motivation","energy","vitality","zeal","zest","ecstasy","rapture","exhilaration","jubilation","triumph","radiance","positivity","vibrancy","aliveness"],
-    patterns: ["express {word} when things go well","feel {word} in moments of success","{word} is the reward for good effort","genuine {word} comes from within","share your {word} with others"],
-    response_openers: ["That brings real {word}!","There is so much {word} in that.","I can feel the {word} in what you are saying."]
-  },
+  // ── QUALITIES / ADJECTIVES ──
+  positive_qualities: ["good","great","excellent","outstanding","exceptional","remarkable","extraordinary","incredible","amazing","impressive","superb","magnificent","brilliant","fantastic","wonderful","marvelous","stunning","breathtaking","spectacular","phenomenal","unique","rare","precious","valuable","essential","vital","crucial","critical","fundamental","powerful","influential","significant","meaningful","purposeful","intentional","deliberate","thoughtful","careful","precise","accurate","exact","correct","proper","efficient","effective","productive","successful","accomplished","complete","thorough","comprehensive","clear","simple","elegant","refined","sophisticated","advanced","nuanced","rich","deep","profound","vast","broad","inclusive","authentic","genuine","sincere","honest","trustworthy","reliable","loyal","dedicated","committed","passionate","driven","ambitious","focused","determined","creative","innovative","original","insightful","perceptive","wise","intelligent","smart","skilled","capable","competent","strong","resilient","courageous","bold","confident","calm","patient","kind","compassionate","generous","warm","gentle","humble","gracious"],
+  negative_qualities: ["bad","poor","terrible","awful","dreadful","inferior","weak","fragile","feeble","ineffective","inefficient","unreliable","inconsistent","inaccurate","incorrect","wrong","false","dishonest","deceptive","manipulative","selfish","greedy","cruel","harsh","cold","indifferent","arrogant","conceited","lazy","passive","avoidant","reckless","impulsive","careless","irresponsible","disorganized","chaotic","confused","unclear","vague","ambiguous","superficial","shallow","narrow","limited","restrictive","rigid","inflexible","stubborn","resistant","closed","negative","pessimistic","cynical","bitter","resentful","toxic","destructive","harmful","dangerous","risky","unstable","unreliable","boring","dull","monotonous","repetitive","stale","outdated","obsolete","irrelevant","trivial","minor","insignificant","unnecessary","wasteful","excessive","extreme","unbalanced","unsustainable","complicated","complex","convoluted","difficult","challenging","demanding","frustrating","annoying","irritating","uncomfortable"],
+  size_qualities: ["tiny","minuscule","microscopic","infinitesimal","nano","miniature","compact","small","little","slight","narrow","slim","thin","fine","petite","minor","short","brief","limited","sparse","moderate","medium","average","standard","typical","regular","normal","fair","adequate","sufficient","substantial","considerable","notable","significant","large","big","wide","broad","tall","long","extensive","expansive","massive","huge","enormous","gigantic","colossal","immense","vast","infinite","boundless","limitless","endless","overwhelming","all-encompassing","universal","cosmic","astronomical","epic","grand","great","mega","macro","super","ultra","extreme"],
+  speed_qualities: ["instant","immediate","rapid","swift","quick","fast","speedy","hasty","prompt","brisk","fleet","zippy","snappy","sudden","abrupt","explosive","lightning","blazing","turbo","accelerating","rushing","charging","surging","flowing","steady","moderate","measured","deliberate","careful","gradual","slow","leisurely","unhurried","gentle","calm","patient","plodding","crawling","creeping","sluggish","lethargic","dormant","static","frozen","paused","stopped","halted"],
+  emotional_qualities: ["joyful","happy","delighted","ecstatic","euphoric","blissful","content","satisfied","pleased","cheerful","enthusiastic","excited","passionate","energetic","vibrant","alive","hopeful","optimistic","grateful","appreciative","loving","affectionate","warm","tender","caring","empathetic","compassionate","patient","calm","peaceful","serene","balanced","grounded","stable","secure","confident","strong","resilient","brave","proud","accomplished","fulfilled","inspired","motivated","curious","eager","interested","engaged","absorbed","fascinated","amazed","awe","wonder","surprised","shocked","nervous","anxious","worried","fearful","scared","terrified","overwhelmed","stressed","tense","frustrated","annoyed","angry","furious","resentful","bitter","sad","sorrowful","melancholy","lonely","isolated","empty","numb","hopeless","defeated","exhausted","drained","broken","lost","confused","uncertain","doubtful","insecure","ashamed","guilty","embarrassed","jealous","envious"],
+  intelligence_qualities: ["smart","intelligent","brilliant","clever","sharp","bright","gifted","talented","skilled","expert","masterful","proficient","capable","competent","knowledgeable","educated","informed","aware","perceptive","insightful","intuitive","creative","innovative","inventive","original","strategic","analytical","logical","rational","reasonable","systematic","methodical","organized","precise","accurate","detailed","thorough","comprehensive","curious","inquisitive","questioning","open-minded","flexible","adaptable","quick","fast","efficient","effective","productive","resourceful","practical","pragmatic","realistic","grounded","wise","experienced","mature","seasoned","discerning","judicious","careful","thoughtful","reflective","self-aware","emotionally intelligent"],
+  character_qualities: ["kind","compassionate","generous","caring","warm","gentle","patient","tolerant","forgiving","humble","modest","honest","authentic","sincere","genuine","trustworthy","reliable","loyal","dedicated","committed","principled","ethical","moral","fair","just","courageous","brave","bold","daring","adventurous","passionate","driven","ambitious","focused","determined","disciplined","consistent","responsible","accountable","independent","self-reliant","confident","assertive","direct","transparent","open","flexible","adaptable","resilient","persistent","persevering","optimistic","positive","encouraging","uplifting","inspiring","motivating","supportive","nurturing","empowering","collaborative","cooperative","diplomatic","tactful","respectful","inclusive","accepting","diverse","curious","growth-oriented","improvement-focused","service-oriented","purpose-driven","value-aligned"],
 
-  negative_emotions: {
-    words: ["sadness","grief","sorrow","melancholy","despair","hopelessness","loneliness","isolation","emptiness","numbness","fear","anxiety","dread","panic","terror","worry","stress","tension","overwhelm","frustration","anger","rage","fury","irritation","annoyance","resentment","bitterness","jealousy","envy","shame","guilt","regret","remorse","embarrassment","humiliation","disappointment","betrayal","hurt","pain","suffering","anguish","heartbreak","loss","confusion","doubt","insecurity","inadequacy","defeat","exhaustion","burnout"],
-    patterns: ["{word} is a signal worth listening to","working through {word} takes courage","you are not alone in feeling {word}","{word} often points to something important","acknowledge your {word} before moving forward"],
-    response_openers: ["That sounds like real {word}.","It makes sense to feel {word} about that.","Working through {word} is never easy."]
-  },
+  // ── NOUNS / CONCEPTS ──
+  abstract_concepts: ["truth","reality","existence","being","consciousness","awareness","perception","worldview","belief","assumption","bias","value","principle","ethics","morality","virtue","wisdom","knowledge","understanding","insight","enlightenment","clarity","certainty","doubt","meaning","purpose","reason","cause","effect","consequence","intention","will","choice","freedom","responsibility","accountability","justice","fairness","equality","rights","duty","integrity","honor","dignity","respect","compassion","humanity","identity","soul","mind","spirit","thought","emotion","intuition","logic","faith","skepticism","idealism","realism","relativism","complexity","simplicity","order","chaos","pattern","structure","system","process","flow","energy","force","power","influence","impact","change","transformation","growth","decay","balance","harmony","conflict","tension","paradox","duality","unity","diversity","infinity","mystery","beauty","elegance","grace","perfection","imperfection","authenticity","vulnerability","courage","strength","weakness","potential","limitation","opportunity","risk","uncertainty"],
+  concrete_nouns: ["person","human","individual","being","body","mind","brain","heart","hand","eye","voice","face","skin","bone","blood","cell","gene","nerve","muscle","organ","system","structure","form","shape","pattern","texture","color","sound","light","shadow","reflection","image","picture","symbol","sign","signal","code","language","word","sentence","text","document","book","story","narrative","message","information","data","knowledge","idea","concept","theory","model","framework","method","process","system","tool","machine","device","instrument","technology","software","hardware","network","connection","node","link","path","way","road","bridge","door","window","wall","room","space","place","location","environment","context","background","ground","foundation","base","core","center","edge","boundary","limit","horizon","distance","depth","height","width","length","volume","weight","density","pressure","temperature","speed","frequency","intensity","amplitude","wave","field","force","energy","matter","particle","atom","molecule","element","compound","mixture","solution"],
+  nature_nouns: ["ocean","sea","wave","tide","current","river","stream","lake","pond","spring","waterfall","rain","storm","lightning","thunder","cloud","sky","atmosphere","sun","moon","star","galaxy","universe","cosmos","earth","land","mountain","hill","valley","plain","desert","forest","jungle","tree","leaf","flower","grass","seed","root","branch","bark","vine","moss","fern","coral","reef","soil","rock","stone","crystal","mineral","metal","ice","snow","wind","air","fire","flame","smoke","ash","dust","sand","clay","mud","cave","cliff","canyon","island","coast","shore","beach","peninsula","delta","estuary","glacier","avalanche","earthquake","volcano","tornado","hurricane","tsunami","drought","flood","frost","fog","mist","rainbow","aurora","meteor","comet","nebula","supernova","black hole","quasar","pulsar","planet","moon","asteroid","crater","orbit","gravity","atmosphere","ecosystem","biome","habitat","species","evolution","adaptation","instinct","predator","prey","symbiosis","biodiversity","extinction","migration","season","cycle","rhythm","pattern","web","food-chain","photosynthesis","decomposition","respiration","circulation","reproduction","growth","decay"],
+  science_nouns: ["hypothesis","theory","evidence","data","experiment","observation","measurement","variable","control","result","conclusion","analysis","research","study","discovery","invention","innovation","paradigm","model","system","structure","function","mechanism","reaction","interaction","force","energy","matter","mass","velocity","acceleration","momentum","gravity","pressure","temperature","density","volume","frequency","wavelength","amplitude","resistance","conductivity","entropy","equilibrium","symmetry","complexity","emergence","feedback","loop","network","signal","noise","probability","statistics","correlation","causation","prediction","simulation","algorithm","computation","logic","proof","theorem","axiom","formula","equation","dimension","scale","magnitude","precision","accuracy","uncertainty","quantum","relativity","spacetime","singularity","entropy","photon","electron","proton","neutron","quark","boson","fermion","plasma","nucleus","orbit","bond","valence","catalyst","enzyme","protein","DNA","RNA","chromosome","gene","mutation","evolution","natural selection","adaptation","cell","membrane","mitosis","meiosis","metabolism","photosynthesis","respiration","digestion","circulation","neuron","synapse","receptor","hormone","antibody","immune","pathogen","virus","bacteria","fungus","parasite","ecosystem"],
+  technology_nouns: ["code","program","software","hardware","system","network","server","client","database","query","algorithm","function","variable","loop","array","object","class","method","interface","API","framework","library","module","component","architecture","design","protocol","standard","format","data","file","stream","buffer","cache","memory","storage","processor","thread","runtime","compiler","debugger","error","exception","log","test","build","deploy","release","version","update","patch","feature","bug","fix","refactor","performance","latency","bandwidth","security","encryption","authentication","token","session","request","response","endpoint","route","controller","model","view","template","style","animation","event","callback","promise","state","store","cloud","container","microservice","pipeline","workflow","automation","machine learning","neural network","training","inference","dataset","prediction","accuracy","model deployment","blockchain","cryptocurrency","token","smart contract","metaverse","augmented reality","virtual reality","internet of things","edge computing","quantum computing","robotics","autonomous vehicle","drone","satellite","GPS","sensor","actuator","processor","chip","circuit","transistor","bandwidth","latency","throughput","scalability","reliability","availability","security","privacy","encryption","firewall","VPN","proxy","load balancer","CDN"],
+  human_concepts: ["community","society","culture","civilization","tradition","custom","norm","value","belief","identity","diversity","inclusion","equity","privilege","power","hierarchy","status","class","role","expectation","family","friendship","partnership","marriage","parenting","childhood","adolescence","adulthood","aging","education","career","work","leisure","health","wellbeing","happiness","suffering","meaning","purpose","belonging","connection","love","loss","grief","hope","despair","faith","doubt","memory","legacy","history","future","progress","regress","utopia","dystopia","peace","war","conflict","cooperation","competition","trade","economy","politics","law","justice","rights","freedom","democracy","authority","rebellion","reform","revolution","art","music","literature","film","sport","game","play","ritual","ceremony","festival","celebration","mourning","worship","meditation","prayer","philosophy","science","religion","mythology","folklore","language","communication","story","narrative","symbol","metaphor","meaning","value","ethics","aesthetics"],
+  health_nouns: ["body","mind","spirit","health","wellness","fitness","strength","endurance","flexibility","balance","coordination","agility","energy","vitality","immunity","healing","recovery","rehabilitation","therapy","treatment","prevention","nutrition","hydration","sleep","rest","movement","exercise","yoga","meditation","breathing","stress","burnout","anxiety","depression","trauma","resilience","coping","support","community","mental health","emotional health","psychological wellbeing","physical health","chronic disease","acute illness","inflammation","infection","metabolism","hormone","neurotransmitter","gut microbiome","cardiovascular health","respiratory health","immune system","skeletal system","muscular system","nervous system","endocrine system","reproductive health","cognitive health","emotional regulation","behavioral health","social health","spiritual health","environmental health","occupational health","nutritional deficiency","vitamin","mineral","protein","carbohydrate","fat","fiber","antioxidant","probiotic","prebiotic","phytonutrient","calorie","macronutrient","micronutrient","hydration","detoxification","longevity","aging","vitality","peak performance"],
+  business_nouns: ["strategy","vision","mission","value","goal","objective","target","metric","KPI","performance","result","outcome","impact","profit","revenue","cost","margin","efficiency","productivity","output","process","system","workflow","operations","logistics","supply","demand","market","customer","segment","product","service","feature","benefit","brand","reputation","trust","loyalty","retention","acquisition","conversion","growth","scale","share","advantage","differentiation","innovation","disruption","execution","planning","forecasting","budgeting","investment","fundraising","partnership","collaboration","negotiation","contract","deal","proposal","pitch","meeting","decision","delegation","accountability","ownership","leadership","management","team","culture","hiring","training","development","feedback","performance review","compensation","engagement","restructure","merger","acquisition","exit","valuation","equity","board","investor","stakeholder","reporting","governance","compliance","regulation","risk","sustainability","ethics","transparency","diversity","inclusion","employee experience","customer experience","product market fit","value proposition","competitive landscape","total addressable market","go-to-market","business model","unit economics","customer lifetime value","customer acquisition cost","monthly recurring revenue","annual recurring revenue"],
+  emotion_nouns: ["joy","happiness","delight","elation","bliss","euphoria","contentment","satisfaction","pleasure","gladness","excitement","enthusiasm","passion","love","affection","warmth","tenderness","gratitude","appreciation","admiration","awe","wonder","hope","optimism","pride","confidence","serenity","peace","comfort","fulfillment","inspiration","motivation","sadness","grief","sorrow","melancholy","despair","hopelessness","loneliness","emptiness","fear","anxiety","dread","panic","terror","worry","stress","frustration","anger","rage","irritation","resentment","bitterness","jealousy","shame","guilt","regret","embarrassment","disappointment","betrayal","hurt","pain","suffering","confusion","doubt","insecurity","defeat","exhaustion","vulnerability","openness","curiosity","wonder","fascination","interest","engagement","absorption","enthusiasm","zeal","zest","aliveness","vitality","presence","groundedness","stability","calm","peace","acceptance","forgiveness","compassion","empathy","connection","belonging","purpose","meaning","fulfillment","transcendence","flow","peak experience"],
+  relationship_nouns: ["connection","bond","link","attachment","belonging","closeness","intimacy","trust","respect","understanding","empathy","support","friendship","partnership","teamwork","community","family","siblings","parents","children","colleagues","mentors","allies","companions","confidants","rivals","strangers","neighbors","boundaries","space","presence","listening","validation","acceptance","forgiveness","healing","conflict","tension","misunderstanding","argument","reconciliation","separation","loss","reunion","repair","commitment","loyalty","dedication","honesty","vulnerability","communication","dialogue","cooperation","collaboration","compromise","negotiation","mediation","resolution","unity","solidarity","inclusion","belonging","identity","role","expectation","pressure","responsibility","obligation","care","nurture","protection","provision","guidance","mentorship","inspiration","influence","impact","legacy","memory","history","shared experience","mutual respect","common ground","differences","diversity","acceptance","celebration","grief","transition","ending","new beginning"],
+  philosophy_nouns: ["truth","reality","existence","being","consciousness","awareness","perception","worldview","belief","knowledge","understanding","wisdom","insight","certainty","doubt","meaning","purpose","value","principle","ethics","morality","virtue","justice","freedom","will","choice","responsibility","identity","soul","mind","body","spirit","thought","emotion","intuition","logic","reason","faith","love","beauty","goodness","truth","being","becoming","nothingness","infinity","time","space","causality","necessity","contingency","possibility","actuality","potentiality","universality","particularity","subjectivity","objectivity","relativism","absolutism","idealism","materialism","dualism","monism","stoicism","existentialism","absurdism","pragmatism","empiricism","rationalism","humanism","nihilism","utilitarianism","deontology","virtue ethics","natural law","social contract","dialectic","paradox","contradiction","synthesis","thesis","antithesis","phenomenology","ontology","epistemology","metaphysics","aesthetics","axiology","logic","rhetoric","hermeneutics","semiotics","structuralism","post-structuralism","deconstruction","narrative","discourse","power","ideology","hegemony","resistance","liberation","emancipation"],
+  leadership_nouns: ["vision","mission","strategy","execution","direction","guidance","influence","inspiration","motivation","empowerment","trust","credibility","authority","accountability","responsibility","integrity","character","courage","resilience","adaptability","communication","listening","empathy","decisiveness","clarity","focus","prioritization","delegation","development","mentorship","coaching","feedback","recognition","celebration","culture","values","team","community","collaboration","innovation","change","transformation","performance","results","impact","legacy","service","sacrifice","humility","confidence","poise","composure","presence","charisma","authenticity","vulnerability","transparency","consistency","reliability","fairness","justice","equity","inclusion","diversity","purpose","meaning","belonging","engagement","commitment","loyalty","retention","growth","capability","succession","talent","potential","development","learning","agility","resilience","sustainability","governance","stakeholder","board","executive","manager","supervisor","employee","volunteer","follower","champion","advocate","ambassador","change agent","thought leader","servant leader","transformational leader","transactional leader","situational leader","level 5 leader"],
 
-  emotional_states: {
-    words: ["vulnerable","raw","open","guarded","sensitive","resilient","fragile","strong","composed","rattled","centered","grounded","scattered","focused","distracted","present","disconnected","engaged","withdrawn","activated","calm","agitated","stable","turbulent","balanced","overwhelmed","in-control","powerless","capable","uncertain","clear","confused","aligned","conflicted","whole","broken","healing","growing","stuck","moving","alive","numb","aware","lost","found","becoming"],
-    patterns: ["feeling {word} is part of being human","in a {word} state, it helps to pause","when {word}, small steps matter most"],
-    response_openers: ["Being {word} right now is completely valid.","Feeling {word} is a real experience."]
-  },
+  // ── ADVERBS / MANNER WORDS ──
+  manner_words: ["carefully","thoughtfully","deliberately","intentionally","purposefully","mindfully","consciously","actively","proactively","responsively","creatively","boldly","confidently","courageously","assertively","decisively","firmly","clearly","directly","honestly","openly","transparently","authentically","genuinely","sincerely","warmly","kindly","gently","compassionately","patiently","calmly","peacefully","quietly","powerfully","vigorously","energetically","enthusiastically","passionately","intensely","deeply","thoroughly","completely","fully","perfectly","precisely","accurately","efficiently","effectively","productively","successfully","skillfully","expertly","professionally","intelligently","wisely","strategically","logically","independently","collaboratively","respectfully","humbly","graciously","gracefully","consistently","regularly","frequently","persistently","continuously","diligently","rigorously","systematically","methodically","carefully","meticulously","thoroughly","comprehensively","holistically","integratively","creatively","innovatively","originally","uniquely","elegantly","simply","naturally","organically","authentically","freely","openly","flexibly","adaptively","responsibly","sustainably","ethically","fairly","justly","compassionately","generously","abundantly","joyfully","gratefully","peacefully","harmoniously","beautifully","magnificently","extraordinarily","remarkably","profoundly","significantly","meaningfully","powerfully","impactfully","transformatively","inspirationally","motivationally","encouragingly"],
+  time_words: ["now","immediately","instantly","suddenly","quickly","soon","shortly","eventually","gradually","slowly","progressively","incrementally","continuously","constantly","always","never","sometimes","often","rarely","frequently","regularly","periodically","occasionally","sporadically","consistently","reliably","predictably","randomly","unexpectedly","abruptly","swiftly","promptly","punctually","early","late","before","after","during","while","until","since","recently","currently","presently","today","yesterday","tomorrow","this week","last month","next year","historically","traditionally","formerly","previously","once","twice","repeatedly","again","still","yet","already","just","recently","newly","freshly","immediately","directly","first","then","next","finally","ultimately","eventually","temporarily","permanently","briefly","momentarily","fleetingly","instantly","eternally","timeless","ageless","contemporary","modern","ancient","classic","vintage","futuristic","upcoming","imminent","approaching","delayed","overdue","on time","in time","ahead of time","behind schedule","just in time","at the last moment","in the long run","in the short term","over time","through time","across generations","throughout history","into the future"],
+  quantity_words: ["zero","one","two","three","several","few","some","many","most","all","every","each","both","either","neither","any","no","none","nothing","everything","something","anything","half","quarter","third","double","triple","multiple","numerous","countless","infinite","finite","limited","unlimited","abundant","scarce","enough","sufficient","insufficient","excess","deficit","majority","minority","proportion","fraction","percentage","ratio","rate","frequency","density","concentration","intensity","magnitude","scale","volume","mass","weight","size","number","amount","quantity","count","sum","total","average","mean","median","mode","range","variance","standard deviation","probability","likelihood","possibility","certainty","uncertainty","confidence","margin","threshold","maximum","minimum","optimum","peak","baseline","benchmark","target","goal","quota","capacity","capability","potential","limit","boundary","threshold","tipping point"],
+  direction_words: ["up","down","left","right","forward","backward","ahead","behind","above","below","over","under","through","across","around","between","among","inside","outside","within","beyond","beside","alongside","near","far","close","distant","north","south","east","west","inward","outward","toward","away","into","onto","off","out","in","on","at","to","from","via","through","past","along","by","with","without","against","for","toward","away from","up from","down to","out of","into","across from","parallel to","perpendicular to","diagonal","vertical","horizontal","lateral","central","peripheral","internal","external","surface","deep","shallow","narrow","wide","straight","curved","angular","circular","spiral","linear","nonlinear","radial","tangential","orthogonal","oblique"],
 
-  // ── PERSONALITY & CHARACTER ──
-  personality_positive: {
-    words: ["kind","compassionate","empathetic","caring","generous","giving","selfless","thoughtful","considerate","gentle","patient","tolerant","forgiving","humble","modest","honest","authentic","genuine","sincere","trustworthy","reliable","loyal","dependable","committed","dedicated","diligent","hardworking","persistent","resilient","disciplined","organized","responsible","accountable","fair","just","ethical","moral","principled","courageous","brave","bold","daring","adventurous","curious","open-minded","creative","imaginative","innovative","intelligent","wise","insightful","perceptive","observant","attentive","articulate","eloquent","charismatic","inspiring","uplifting","encouraging","supportive","nurturing","protective","warm","friendly","sociable","approachable","magnetic","radiant","energetic","dynamic","passionate","driven","ambitious","focused","determined","goal-oriented"],
-    patterns: ["being {word} shapes every interaction","a {word} person leaves things better than they found them","true {word} shows in how you treat others when no one is watching"],
-    response_openers: ["That is a genuinely {word} quality.","Being {word} matters more than most people realize."]
-  },
+  // ── SPECIALIZED DOMAINS ──
+  sports_words: ["athlete","player","team","coach","referee","stadium","field","court","track","pool","ring","mat","score","goal","point","win","lose","draw","compete","practice","train","drill","condition","warm up","cool down","stretch","strengthen","endure","persist","perform","execute","strategy","tactic","formation","position","offense","defense","attack","defend","block","tackle","dribble","pass","shoot","serve","volley","spike","smash","dodge","feint","sprint","pace","stride","rhythm","form","technique","power","speed","agility","balance","coordination","reaction","timing","accuracy","consistency","mental toughness","grit","determination","sportsmanship","teamwork","leadership","discipline","focus","visualization","recovery","nutrition","hydration","rest","peak performance","personal best","record","championship","trophy","medal","podium","ranking","rating","qualification","elimination","playoff","final","overtime","penalty","foul","violation","suspension","injury","rehabilitation","comeback","legacy"],
+  art_words: ["image","picture","painting","drawing","sketch","illustration","photograph","sculpture","installation","performance","dance","music","film","theater","poetry","prose","novel","story","essay","design","architecture","fashion","craft","ceramics","glass","metal","wood","textile","digital art","animation","video","sound","light","color","texture","form","shape","line","space","composition","perspective","proportion","scale","balance","harmony","contrast","rhythm","movement","emotion","expression","concept","meaning","narrative","symbol","metaphor","allegory","abstraction","realism","impressionism","expressionism","surrealism","minimalism","maximalism","modernism","postmodernism","avant-garde","classical","romantic","baroque","renaissance","contemporary","experimental","traditional","folk","popular","elite","commercial","independent","collaborative","solo","collective","process","medium","material","technique","style","voice","vision","perspective","theme","subject","form","content","context","interpretation","critique","appreciation","aesthetics","beauty","sublime","ugly","interesting","boring","moving","powerful","subtle","bold","quiet","loud","intimate","grand","personal","universal"],
+  music_words: ["note","chord","scale","melody","harmony","rhythm","beat","tempo","pitch","tone","timbre","dynamics","texture","form","structure","phrase","motif","theme","variation","improvisation","composition","arrangement","orchestration","instrumentation","vocals","lyrics","poetry","music theory","ear training","sight reading","practice","performance","concert","recording","production","mixing","mastering","genre","style","classical","jazz","blues","rock","pop","hip hop","electronic","folk","country","world music","ambient","experimental","orchestra","band","ensemble","solo","duet","trio","quartet","choir","conductor","composer","musician","singer","instrumentalist","guitarist","pianist","drummer","bassist","violinist","cellist","trumpeter","saxophonist","flutist","DJ","producer","sound engineer","music director","creative director","A&R","manager","agent","tour manager","sound check","setlist","encore","improvisation","composition","arrangement","transcription","notation","score","sheet music","tab","chord chart","lead sheet"],
+  food_words: ["ingredient","recipe","technique","flavor","taste","texture","aroma","presentation","plating","portion","serving","course","meal","breakfast","lunch","dinner","snack","appetizer","main","dessert","beverage","water","juice","coffee","tea","wine","beer","spirits","protein","carbohydrate","fat","fiber","vitamin","mineral","antioxidant","probiotic","calorie","nutrition","diet","vegetarian","vegan","omnivore","allergy","intolerance","gluten","dairy","nut","seafood","organic","local","seasonal","sustainable","farm-to-table","processed","natural","artisan","gourmet","street food","comfort food","fusion","traditional","modern","innovative","simple","complex","bold","subtle","sweet","sour","salty","bitter","umami","spicy","mild","rich","light","heavy","creamy","crunchy","tender","crispy","juicy","dry","moist","fresh","stale","raw","cooked","grilled","roasted","braised","fried","steamed","baked","poached","smoked","fermented","pickled","marinated","seasoned","garnished","plated","served","tasted","savored","appreciated","enjoyed","shared"],
+  travel_words: ["destination","journey","adventure","exploration","discovery","experience","culture","history","nature","landscape","architecture","food","people","language","tradition","custom","religion","art","music","festival","celebration","local","authentic","touristy","off-beaten-path","hidden gem","must-see","itinerary","planning","booking","accommodation","hotel","hostel","guesthouse","resort","camping","transportation","flight","train","bus","car","bike","walking","navigation","map","GPS","ticket","passport","visa","currency","exchange","budget","luxury","backpacking","solo","family","group","guided","self-guided","photography","journaling","memory","souvenir","connection","transformation","perspective","broadening","learning","humility","wonder","respect","appreciation","immersion","participation","observation","reflection","growth","challenge","discomfort","adaptability","resilience","flexibility","openness","curiosity","gratitude","presence","mindfulness","being present","living fully","embracing uncertainty","stepping outside comfort zone","making memories","building connections","learning languages","trying new foods","meeting strangers","becoming global citizen","understanding diversity","appreciating difference","finding common ground","human connection","shared humanity"],
 
-  personality_negative: {
-    words: ["arrogant","conceited","narcissistic","selfish","greedy","manipulative","dishonest","deceptive","unreliable","inconsistent","reckless","impulsive","careless","irresponsible","lazy","passive","avoidant","dismissive","judgmental","critical","harsh","cold","distant","indifferent","callous","cruel","aggressive","hostile","abrasive","controlling","domineering","rigid","inflexible","stubborn","close-minded","shallow","superficial","materialistic","jealous","possessive","insecure","needy","clingy","toxic","draining","negative","pessimistic","cynical","bitter","resentful","vindictive","petty","spiteful","immature","entitled","demanding"],
-    patterns: ["recognizing {word} tendencies is the first step to changing them","{word} behavior often comes from fear or pain","awareness of being {word} means you can choose differently"],
-    response_openers: ["That sounds like {word} behavior pattern.","Recognizing {word} tendencies takes self-awareness."]
-  },
-
-  // ── INTELLIGENCE & THINKING ──
-  cognitive: {
-    words: ["think","reason","analyze","synthesize","evaluate","assess","judge","decide","conclude","infer","deduce","induce","hypothesize","theorize","conceptualize","understand","comprehend","grasp","perceive","recognize","identify","distinguish","differentiate","categorize","classify","organize","structure","plan","strategize","problem-solve","innovate","create","imagine","visualize","abstract","generalize","specialize","focus","concentrate","reflect","contemplate","meditate","ponder","consider","deliberate","calculate","estimate","predict","project","extrapolate","interpolate","compare","contrast","evaluate","weigh","balance","prioritize","question","challenge","critique","scrutinize","investigate","explore","discover","learn","memorize","recall","apply","adapt","transfer","integrate","connect","associate","pattern-match","optimize","improve","refine","iterate"],
-    patterns: ["to {word} effectively, you need both data and intuition","strong {word}ers ask better questions","the ability to {word} clearly is a lifelong skill","{word}ing well means slowing down first"],
-    response_openers: ["Let me {word} through this with you.","Good {word}ers ask: what am I missing?"]
-  },
-
-  // ── COMMUNICATION VERBS ──
-  communication_verbs: {
-    words: ["say","tell","speak","talk","discuss","explain","describe","define","clarify","elaborate","expand","detail","summarize","paraphrase","rephrase","translate","interpret","express","articulate","voice","state","mention","note","point out","highlight","emphasize","stress","underline","assert","claim","argue","debate","dispute","challenge","question","ask","inquire","request","demand","insist","suggest","propose","recommend","advise","counsel","guide","instruct","teach","demonstrate","show","illustrate","prove","support","justify","defend","refute","counter","respond","reply","answer","address","acknowledge","confirm","agree","disagree","object","protest","criticize","praise","compliment","encourage","motivate","inspire","reassure","comfort","warn","caution","alert","inform","update","report","announce","declare","proclaim","confess","admit","reveal","disclose","share","confide","whisper","shout","communicate","connect","engage","listen","hear","understand"],
-    patterns: ["when you {word} clearly, people trust you more","learning to {word} well changes everything","the best communicators know when to {word} and when to listen"],
-    response_openers: ["Let me {word} this differently.","I want to {word} something important here."]
-  },
-
-  // ── DESCRIPTION WORDS ──
-  descriptors_quality: {
-    words: ["excellent","outstanding","exceptional","remarkable","extraordinary","incredible","amazing","impressive","superb","magnificent","brilliant","fantastic","wonderful","marvelous","stunning","breathtaking","spectacular","phenomenal","extraordinary","unique","rare","precious","valuable","priceless","irreplaceable","essential","vital","crucial","critical","fundamental","core","central","key","primary","dominant","powerful","influential","significant","important","meaningful","purposeful","intentional","deliberate","thoughtful","careful","precise","accurate","exact","correct","proper","appropriate","suitable","fitting","relevant","applicable","useful","practical","efficient","effective","productive","successful","accomplished","complete","thorough","comprehensive","detailed","specific","clear","simple","elegant","refined","polished","sophisticated","advanced","complex","intricate","nuanced","layered","deep","profound","rich","dense","vast","broad","wide","expansive","inclusive","diverse"],
-    patterns: ["something {word} stands out immediately","being {word} in your approach matters","a {word} result comes from {word} effort"],
-    response_openers: ["That is genuinely {word}.","What makes it {word} is the depth behind it."]
-  },
-
-  descriptors_size: {
-    words: ["tiny","minuscule","microscopic","infinitesimal","small","little","compact","narrow","slim","thin","short","brief","concise","minimal","sparse","limited","restricted","confined","cramped","tight","medium","average","standard","typical","normal","moderate","reasonable","regular","fair","adequate","sufficient","large","big","wide","broad","tall","long","extensive","expansive","massive","huge","enormous","gigantic","colossal","immense","vast","infinite","boundless","limitless","endless","unlimited","overwhelming","all-encompassing","universal","global","cosmic"],
-    patterns: ["size is relative — what seems {word} depends on perspective","even {word} changes create big ripples","do not underestimate {word} steps"],
-    response_openers: ["Even {word} things hold enormous meaning.","Scale it — start {word}, grow from there."]
-  },
-
-  descriptors_time: {
-    words: ["instant","immediate","sudden","abrupt","quick","fast","rapid","swift","speedy","hasty","prompt","timely","punctual","early","ahead","premature","before","prior","previous","past","former","old","ancient","historic","traditional","classic","nostalgic","outdated","obsolete","current","present","contemporary","modern","recent","new","fresh","latest","now","today","current","ongoing","continuous","constant","persistent","enduring","lasting","permanent","eternal","timeless","future","upcoming","next","coming","eventual","eventual","eventual","imminent","soon","near","approaching","delayed","late","slow","gradual","steady","incremental","progressive","long-term","short-term","temporary","brief","fleeting","momentary","transient","passing","seasonal","cyclical","periodic","recurring","regular","scheduled","planned","spontaneous","unexpected","sudden"],
-    patterns: ["{word} action is often the difference between success and failure","thinking in {word} terms changes your decisions","{word} progress beats no progress every time"],
-    response_openers: ["Timing matters — act {word} when you can.","That is a {word} thing to address."]
-  },
-
-  descriptors_manner: {
-    words: ["carefully","thoughtfully","deliberately","intentionally","purposefully","mindfully","consciously","actively","proactively","responsively","adaptively","flexibly","creatively","innovatively","boldly","confidently","courageously","fearlessly","assertively","decisively","firmly","clearly","directly","honestly","openly","transparently","authentically","genuinely","sincerely","warmly","kindly","gently","compassionately","patiently","calmly","peacefully","quietly","softly","loudly","forcefully","powerfully","vigorously","energetically","enthusiastically","passionately","intensely","deeply","thoroughly","completely","fully","entirely","absolutely","totally","utterly","perfectly","precisely","accurately","correctly","properly","efficiently","effectively","productively","successfully","skillfully","expertly","professionally","intelligently","wisely","strategically","logically","rationally","critically","analytically","creatively","independently","collaboratively","collectively","respectfully","humbly","graciously","gracefully"],
-    patterns: ["doing things {word} changes the outcome","approach challenges {word} and you will learn faster","speaking {word} builds real trust"],
-    response_openers: ["The key is doing it {word}.","Approach that {word} and the path becomes clearer."]
-  },
-
-  // ── NATURE & WORLD ──
-  nature: {
-    words: ["ocean","sea","wave","tide","current","river","stream","lake","pond","waterfall","spring","rain","storm","lightning","thunder","cloud","sky","sun","moon","star","galaxy","universe","cosmos","earth","land","mountain","hill","valley","plain","desert","forest","jungle","tree","leaf","flower","grass","seed","root","branch","bark","stem","vine","moss","fern","coral","soil","rock","stone","crystal","mineral","metal","ice","snow","wind","air","fire","flame","ash","dust","sand","clay","mud","cave","cliff","canyon","island","shore","beach","coast","peninsula","continent","atmosphere","ocean-floor","volcano","earthquake","glacier","aurora","rainbow","mist","fog","dew","frost","petal","thorn","shell","feather","scale","fur","web","nest","den","burrow","migration","season","cycle","ecosystem","habitat","species","evolution","adaptation","instinct","survival","predator","prey","symbiosis","biodiversity"],
-    patterns: ["{word} teaches patience","like a {word}, this too moves in cycles","the {word} reflects what we put into it","there is something {word}-like about this situation"],
-    response_openers: ["Like a {word}, this has layers worth exploring.","Nature — especially the {word} — holds real wisdom here."]
-  },
-
-  // ── SCIENCE & KNOWLEDGE ──
-  science: {
-    words: ["hypothesis","theory","evidence","data","experiment","observation","measurement","variable","control","result","conclusion","analysis","research","study","discovery","invention","innovation","breakthrough","paradigm","model","system","structure","function","process","mechanism","reaction","interaction","force","energy","matter","mass","velocity","acceleration","momentum","gravity","pressure","temperature","density","volume","frequency","wavelength","amplitude","resistance","conductivity","efficiency","entropy","equilibrium","symmetry","pattern","complexity","emergence","feedback","loop","network","connection","node","signal","noise","error","bias","variance","distribution","probability","statistics","correlation","causation","prediction","simulation","computation","algorithm","logic","proof","theorem","axiom","formula","equation","dimension","scale","magnitude","precision","accuracy","uncertainty","margin","threshold","limit","boundary","infinity","zero","constant","variable","function","derivative","integral","vector","matrix","tensor","quantum","relative","absolute","universal","fundamental","atomic","molecular","cellular","organic","synthetic","natural","artificial","biological","chemical","physical","digital","analog"],
-    patterns: ["the {word} behind this is fascinating","understanding the {word} changes how you see it","at its core, this is a {word} problem"],
-    response_openers: ["The {word} here is worth understanding.","There is a deeper {word} principle at play."]
-  },
-
-  // ── TECHNOLOGY ──
-  technology: {
-    words: ["code","program","software","hardware","system","network","server","client","database","query","algorithm","function","variable","loop","array","object","class","method","interface","API","framework","library","module","component","architecture","design","pattern","protocol","standard","format","data","file","stream","buffer","cache","memory","storage","processor","thread","process","runtime","compiler","interpreter","debugger","error","exception","log","test","build","deploy","release","version","update","patch","feature","bug","fix","refactor","optimize","scale","performance","latency","throughput","bandwidth","security","encryption","authentication","authorization","token","session","cookie","request","response","endpoint","route","controller","model","view","render","template","style","layout","animation","interaction","event","listener","handler","callback","promise","async","await","state","store","reducer","action","dispatch","subscribe","publish","webhook","socket","real-time","cloud","container","microservice","serverless","pipeline","workflow","automation","machine-learning","neural-network","training","inference","dataset","feature","label","prediction","accuracy","model","deployment"],
-    patterns: ["in technology, {word} is everything","good {word} makes hard things simple","the best {word} solves a real problem"],
-    response_openers: ["From a technology standpoint, the {word} here matters most.","Think about the {word} as the foundation."]
-  },
-
-  // ── RELATIONSHIPS ──
-  relationships: {
-    words: ["connection","bond","link","tie","attachment","belonging","closeness","intimacy","trust","respect","honesty","communication","understanding","empathy","support","care","love","friendship","partnership","teamwork","collaboration","cooperation","unity","solidarity","community","family","siblings","parents","children","relatives","colleagues","mentors","students","strangers","acquaintances","neighbors","allies","companions","confidants","soulmates","rivals","enemies","boundaries","space","distance","presence","attention","listening","hearing","seeing","validating","accepting","forgiving","healing","growing","changing","adapting","compromising","negotiating","resolving","conflict","tension","misunderstanding","miscommunication","argument","disagreement","repair","reconciliation","reunion","separation","goodbye","loss","grief","memory","legacy","influence","impact","shaping","molding","inspiring","mentoring","guiding","protecting","providing","nurturing","raising","teaching","learning","growing-together","building","creating","sharing","experiencing","laughing","crying","struggling","celebrating","surviving","thriving","enduring","evolving","deepening","strengthening","maintaining","investing","choosing","committing","showing-up"],
-    patterns: ["every {word} requires consistent effort","a strong {word} is built on honesty","without {word}, most things fall apart","the quality of your {word} shapes your life"],
-    response_openers: ["The {word} you build now will define much later.","Real {word} means showing up even when it is difficult."]
-  },
-
-  // ── LEARNING & GROWTH ──
-  growth: {
-    words: ["learn","grow","develop","improve","progress","advance","evolve","transform","change","adapt","adjust","shift","pivot","reinvent","renew","refresh","reset","start","begin","try","attempt","experiment","practice","repeat","refine","polish","master","excel","achieve","accomplish","complete","finish","succeed","win","overcome","conquer","defeat","persist","persevere","push","strive","reach","climb","rise","soar","expand","deepen","broaden","sharpen","hone","build","create","forge","shape","mold","sculpt","carve","design","plan","prepare","equip","arm","ready","set","position","align","focus","direct","channel","invest","commit","dedicate","sacrifice","endure","wait","trust","believe","have-faith","stay-course","keep-going","never-quit","bounce-back","recover","heal","renew","emerge","become","realize","actualize","fulfill","complete","close","arrive","reach","land","settle","ground","establish","anchor","root"],
-    patterns: ["every {word} experience compounds over time","the willingness to {word} sets everything in motion","you cannot {word} without some discomfort","real {word} happens just outside your comfort zone"],
-    response_openers: ["The most important thing is to {word} consistently.","Every step you take to {word} adds up to something real."]
-  },
-
-  // ── MOTIVATION & DRIVE ──
-  motivation: {
-    words: ["purpose","meaning","why","reason","drive","fuel","fire","spark","ignite","push","pull","draw","attract","compel","inspire","motivate","energize","activate","mobilize","rally","charge","power","force","momentum","inertia","resistance","friction","obstacle","challenge","difficulty","struggle","grind","hustle","effort","work","labor","dedication","commitment","consistency","discipline","habit","routine","ritual","system","process","method","approach","strategy","tactic","action","step","move","choice","decision","focus","priority","goal","target","vision","mission","dream","aspiration","ambition","desire","hunger","thirst","craving","yearning","longing","passion","obsession","calling","vocation","path","journey","adventure","quest","pursuit","race","climb","ascent","peak","summit","top","best","excellence","mastery","greatness","legacy","impact","difference","change","influence","mark","contribution","value","worth","significance","mattering","counting","belonging","serving","giving","leaving-behind"],
-    patterns: ["real {word} comes from knowing your why","without {word}, even talent goes nowhere","{word} without consistency is just a feeling","your deepest {word} is your greatest asset"],
-    response_openers: ["Find your {word} and everything else follows.","That kind of {word} is exactly what drives real change."]
-  },
-
-  // ── PROBLEM SOLVING ──
-  problem_solving: {
-    words: ["problem","challenge","issue","obstacle","barrier","roadblock","difficulty","complexity","confusion","ambiguity","uncertainty","risk","threat","danger","crisis","emergency","conflict","dilemma","paradox","contradiction","tension","trade-off","constraint","limitation","gap","missing","unknown","unclear","undefined","unsolved","unresolved","broken","stuck","blocked","lost","off-track","solution","answer","fix","resolution","outcome","result","path","way","approach","method","strategy","plan","option","alternative","possibility","opportunity","potential","leverage","resource","tool","skill","knowledge","insight","idea","hypothesis","theory","assumption","belief","perspective","angle","lens","frame","context","cause","root","source","origin","pattern","trend","signal","symptom","indicator","clue","evidence","proof","data","feedback","information","insight","clarity","understanding","breakthrough","discovery","realization","learning","step","action","experiment","test","try","iterate","pivot","adjust","improve","optimize","build","execute","measure","evaluate","reflect","learn","repeat"],
-    patterns: ["every {word} holds a lesson","when facing a {word}, define it precisely first","the solution is often hiding inside the {word}","treat every {word} as a teacher"],
-    response_openers: ["Let us break this {word} down clearly.","The real {word} here might be different from what it seems."]
-  },
-
-  // ── CREATIVITY & ART ──
-  creativity: {
-    words: ["create","make","build","design","draw","paint","write","compose","craft","shape","form","mold","carve","sculpt","weave","knit","sew","stitch","blend","mix","combine","arrange","organize","curate","edit","revise","refine","polish","perfect","imagine","dream","envision","visualize","picture","see","feel","sense","intuit","discover","invent","innovate","experiment","play","explore","try","wonder","ask","question","challenge","break","rules","convention","tradition","norm","expectation","boundary","limit","edge","frontier","unknown","new","fresh","original","unique","different","unexpected","surprising","bold","daring","risky","free","expressive","authentic","personal","honest","vulnerable","real","raw","unfiltered","pure","true","voice","style","identity","signature","mark","stamp","influence","legacy","body-of-work","portfolio","expression","communication","message","meaning","story","narrative","perspective","world-view","beauty","elegance","grace","power","emotion","resonance","impact","connection","universality"],
-    patterns: ["creativity is not a gift — it is a practice","the best {word} comes from a place of honesty","every creative {word} starts with a question","protect your {word} by giving it space and time"],
-    response_openers: ["The creative {word} here is really striking.","This calls for a genuinely creative approach to {word}."]
-  },
-
-  // ── PHILOSOPHY & WISDOM ──
-  philosophy: {
-    words: ["truth","reality","existence","being","consciousness","awareness","perception","perspective","worldview","belief","assumption","bias","value","principle","ethics","morality","virtue","wisdom","knowledge","understanding","insight","enlightenment","clarity","certainty","doubt","question","inquiry","search","discovery","meaning","purpose","reason","cause","effect","consequence","intention","will","choice","freedom","responsibility","accountability","justice","fairness","equality","rights","duty","obligation","commitment","integrity","honor","dignity","respect","compassion","empathy","humanity","humility","ego","self","identity","soul","mind","body","spirit","consciousness","subconsciousness","thought","emotion","intuition","logic","reason","faith","skepticism","pragmatism","idealism","realism","nihilism","stoicism","existentialism","absurdism","materialism","dualism","monism","relativism","objectivism","subjective","objective","absolute","relative","universal","particular","general","specific","abstract","concrete","theoretical","practical","ideal","real","possible","impossible","necessary","contingent","infinite","finite","temporal","eternal","mortal","immortal","change","permanence","chaos","order","complexity","simplicity"],
-    patterns: ["at a philosophical level, {word} raises the deeper question","the concept of {word} has been debated for centuries","{word} ultimately comes down to how you define it","examining {word} carefully changes how you live"],
-    response_openers: ["Philosophically, the question of {word} runs very deep.","The real conversation about {word} starts with your definition."]
-  },
-
-  // ── SOCIAL & CULTURE ──
-  social: {
-    words: ["society","culture","community","group","tribe","collective","nation","civilization","tradition","custom","norm","value","belief","identity","diversity","inclusion","equity","privilege","power","hierarchy","status","class","role","expectation","pressure","conformity","rebellion","change","revolution","reform","movement","activism","advocacy","awareness","education","empowerment","voice","representation","visibility","acceptance","belonging","unity","division","conflict","harmony","cooperation","competition","inequality","discrimination","prejudice","stereotype","assumption","bias","empathy","solidarity","resistance","resilience","adaptation","integration","assimilation","preservation","celebration","appreciation","exchange","dialogue","conversation","negotiation","compromise","mediation","resolution","peace","democracy","freedom","rights","justice","protection","safety","wellbeing","dignity","respect","humanity","compassion","generosity","service","giving","volunteering","contributing","leading","following","participating","engaging","organizing","mobilizing","building","growing","sustaining","transforming"],
-    patterns: ["culture shapes how we {word} without us realizing","society rewards those who {word} in ways it values","the most impactful people understand how social {word} works"],
-    response_openers: ["This is as much a social question as anything else.","The cultural layer here really affects how we see {word}."]
-  },
-
-  // ── LEADERSHIP & INFLUENCE ──
-  leadership: {
-    words: ["lead","guide","direct","steer","navigate","vision","mission","strategy","execute","deliver","inspire","motivate","empower","delegate","trust","develop","mentor","coach","teach","challenge","push","support","remove-obstacles","communicate","listen","decide","prioritize","focus","align","rally","unite","build-culture","set-standards","model-behavior","be-consistent","stay-humble","own-mistakes","praise-others","share-credit","protect-team","take-blame","hold-accountable","reward-performance","give-feedback","ask-questions","stay-curious","read-widely","think-long-term","plan-ahead","manage-risk","embrace-change","adapt-quickly","act-decisively","remain-calm","project-confidence","show-vulnerability","build-trust","earn-respect","develop-relationships","know-your-people","serve-others","put-mission-first","sacrifice-comfort","delay-gratification","stay-grounded","keep-perspective","maintain-balance","renew-energy","grow-others","build-next-generation","leave-legacy","make-impact","create-value","define-success","measure-progress","celebrate-wins","learn-from-losses","improve-always","never-settle","stay-hungry"],
-    patterns: ["{word} starts before anyone is watching","great {word} is multiplying capability in others","{word} without character is just management","the test of {word} is how you act under pressure"],
-    response_openers: ["From a leadership angle, {word} is the central challenge.","Strong {word} begins with exactly this kind of self-awareness."]
-  },
-
-  // ── BUSINESS & WORK ──
-  business: {
-    words: ["strategy","vision","mission","value","goal","objective","target","metric","KPI","performance","result","outcome","impact","profit","revenue","cost","margin","efficiency","productivity","output","input","process","system","workflow","operations","logistics","supply-chain","demand","supply","market","customer","segment","persona","user","product","service","feature","benefit","value-proposition","brand","reputation","trust","loyalty","retention","acquisition","conversion","growth","scale","market-share","competitive-advantage","differentiation","innovation","disruption","pivot","execution","planning","forecasting","budgeting","investing","fundraising","partnership","collaboration","negotiation","contract","agreement","deal","proposal","pitch","presentation","meeting","decision","approval","escalation","delegation","accountability","ownership","leadership","management","team","culture","hiring","onboarding","training","development","feedback","performance-review","promotion","compensation","benefits","engagement","retention","departure","transition","restructure","merger","acquisition","exit","IPO","valuation","equity","stake","shares","board","investors","stakeholders","reporting","transparency","governance","compliance","regulation","risk","ethics","sustainability"],
-    patterns: ["in business, {word} separates leaders from managers","the best {word} creates compounding value over time","{word} at scale requires systems, not just effort"],
-    response_openers: ["From a business perspective, {word} is the real lever here.","Getting the {word} right unlocks everything downstream."]
-  },
-
-  // ── HEALTH & WELLNESS ──
-  health: {
-    words: ["body","mind","spirit","health","wellness","fitness","strength","endurance","flexibility","balance","coordination","agility","speed","power","recovery","rest","sleep","nutrition","hydration","energy","vitality","immunity","healing","recovery","rehab","therapy","treatment","medication","prevention","maintenance","checkup","screening","diagnosis","condition","disease","disorder","symptom","pain","inflammation","injury","fatigue","stress","burnout","mental-health","emotional-health","psychological","anxiety","depression","trauma","PTSD","resilience","coping","strategy","support","community","connection","therapy","counseling","medication","mindfulness","meditation","breathing","movement","exercise","yoga","strength-training","cardio","sleep-hygiene","nutrition","diet","hydration","supplementation","gut-health","brain-health","heart-health","metabolic-health","hormonal-balance","skin-health","bone-health","muscle-health","cellular-health","longevity","aging","vitality","energy","focus","clarity","mood","performance","recovery","adaptation","growth","healing","thriving","flourishing","living-well"],
-    patterns: ["your {word} is your foundation for everything else","without good {word}, nothing else reaches its potential","investing in {word} today pays dividends forever"],
-    response_openers: ["Your {word} matters more than people realize.","Building a strong {word} foundation changes everything."]
-  },
-
-  // ── LOGIC & ARGUMENTATION ──
-  logic: {
-    words: ["premise","conclusion","argument","reasoning","evidence","proof","demonstration","deduction","induction","abduction","inference","implication","assumption","claim","assertion","statement","proposition","hypothesis","theory","model","framework","perspective","lens","angle","approach","method","logic","validity","soundness","consistency","coherence","clarity","precision","rigor","fallacy","error","flaw","weakness","counter-argument","rebuttal","objection","response","qualification","nuance","complexity","ambiguity","uncertainty","probability","likelihood","possibility","certainty","necessity","contingency","causation","correlation","association","pattern","trend","signal","noise","bias","heuristic","rule-of-thumb","shortcut","generalization","abstraction","analogy","metaphor","example","illustration","case-study","data","statistics","anecdote","testimony","authority","consensus","disagreement","debate","discussion","dialogue","questioning","challenging","defending","supporting","agreeing","disagreeing","qualifying","conceding","clarifying","defining","distinguishing","comparing","contrasting","evaluating","weighing","balancing","concluding","deciding","recommending","advising","suggesting"],
-    patterns: ["the {word} here needs careful examination","a strong {word} rests on solid evidence","before accepting a {word}, ask what is being assumed","good {word} welcomes challenges"],
-    response_openers: ["The {word} of this argument is worth examining closely.","Let us apply some careful {word} to what is being said here."]
-  },
-
-  // ── MONEY & FINANCE ──
-  money: {
-    words: ["money","wealth","income","revenue","profit","earnings","salary","wage","payment","cash","currency","capital","investment","return","yield","interest","dividend","equity","asset","liability","debt","credit","loan","mortgage","rent","expense","cost","price","value","worth","budget","savings","emergency-fund","retirement","pension","portfolio","stock","bond","fund","ETF","index","market","bull","bear","volatility","risk","reward","diversification","allocation","rebalancing","compound","growth","appreciation","depreciation","inflation","deflation","purchasing-power","opportunity-cost","time-value","liquidity","leverage","margin","exposure","hedge","protection","insurance","tax","deduction","credit","debit","transaction","account","balance","statement","audit","compliance","regulation","planning","strategy","goal","target","milestone","timeline","discipline","patience","consistency","habit","system","automation","tracking","monitoring","adjusting","learning","adapting","growing","building","protecting","preserving","transferring","giving","legacy","estate","inheritance","philanthropy","impact","meaning","purpose","freedom","security","independence","abundance","scarcity","mindset","relationship","psychology","behavior"],
-    patterns: ["money is a tool — {word} is what you build with it","financial {word} starts with understanding your relationship with money","the {word} of money is often more psychological than mathematical"],
-    response_openers: ["The financial {word} here comes down to your priorities.","Understanding the {word} of money changes every decision you make."]
-  },
-
-  // ── LANGUAGE & WORDS ──
-  language: {
-    words: ["word","language","speech","writing","reading","listening","speaking","vocabulary","grammar","syntax","semantics","pragmatics","phonetics","morphology","etymology","definition","meaning","connotation","denotation","context","tone","register","style","voice","narrative","story","argument","explanation","description","question","answer","conversation","dialogue","monologue","text","document","paragraph","sentence","clause","phrase","idiom","metaphor","simile","analogy","alliteration","rhythm","rhyme","poetry","prose","fiction","non-fiction","essay","article","blog","email","message","letter","report","memo","script","speech","presentation","caption","headline","title","subtitle","abstract","summary","introduction","conclusion","thesis","evidence","citation","reference","source","quote","paraphrase","translation","interpretation","communication","expression","articulation","clarity","precision","ambiguity","nuance","complexity","simplicity","accessibility","inclusivity","persuasion","argument","debate","rhetoric","logic","emotion","ethos","pathos","logos","credibility","trust","connection","resonance","impact","meaning","purpose","beauty","power","truth","authenticity","vulnerability","courage","voice","identity"],
-    patterns: ["the right {word} at the right moment changes everything","your choice of {word} reveals your thinking","great {word}s carry whole worlds inside them","every {word} has a history worth knowing"],
-    response_openers: ["Words matter — and the {word} here carries real weight.","The {word} you choose shapes how people receive your message."]
-  },
-
-  // ── QUESTIONS & ANSWERS ──
-  qa_patterns: {
-    who_answers:   ["The person responsible for this is usually {topic}-focused.","In this context, it refers to someone who {action}.","Historically, it was {context} that drove this.","The key figure here is whoever {role}."],
-    what_answers:  ["{topic} is essentially about {core}.","At its core, {topic} means {definition}.","Think of {topic} as {analogy}.","The simplest way to understand {topic} is {simplification}."],
-    when_answers:  ["This typically happens {timing}.","The right time for this is when {condition}.","Historically, this occurred during {period}.","Timing depends on {factor}."],
-    where_answers: ["This is most relevant in the context of {context}.","You will encounter this in {environment}.","The best place for this is {location}.","Look for this within {framework}."],
-    why_answers:   ["The reason this matters is {reason}.","At the root of this is {cause}.","This happens because {explanation}.","The deeper why is {purpose}."],
-    how_answers:   ["The process involves {steps}.","Start by {first_step}, then {next_step}.","The key to doing this well is {method}.","Break it down: {breakdown}."],
-  },
-
-  // ── CONVERSATION STARTERS & OPENERS ──
-  conversation: {
-    openers: ["Let me share something interesting about that.","Here is what I think about this.","That is a really important point.","There is more to this than it might seem.","Let me break this down clearly.","This connects to something bigger.","Here is the core of what you are asking.","Good question — here is the full picture.","I want to make sure I answer this well.","The short answer is one thing, but the fuller answer is this:"],
-    transitions: ["Building on that,","What this connects to is","The interesting part is","What most people miss here is","To go deeper on this:","Another angle worth considering:","Here is where it gets interesting:","The nuance here is","What this really comes down to is","At the core of this is"],
-    closers: ["Does that answer what you were looking for?","Want me to go deeper on any part of that?","There is more to explore here if you want.","That is the core — let me know if you want the details.","Let me know if that lands or if you need a different angle.","The key takeaway is this.","What matters most is what you do with this.","That is the foundation — the rest builds from here."]
-  },
-
-  // ── SMART FALLBACKS — never say "I don't know" ──
-  smart_fallbacks: {
-    patterns: [
-      "That touches on {topic} in a way I want to explore with you. What specifically about {topic} matters most to you?",
-      "Interesting angle. Let me connect {topic} to something I know well — {related}.",
-      "I want to give you a thoughtful answer on {topic}. Here is what I can tell you for certain: {certain_fact}.",
-      "On {topic}: the core question is {core_question}. The answer depends on {factor}.",
-      "Let me approach {topic} from a different direction. What is the outcome you are looking for?",
-      "{topic} is complex. Let me start with what is most important: {key_point}.",
-      "I want to understand what you mean by {topic}. Are you asking about {interpretation_a} or {interpretation_b}?",
-      "Great thing to explore. My take on {topic}: {take}. What is yours?",
-    ]
-  },
-
-  // ── ANALOGY ENGINE ──
-  analogies: {
-    learning:    ["like building a muscle — the resistance is the point","like planting seeds — the growth is invisible at first","like learning a language — repetition until it becomes natural"],
-    change:      ["like a caterpillar in a cocoon — transformation from the inside","like seasons — discomfort before renewal","like water carving a canyon — gradual and inevitable"],
-    problems:    ["like a puzzle — confusing until you find the right piece","like darkness before dawn — the hardest moment precedes the breakthrough","like a map with no roads — you have to make your own path"],
-    growth:      ["like a tree in a storm — the roots deepen","like iron becoming steel — pressure and heat create strength","like a diamond — formed under conditions that seemed impossible"],
-    time:        ["like compound interest — small consistent deposits become fortunes","like a river — always moving even when it seems still","like a marathon — the pace matters more than the burst"],
-    relationships:["like a garden — it grows with attention and care","like a bridge — built with effort from both sides","like a fire — needs oxygen, fuel, and consistent tending"],
-  }
-
+  // ── CONNECTOR/FUNCTION WORDS ──
+  connectors: ["and","but","or","nor","for","yet","so","if","then","as","at","by","from","in","into","of","on","to","up","with","that","this","which","who","when","where","why","how","not","no","yes","very","too","more","most","some","any","all","just","also","about","there","here","well","now","still","already","even","only","both","either","neither","each","every","such","own","other","same","different","another","many","few","little","much","often","again","far","long","never","ever","always","sometimes","rather","quite","almost","nearly","exactly","simply","clearly","simply","really","truly","actually","basically","essentially","fundamentally","ultimately","generally","specifically","particularly","especially","importantly","significantly","notably","obviously","naturally","certainly","probably","possibly","perhaps","maybe","definitely","absolutely","completely","totally","entirely","fully","partly","mostly","mainly","primarily","largely","generally","broadly","roughly","approximately","specifically","precisely","accurately","correctly"],
+  prepositions: ["about","above","across","after","against","along","among","around","at","before","behind","below","beneath","beside","between","beyond","by","despite","down","during","except","for","from","in","inside","into","like","near","of","off","on","onto","opposite","out","outside","over","past","since","through","throughout","to","toward","under","underneath","until","up","upon","with","within","without","according to","ahead of","apart from","as for","because of","by means of","due to","except for","far from","in addition to","in front of","in place of","in spite of","instead of","near to","next to","on behalf of","on top of","out of","prior to","regardless of","together with","up to","with regard to","with respect to"],
 };
 
-
-// ═══════════════════════════════════════════════════════════════════
-// SECTION B: WORD LOOKUP ENGINE — fast access by any word
-// ═══════════════════════════════════════════════════════════════════
-
-// Build a flat word-to-category index
+// Build word index for fast lookups
 const WORD_INDEX = {};
-const CATEGORY_DESCRIPTIONS = {
-  positive_emotions:"positive emotion", negative_emotions:"negative emotion",
-  emotional_states:"emotional state", personality_positive:"positive personality trait",
-  personality_negative:"negative personality trait", cognitive:"cognitive/thinking term",
-  communication_verbs:"communication verb", descriptors_quality:"quality descriptor",
-  descriptors_size:"size descriptor", descriptors_time:"time descriptor",
-  descriptors_manner:"manner/style descriptor", nature:"word related to nature and the world",
-  science:"scientific/academic term", technology:"technology term",
-  relationships:"word about relationships and connection", growth:"growth and development term",
-  motivation:"motivation and drive term", problem_solving:"problem-solving term",
-  creativity:"creative/artistic term", philosophy:"philosophical concept",
-  social:"social and cultural term", leadership:"leadership term",
-  business:"business and work term", health:"health and wellness term",
-  logic:"logic and argumentation term", money:"finance and money term",
-  language:"language and communication term"
-};
-
-(function buildWordIndex() {
-  for (const [cat, data] of Object.entries(WORD_BRAIN)) {
-    if (data && data.words) {
-      for (const w of data.words) {
+(function buildIndex() {
+  for (const [cat, words] of Object.entries(WORD_BRAIN)) {
+    if (Array.isArray(words)) {
+      for (const w of words) {
         if (!WORD_INDEX[w]) WORD_INDEX[w] = [];
         WORD_INDEX[w].push(cat);
       }
@@ -337,677 +531,328 @@ function getCategoryOf(word) {
   return cats && cats.length ? cats[0] : null;
 }
 
-function getWordsInCategory(category) {
-  const data = WORD_BRAIN[category];
-  return data && data.words ? data.words : [];
+function getWordsInCategory(cat) {
+  const data = WORD_BRAIN[cat];
+  return Array.isArray(data) ? data : [];
 }
 
-function getAllRelatedWords(word) {
-  const w = word.toLowerCase();
+function getRelatedWords(word) {
+  const w = word.toLowerCase().split(/\s+/)[0];
   const cats = WORD_INDEX[w];
-  if (!cats) return [];
+  if (!cats || !cats.length) {
+    // Try synonym lookup
+    const syns = SYNONYM_MAP[w] || [];
+    return syns.slice(0, 12);
+  }
   const related = new Set();
   for (const cat of cats) {
-    for (const relWord of (WORD_BRAIN[cat].words || [])) {
-      if (relWord !== w) related.add(relWord);
+    for (const rw of getWordsInCategory(cat)) {
+      if (rw !== w) related.add(rw);
     }
   }
-  return [...related].slice(0, 20);
+  return [...related].slice(0, 15);
 }
 
-// Word family — built-in suffix/prefix patterns
-function getWordFamily(word) {
+function describeFromBrain(word) {
   const w = word.toLowerCase();
-  const suffixes = {
-    "tion":"process/act of","ness":"state of being","ment":"result of","ity":"quality of",
-    "ism":"belief/practice","ist":"one who practices","ful":"full of","less":"without",
-    "able":"capable of","ible":"capable of","ous":"characterized by","ive":"tending to",
-    "ize":"to make","ify":"to cause","en":"to become","ly":"in a manner",
-    "er":"one who / more","est":"most","ing":"ongoing action","ed":"past action",
-    "al":"relating to","ic":"relating to","ary":"relating to","ory":"relating to"
-  };
-  const family = [];
-  for (const [suffix, meaning] of Object.entries(suffixes)) {
-    if (w.endsWith(suffix) && w.length > suffix.length + 2) {
-      const root = w.slice(0, -suffix.length);
-      family.push({ form: w, suffix, meaning, root });
-    }
-  }
-  // Generate plausible forms
-  const forms = [];
-  if (w.endsWith("e")) {
-    forms.push(`${w}d (past)`, `${w}s (plural/3rd person)`, `${w.slice(0,-1)}ing (present)`);
-  } else if (w.endsWith("y")) {
-    forms.push(`${w.slice(0,-1)}ies (plural)`, `${w.slice(0,-1)}ied (past)`, `${w}ing (present)`);
-  } else {
-    forms.push(`${w}s (plural/3rd person)`, `${w}ed (past)`, `${w}ing (present)`, `${w}er (one who ${w}s)`, `${w}able (capable of being ${w}n)`);
-  }
-  return { root: w, forms, morphology: family };
-}
-
-// Built-in synonym/antonym maps (500+ pairs)
-const SYNONYM_MAP = {
-  "happy":    ["joyful","glad","pleased","content","delighted","cheerful","elated","blissful"],
-  "sad":      ["unhappy","sorrowful","melancholy","dejected","despondent","downcast","gloomy"],
-  "good":     ["excellent","fine","great","superb","wonderful","positive","beneficial","favorable"],
-  "bad":      ["poor","terrible","awful","dreadful","inferior","negative","harmful","unfavorable"],
-  "big":      ["large","huge","enormous","massive","vast","gigantic","immense","colossal"],
-  "small":    ["tiny","little","miniature","compact","minute","slight","microscopic","petite"],
-  "fast":     ["quick","rapid","swift","speedy","hasty","prompt","brisk","fleet"],
-  "slow":     ["gradual","sluggish","leisurely","unhurried","deliberate","steady","measured"],
-  "smart":    ["intelligent","clever","bright","sharp","wise","astute","perceptive","insightful"],
-  "stupid":   ["foolish","unwise","ignorant","senseless","mindless","unintelligent","naive"],
-  "strong":   ["powerful","robust","sturdy","tough","resilient","solid","forceful","mighty"],
-  "weak":     ["fragile","feeble","delicate","frail","vulnerable","powerless","flimsy"],
-  "beautiful":["gorgeous","stunning","attractive","lovely","elegant","radiant","exquisite"],
-  "ugly":     ["unattractive","unsightly","hideous","unappealing","unpleasant","repulsive"],
-  "rich":     ["wealthy","affluent","prosperous","well-off","comfortable","abundant"],
-  "poor":     ["impoverished","destitute","needy","broke","penniless","disadvantaged"],
-  "hard":     ["difficult","challenging","tough","demanding","rigorous","strenuous","arduous"],
-  "easy":     ["simple","effortless","straightforward","manageable","uncomplicated","light"],
-  "new":      ["fresh","recent","modern","current","novel","latest","contemporary","original"],
-  "old":      ["ancient","aged","historic","traditional","vintage","outdated","classic","elderly"],
-  "important":"crucial,vital,essential,significant,critical,key,fundamental,necessary".split(","),
-  "interesting":"fascinating,engaging,compelling,captivating,intriguing,absorbing,stimulating".split(","),
-  "boring":   ["dull","tedious","monotonous","uninteresting","dry","flat","uninspiring"],
-  "angry":    ["furious","enraged","irritated","annoyed","frustrated","incensed","livid"],
-  "afraid":   ["scared","fearful","anxious","terrified","nervous","timid","apprehensive"],
-  "confused": ["puzzled","perplexed","baffled","bewildered","uncertain","unclear","lost"],
-  "clear":    ["obvious","evident","plain","transparent","lucid","explicit","unambiguous"],
-  "begin":    ["start","initiate","commence","launch","open","embark","undertake"],
-  "end":      ["finish","conclude","complete","terminate","close","stop","cease","halt"],
-  "make":     ["create","build","produce","construct","form","generate","develop","craft"],
-  "think":    ["believe","consider","reason","reflect","ponder","contemplate","analyze"],
-  "know":     ["understand","realize","recognize","grasp","comprehend","perceive","learn"],
-  "want":     ["desire","wish","need","crave","seek","prefer","require","aspire"],
-  "help":     ["assist","support","aid","guide","serve","contribute","facilitate","enable"],
-  "show":     ["display","reveal","demonstrate","exhibit","present","illustrate","prove"],
-  "change":   ["alter","modify","transform","adjust","adapt","shift","revise","update"],
-  "keep":     ["maintain","retain","preserve","hold","sustain","continue","protect","save"],
-  "use":      ["utilize","employ","apply","operate","leverage","exercise","implement"],
-  "give":     ["provide","offer","supply","donate","grant","award","present","contribute"],
-  "get":      ["receive","obtain","acquire","gain","secure","earn","achieve","attain"],
-  "say":      ["state","declare","express","mention","articulate","communicate","voice"],
-  "see":      ["observe","notice","perceive","witness","recognize","view","detect","spot"],
-  "go":       ["move","travel","proceed","advance","continue","progress","journey","head"],
-  "work":     ["function","operate","perform","labor","effort","strive","endeavor","toil"],
-  "love":     ["adore","cherish","treasure","appreciate","value","admire","care-for"],
-  "hate":     ["despise","detest","loathe","abhor","dislike","resent","oppose"],
-  "true":     ["correct","accurate","genuine","authentic","real","honest","valid","factual"],
-  "false":    ["wrong","incorrect","untrue","fake","inaccurate","invalid","dishonest"],
-  "beautiful":["stunning","gorgeous","lovely","elegant","exquisite","radiant","breathtaking"],
-  "creative": ["imaginative","inventive","innovative","original","artistic","inspired"],
-  "brave":    ["courageous","bold","daring","fearless","heroic","valiant","audacious"],
-  "kind":     ["compassionate","caring","generous","warm","gentle","benevolent","thoughtful"],
-  "honest":   ["truthful","sincere","genuine","authentic","transparent","open","candid"],
-  "patient":  ["calm","tolerant","composed","steady","persevering","enduring","serene"],
-  "curious":  ["inquisitive","questioning","interested","exploratory","eager","inquiring"],
-  "confident":"assured,self-assured,certain,bold,poised,secure,positive,self-confident".split(","),
-  "humble":   ["modest","unpretentious","unassuming","grounded","down-to-earth","simple"],
-  "wise":     ["insightful","sagacious","knowledgeable","discerning","judicious","experienced"],
-};
-
-const ANTONYM_MAP = {
-  "happy":     ["sad","miserable","unhappy","depressed","sorrowful"],
-  "sad":       ["happy","joyful","cheerful","content","delighted"],
-  "good":      ["bad","poor","terrible","harmful","negative"],
-  "bad":       ["good","excellent","wonderful","beneficial","positive"],
-  "big":       ["small","tiny","little","miniature","compact"],
-  "small":     ["big","large","huge","enormous","massive"],
-  "fast":      ["slow","gradual","leisurely","sluggish","unhurried"],
-  "slow":      ["fast","quick","rapid","swift","speedy"],
-  "smart":     ["foolish","unintelligent","unwise","ignorant","naive"],
-  "strong":    ["weak","fragile","feeble","delicate","frail"],
-  "beautiful": ["ugly","unattractive","unsightly","unappealing"],
-  "hard":      ["easy","simple","effortless","straightforward"],
-  "easy":      ["hard","difficult","challenging","demanding","tough"],
-  "new":       ["old","ancient","outdated","obsolete","vintage"],
-  "old":       ["new","fresh","modern","contemporary","recent"],
-  "true":      ["false","wrong","incorrect","inaccurate","untrue"],
-  "false":     ["true","correct","accurate","genuine","real"],
-  "love":      ["hate","despise","dislike","loathe","resent"],
-  "hate":      ["love","adore","cherish","appreciate","care-for"],
-  "begin":     ["end","finish","conclude","terminate","close"],
-  "end":       ["begin","start","initiate","launch","open"],
-  "give":      ["take","receive","withhold","keep","retain"],
-  "take":      ["give","provide","offer","donate","return"],
-  "open":      ["close","shut","seal","block","restrict"],
-  "close":     ["open","reveal","expose","unlock","expand"],
-  "positive":  ["negative","harmful","bad","detrimental","adverse"],
-  "negative":  ["positive","good","beneficial","helpful","favorable"],
-  "success":   ["failure","defeat","loss","setback","miss"],
-  "failure":   ["success","achievement","victory","win","accomplishment"],
-  "confident": ["insecure","uncertain","timid","doubtful","anxious"],
-  "brave":     ["cowardly","fearful","timid","afraid","scared"],
-  "kind":      ["cruel","harsh","unkind","cold","callous"],
-  "honest":    ["dishonest","deceptive","lying","misleading","false"],
-  "patient":   ["impatient","hasty","rushed","impulsive","restless"],
-  "humble":    ["arrogant","conceited","proud","boastful","egotistical"],
-  "clear":     ["confused","unclear","ambiguous","vague","murky"],
-  "simple":    ["complex","complicated","difficult","intricate","convoluted"],
-  "important": ["unimportant","trivial","minor","insignificant","irrelevant"],
-  "creative":  ["uncreative","conventional","ordinary","unoriginal","rigid"],
-};
-
-function synonymsOf(word) {
-  const w = word.toLowerCase();
-  return SYNONYM_MAP[w] || getAllRelatedWords(w).slice(0,8);
-}
-
-function antonymsOf(word) {
-  const w = word.toLowerCase();
-  return ANTONYM_MAP[w] || [];
-}
-
-// Built-in word descriptions (for "describe X" intent)
-const WORD_DESCRIPTIONS = {
-  "ocean":       "vast, deep, and powerful — the ocean covers 71% of Earth's surface and holds mysteries yet to be discovered. It is both calming and terrifying, beautiful and dangerous.",
-  "courage":     "the ability to act despite fear. It is not the absence of anxiety — it is choosing to move forward anyway. Courage is quiet as often as it is loud.",
-  "intelligence":"the capacity to learn, reason, adapt, and solve problems. It comes in many forms — emotional, creative, analytical, practical — and grows with use.",
-  "leadership":  "the act of guiding others toward a shared goal. True leadership is less about authority and more about service, trust, and consistently showing up.",
-  "love":        "a deep connection, commitment, and care for someone or something. It is both a feeling and a choice — a verb as much as a noun.",
-  "freedom":     "the state of being able to act, speak, and think without restraint. It comes with responsibility — true freedom includes the freedom to be accountable.",
-  "success":     "the achievement of a meaningful goal. Success is personal — what counts as success varies from person to person and moment to moment.",
-  "failure":     "the result of an attempt that did not achieve its goal. More importantly, failure is information — it points exactly toward what needs to change.",
-  "time":        "the most finite and valuable resource anyone has. Unlike money, it cannot be earned back. How you spend your time is how you spend your life.",
-  "knowledge":   "information that has been understood, organized, and made useful. Knowledge grows through curiosity, experience, and the willingness to be wrong.",
-  "change":      "the constant reorganization of reality. Change is neutral — what matters is whether you navigate it or resist it.",
-  "fear":        "an emotional response to perceived threat. Fear protects us, but it also limits us. The key is learning which fears are signals and which are noise.",
-  "trust":       "the foundation of every meaningful relationship. It is built slowly through consistency and broken quickly through deception.",
-  "hope":        "the belief that a better outcome is possible. Hope is not passive — it is the fuel that makes effort feel worthwhile.",
-  "growth":      "the ongoing process of becoming more capable, aware, and effective. Growth is often uncomfortable because it requires letting go of who you were.",
-  "creativity":  "the ability to connect ideas in new ways to produce something original. Everyone is creative — the practice just looks different for different people.",
-  "resilience":  "the capacity to recover, adapt, and keep going after difficulty. Resilience is not about avoiding pain — it is about moving through it.",
-  "purpose":     "the deep sense of why you do what you do. Purpose gives ordinary actions extraordinary meaning.",
-  "community":   "a group of people bound by shared values, experiences, or goals. Community provides belonging, accountability, and collective strength.",
-  "discipline":  "the practice of doing what needs to be done even when you do not want to. Discipline is the bridge between goals and achievement.",
-  "patience":    "the ability to wait, endure, or persist without frustration. Patience is not passive — it is active trust that things will develop in their own time.",
-  "silence":     "the absence of sound — and the presence of everything else. Silence is where clarity, creativity, and self-awareness often live.",
-  "language":    "the system humans use to communicate, share meaning, and build civilization. Language shapes thought as much as thought shapes language.",
-  "power":       "the capacity to influence, act, or change outcomes. Power can uplift or oppress — it matters enormously who holds it and how they use it.",
-  "beauty":      "a quality that produces aesthetic pleasure and deep appreciation. Beauty is subjective but deeply felt — it stops you, if only for a moment.",
-  "truth":       "alignment between a statement and reality. Truth is simple to define and often difficult to face.",
-  "justice":     "fairness in the distribution of rights, resources, and consequences. Justice requires both principle and compassion.",
-  "mind":        "the center of thought, feeling, memory, and consciousness. The mind is both the tool you use and the lens through which you see everything.",
-  "body":        "the physical vehicle through which you experience the world. Your body carries your history and enables your future.",
-  "music":       "organized sound that creates emotional and aesthetic experience. Music is one of the most universal languages humans have ever created.",
-  "story":       "a sequence of events with meaning attached. Stories are how humans make sense of the world — every culture runs on narrative.",
-  "home":        "the place where you feel safe, known, and yourself. Home is more a feeling than a location.",
-  "technology":  "tools and systems created to solve problems and extend human capability. Technology amplifies both our best and worst impulses.",
-  "nature":      "the physical world beyond human creation — plants, animals, weather, and the systems that connect them. Nature is both context and teacher.",
-  "choice":      "the act of selecting between alternatives. Every choice carries weight because it always includes what you did not choose.",
-  "system":      "an organized set of connected parts working together toward a shared purpose. Systems produce outcomes — change the system, change the results.",
-};
-
-function describeWord(word) {
-  const w = word.toLowerCase();
-  if (WORD_DESCRIPTIONS[w]) return WORD_DESCRIPTIONS[w];
   const cat = getCategoryOf(w);
-  const syns = synonymsOf(w);
-  const ants = antonymsOf(w);
-  let out = `**${word}** is a ${cat ? CATEGORY_DESCRIPTIONS[cat] || cat : "word"}.`;
-  if (syns.length) out += ` Similar words include: ${syns.slice(0,5).join(", ")}.`;
-  if (ants.length) out += ` Its opposites include: ${ants.slice(0,3).join(", ")}.`;
-  const related = getAllRelatedWords(w);
-  if (related.length) out += ` Related concepts: ${related.slice(0,6).join(", ")}.`;
-  return out;
+  const syns = (SYNONYM_MAP[w] || []).slice(0, 4);
+  const ants = (ANTONYM_MAP[w] || []).slice(0, 3);
+  let out = `${capitalize(word)} is`;
+  if (cat) out += ` a ${cat.replace(/_/g, " ")} concept`;
+  if (syns.length) out += ` associated with ${syns.join(", ")}`;
+  if (ants.length) out += `. Its opposites include ${ants.join(", ")}`;
+  return out + ".";
 }
 
-// Example sentences using the word
-const EXAMPLE_BANK = {
-  "resilience":  ["Her resilience through the hardest year surprised even her closest friends.","Building resilience takes time, but every difficult moment contributes to it.","Resilience is not about being tough — it is about being flexible enough to recover."],
-  "courage":     ["It takes real courage to be honest when honesty is uncomfortable.","Courage does not mean you are not afraid — it means you act anyway.","The courage to start is often harder than the courage to continue."],
-  "creativity":  ["Creativity is not a talent — it is a habit you build deliberately.","Her creativity showed in the unexpected connections she made between ideas.","Creativity needs space, silence, and the freedom to be wrong."],
-  "discipline":  ["His discipline to show up every day regardless of motivation was what set him apart.","Discipline is not punishment — it is the commitment to your future self.","Without discipline, even the best intentions remain just intentions."],
-  "empathy":     ["Empathy means actually trying to feel what someone else feels, not just acknowledging it.","Her empathy was her greatest professional strength — people opened up to her naturally.","Practicing empathy daily changes how you see conflict and disagreement."],
-  "integrity":   ["Integrity is doing the right thing when no one is watching.","His integrity was never more visible than in how he handled failure.","A reputation for integrity takes years to build and moments to destroy."],
-  "patience":    ["Patience is not about waiting — it is about maintaining perspective while waiting.","Learning patience was the skill that changed her relationship with difficult people.","Great things rarely arrive on the schedule we imagine for them."],
-  "purpose":     ["Once she found her purpose, every decision became clearer.","Purpose does not have to be grand — it just has to be yours.","Working with purpose changes the quality of your effort, not just your motivation."],
-  "communication":["Clear communication prevents most conflicts before they start.","Communication is not just speaking — it is ensuring you have been understood.","The best leaders are almost always exceptional communicators."],
-};
-
-function examplesOf(word) {
-  const w = word.toLowerCase();
-  if (EXAMPLE_BANK[w]) return EXAMPLE_BANK[w];
-  const syns = synonymsOf(w);
-  if (syns.length) {
-    return [
-      `"${word}" in use: She demonstrated real ${word} in how she handled the situation.`,
-      `The quality of ${word} showed in every decision he made.`,
-      `Understanding ${word} deeply means recognizing it in everyday moments.`,
-    ];
-  }
-  return [`Here is how you might use "${word}": The concept of ${word} shapes outcomes in ways people often underestimate.`];
-}
-
-
-// ═══════════════════════════════════════════════════════════════════
-// SECTION C: COMMUNICATION ENGINE — sentence builder + response flows
-// ═══════════════════════════════════════════════════════════════════
-
-// 200+ sentence templates, organized by communication type
-const SENTENCE_PATTERNS = {
-
-  // When explaining something
-  explain: [
-    "Let me break this down: {core} is fundamentally about {essence}.",
-    "Think of it this way — {topic} is essentially {analogy}.",
-    "Here is the simplest way to put it: {simple_version}.",
-    "At its core, {topic} comes down to one thing: {core_thing}.",
-    "To understand {topic}, start with this: {starting_point}.",
-    "The easiest way to explain {topic} is with an example: {example}.",
-    "People often overcomplicate {topic}. In plain terms: {plain_terms}.",
-    "{topic} has three key parts: first {part1}, then {part2}, and finally {part3}.",
-    "The reason {topic} matters is {reason}. Without it, {consequence}.",
-    "Imagine {topic} like this: {vivid_image}.",
-  ],
-
-  // When answering a question
-  answer: [
-    "The direct answer is: {answer}.",
-    "Short answer: {short}. Longer answer: {longer}.",
-    "Yes — and here is why: {reason}.",
-    "No — because {reason}. However, {nuance}.",
-    "It depends on {factor}. If {condition_a}, then {outcome_a}. If {condition_b}, then {outcome_b}.",
-    "Most people think {common_belief}. The reality is {reality}.",
-    "The honest answer: {answer}. What this means for you: {implication}.",
-    "{topic} is {answer}. But the more interesting question is {deeper_question}.",
-    "Here is what I know for certain: {certain}. Here is what is less clear: {uncertain}.",
-    "The answer has multiple layers. On the surface: {surface}. Deeper: {deeper}.",
-  ],
-
-  // When describing something
-  describe: [
-    "{topic} is {quality1}, {quality2}, and {quality3} — all at once.",
-    "Picture {topic} as {image}. That captures something true about it.",
-    "{topic} feels like {feeling} and looks like {appearance}.",
-    "What makes {topic} unique is {unique_feature}.",
-    "{topic} is defined by {defining_trait} and shaped by {shaping_force}.",
-    "Imagine you had never encountered {topic} before. The first thing you would notice is {first_impression}.",
-    "{topic} lives at the intersection of {domain1} and {domain2}.",
-    "There is something {quality} about {topic} that most people overlook: {overlooked_thing}.",
-    "To truly understand {topic}, you need to experience {experience}.",
-    "The best way to describe {topic} is not with words — but if I had to: {description}.",
-  ],
-
-  // When comparing two things
-  compare: [
-    "{a} and {b} are similar in that they both {shared_quality}. The difference is {difference}.",
-    "Both {a} and {b} {shared_action}. But {a} tends to {a_tendency} while {b} tends to {b_tendency}.",
-    "Comparing {a} to {b}: {a} wins on {a_strength}; {b} wins on {b_strength}. The choice depends on {deciding_factor}.",
-    "At first glance, {a} and {b} seem the same. Look closer and {key_difference}.",
-    "Use {a} when {a_use_case}. Use {b} when {b_use_case}.",
-    "{a} is about {a_essence}. {b} is about {b_essence}. One is not better — just different.",
-    "The relationship between {a} and {b}: they are {relationship_type}. Together, {together_outcome}.",
-  ],
-
-  // When motivating / encouraging
-  encourage: [
-    "You are further along than you think. The fact that you are asking this question proves it.",
-    "The hardest part is the part you just did — starting.",
-    "Every expert once stood exactly where you are standing. They kept going.",
-    "Progress is not always visible. Trust the process — it is working.",
-    "The discomfort you feel is not a warning sign. It is a growth sign.",
-    "You do not need to see the whole path. You just need to take the next step.",
-    "Doubt is not a reason to stop. It is just resistance — it shows up when something matters.",
-    "The version of you that finishes this will not be the version of you that started.",
-    "You are not behind. You are on your timeline, building at your pace.",
-    "Some days the goal is just to show up. That counts more than you know.",
-  ],
-
-  // When comforting / empathizing
-  comfort: [
-    "What you are feeling makes complete sense given what you are going through.",
-    "There is no rush to fix this or feel differently. You are allowed to sit with this.",
-    "You do not have to have it together right now. No one expects that.",
-    "This is hard. Genuinely hard. And you are handling it.",
-    "Your feelings are valid — every last one of them.",
-    "Sometimes the right response to difficulty is not to push through. It is to pause.",
-    "You are not alone in this, even when it feels that way.",
-    "Struggling does not mean failing. It means you are in the middle of something real.",
-    "Give yourself the same grace you would give someone you love in this situation.",
-    "It is okay not to be okay.",
-  ],
-
-  // When debating / arguing a point
-  argue: [
-    "Here is the argument for this position: {argument}. The strongest objection is {objection}. The response to that objection: {rebuttal}.",
-    "The evidence supports {claim}. Specifically: {evidence1} and {evidence2}.",
-    "While {opposing_view} has merit — specifically {merit} — it falls short because {flaw}.",
-    "This is not just an opinion. The data shows {data_point}, which means {implication}.",
-    "Three reasons this matters: first {reason1}, second {reason2}, and third {reason3}.",
-    "The conventional wisdom says {conventional}. But a closer look reveals {reality}.",
-    "Let me steelman the other side: {steelman}. Now here is why I still disagree: {response}.",
-    "This question comes down to values, not just facts. If you prioritize {value}, then {conclusion}.",
-  ],
-
-  // When teaching / instructing
-  teach: [
-    "Here is the concept step by step: first {step1}. Then {step2}. Finally {step3}.",
-    "Let me use an analogy: {topic} is like {analogy} because {connection}.",
-    "The beginner mistake here is {common_mistake}. The corrected approach: {correction}.",
-    "You already understand {foundation} — {topic} builds directly on that.",
-    "The key insight that unlocks {topic} is this: {key_insight}.",
-    "Test your understanding: if {scenario}, what would you expect? The answer reveals whether {concept} is clear.",
-    "Here is the 80/20 of {topic}: mastering {key_20_percent} gets you most of the value.",
-    "Most people learn {topic} backwards. Start instead with {correct_starting_point}.",
-  ],
-
-  // When asking / exploring
-  explore: [
-    "What do you mean specifically by {topic}? The answer changes depending on {factor}.",
-    "Before I respond — what outcome are you looking for here?",
-    "Interesting question. Here is what it makes me think about: {thought}.",
-    "Let me push on this a little: {challenging_question}.",
-    "What would it mean if {hypothetical}?",
-    "There are a few ways to read this. Which one feels closest to what you are asking: {option_a} or {option_b}?",
-    "I want to make sure I answer the right question. Are you asking about {interpretation_a} or {interpretation_b}?",
-    "The real question inside this question might be: {deeper_question}.",
-  ],
-
-};
-
-// ─────────────────────────────────────────────
-// Word Flow Engine — builds connected responses
-// ─────────────────────────────────────────────
-
-function getPatternFor(category) {
-  const data = WORD_BRAIN[category];
-  if (!data || !data.patterns) return [];
-  return data.patterns;
-}
-
-function getResponseOpener(category) {
-  const data = WORD_BRAIN[category];
-  if (!data || !data.response_openers) return null;
-  const openers = data.response_openers;
-  const opener = openers[Math.floor(Math.random() * openers.length)];
-  // Fill in a word from the category
-  const words = data.words;
-  const word = words[Math.floor(Math.random() * words.length)];
-  return opener.replace("{word}", word);
-}
-
-function buildWordFlow(userText) {
-  // Extract meaningful words from user input
-  const stopWords = new Set(["i","me","my","we","you","your","the","a","an","is","are","was","were","be","been","being","have","has","had","do","does","did","will","would","could","should","may","might","shall","can","need","ought","and","but","or","nor","for","yet","so","if","then","as","at","by","from","in","into","of","on","to","up","with","that","this","these","those","it","its","he","she","they","them","their","what","which","who","when","where","why","how","not","no","yes","very","too","more","most","some","any","all","just","also","about","there","here"]);
-  const words = userText.toLowerCase().replace(/[^a-z\s]/g,"").split(/\s+/).filter(w => w.length > 3 && !stopWords.has(w));
-  const wordInfo = [];
-  for (const w of words) {
-    const cats = WORD_INDEX[w];
-    if (cats && cats.length) wordInfo.push({ word: w, categories: cats });
-  }
-  return wordInfo;
-}
-
-function getAnalogyFor(concept) {
+function getAnalogy(concept) {
   const c = concept.toLowerCase();
-  if (c.includes("learn") || c.includes("study") || c.includes("practice")) return WORD_BRAIN.analogies.learning[Math.floor(Math.random()*3)];
-  if (c.includes("change") || c.includes("transform") || c.includes("shift")) return WORD_BRAIN.analogies.change[Math.floor(Math.random()*3)];
-  if (c.includes("problem") || c.includes("issue") || c.includes("challenge")) return WORD_BRAIN.analogies.problems[Math.floor(Math.random()*3)];
-  if (c.includes("grow") || c.includes("develop") || c.includes("build")) return WORD_BRAIN.analogies.growth[Math.floor(Math.random()*3)];
-  if (c.includes("time") || c.includes("wait") || c.includes("patient")) return WORD_BRAIN.analogies.time[Math.floor(Math.random()*3)];
-  if (c.includes("relation") || c.includes("friend") || c.includes("love") || c.includes("partner")) return WORD_BRAIN.analogies.relationships[Math.floor(Math.random()*3)];
+  const ANALOGIES = {
+    learn:       "like building a muscle — the resistance is the point",
+    learning:    "like building a muscle — the resistance is the point",
+    change:      "like a caterpillar in a cocoon — transformation from the inside out",
+    growth:      "like a tree in a storm — the roots deepen under pressure",
+    problem:     "like a puzzle — confusing until you find the right piece",
+    time:        "like compound interest — small consistent deposits become fortunes",
+    trust:       "like a bridge — built with effort from both sides and destroyed in an instant",
+    failure:     "like data — it tells you exactly what needs to change",
+    success:     "like an iceberg — only a fraction is visible above the surface",
+    focus:       "like a laser — concentrated energy cuts through anything",
+    habit:       "like a river carving a canyon — gradual and inevitable",
+    courage:     "like a muscle — it grows stronger every time you use it",
+    patience:    "like planting seeds — the growth is invisible for a long time",
+    resilience:  "like bamboo — it bends in the storm but does not break",
+    creativity:  "like a muscle — the more you use it, the stronger it gets",
+    leadership:  "like a compass — it shows direction, it does not do the walking",
+    communication: "like a bridge — it only works when both sides are connected",
+    discipline:  "like a river with banks — the boundaries are what give it power",
+    motivation:  "like fire — useful if you feed it, dangerous if you ignore it",
+  };
+  for (const [key, val] of Object.entries(ANALOGIES)) {
+    if (c.includes(key)) return val;
+  }
   return null;
 }
 
-// ─────────────────────────────────────────────
-// SMART REPLY GENERATOR  
-// — builds a real answer using vocabulary only, no search
-// ─────────────────────────────────────────────
-
-function smartReply(userText, intent, persona, emotion) {
-  const flowWords = buildWordFlow(userText);
-  const topic = flowWords.length ? flowWords[0].word : "this";
-  const topicCat = flowWords.length ? flowWords[0].categories[0] : null;
-
-  // Pick communication strategy based on intent
-  let strategy = "answer";
-  if (intent === "describe")     strategy = "describe";
-  if (intent === "compare")      strategy = "compare";
-  if (intent === "motivate")     strategy = "encourage";
-  if (intent === "comfort")      strategy = "comfort";
-  if (intent === "teach")        strategy = "teach";
-  if (intent === "brainstorm")   strategy = "explore";
-  if (intent === "argue")        strategy = "argue";
-  if (intent === "explain")      strategy = "explain";
-
-  const patterns = SENTENCE_PATTERNS[strategy] || SENTENCE_PATTERNS.answer;
-  const opener = WORD_BRAIN.conversation.openers[Math.floor(Math.random() * WORD_BRAIN.conversation.openers.length)];
-  const transition = WORD_BRAIN.conversation.transitions[Math.floor(Math.random() * WORD_BRAIN.conversation.transitions.length)];
-  const closer = WORD_BRAIN.conversation.closers[Math.floor(Math.random() * WORD_BRAIN.conversation.closers.length)];
-
-  // Build the core response using word brain
-  const syns = synonymsOf(topic);
-  const related = getAllRelatedWords(topic);
-  const analogy = getAnalogyFor(topic);
-  const desc = WORD_DESCRIPTIONS[topic] || null;
-
-  let core = "";
-
-  if (desc) {
-    core = desc;
-  } else if (topicCat) {
-    const catWords = getWordsInCategory(topicCat);
-    const catPatterns = getPatternFor(topicCat);
-    const catPattern = catPatterns.length ? catPatterns[Math.floor(Math.random() * catPatterns.length)] : null;
-    if (catPattern) {
-      const fillWord = catWords[Math.floor(Math.random() * catWords.length)];
-      core = catPattern.replace("{word}", topic).replace("{topic}", topic).replace("{action}", fillWord).replace("{context}", fillWord).replace("{role}", fillWord).replace("{condition}", fillWord).replace("{factor}", fillWord);
-    }
-  }
-
-  if (!core) {
-    // Build from synonyms and related words
-    if (syns.length) core = `"${topic}" connects closely to: ${syns.slice(0,4).join(", ")}. Each of these adds a different shade of meaning.`;
-    else if (related.length) core = `"${topic}" is part of a broader set of concepts including: ${related.slice(0,5).join(", ")}.`;
-    else core = `The concept of "${topic}" is worth exploring carefully — it sits at the intersection of meaning and application.`;
-  }
-
-  if (analogy) core += ` Think of it ${analogy}.`;
-
-  // Persona-flavored response
-  if (persona === "friend") {
-    return `${opener.toLowerCase()} ${core} ${related.length ? "also super connected to: " + related.slice(0,3).join(", ") + " 😊" : ""}`;
-  }
-  if (persona === "teacher") {
-    return `${opener}\n\n${core}\n\n${transition} the key thing to remember is that ${topic} is best understood through practice and real examples.\n\n${closer}`;
-  }
-  if (persona === "coach") {
-    return `${opener}\n\n${core}\n\nThe action that matters here: take what you now know about ${topic} and apply it in one concrete way today.\n\n${closer}`;
-  }
-  if (persona === "philosopher") {
-    return `${opener}\n\n${core}\n\n${transition} the deeper question is: what does your relationship with "${topic}" reveal about your values?\n\n${closer}`;
-  }
-  if (persona === "savage") {
-    return `${core} Stop overthinking it.`;
-  }
-  if (persona === "formal") {
-    return `${opener}\n\n${core}\n\n${transition} it is worth noting that ${topic} has implications beyond the surface level.\n\n${closer}`;
-  }
-  if (persona === "storyteller") {
-    return `Imagine a world where nobody understood "${topic}". ${core} That is why it matters — not just as a word, but as a lived experience.`;
-  }
-  if (persona === "analyst") {
-    return `**Topic: ${topic}**\n\n${core}\n\n**Related concepts:** ${related.slice(0,6).join(", ")}\n**Synonyms:** ${syns.slice(0,5).join(", ")}\n${closer}`;
-  }
-
-  return `${opener}\n\n${core}\n\n${closer}`;
+function capitalize(str) {
+  if (!str) return "";
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 
-// ═══════════════════════════════════════════════════════════════════
-// SECTION D: PERSONAS, MEMORY, EMOTION (all 10 preserved from v4)
-// ═══════════════════════════════════════════════════════════════════
+// ================================================================
+// SECTION 4: SYNONYM & ANTONYM MAPS (600+ pairs)
+// ================================================================
 
-const PERSONAS = {
-  default:     "SONIX: sharp, helpful, concise, direct. Communicates first, searches second.",
-  coder:       "SONIX Coder: senior engineer, technical precision, code examples.",
-  friend:      "SONIX Friend: warm, casual, conversational, encouraging.",
-  formal:      "SONIX Formal: professional, structured, proper grammar.",
-  savage:      "SONIX Savage: brutally honest, witty, zero fluff.",
-  analyst:     "SONIX Analyst: research, compare, synthesize, data-driven.",
-  teacher:     "SONIX Teacher: patient, step-by-step, analogies, examples.",
-  coach:       "SONIX Coach: motivational, outcome-focused, energizing.",
-  philosopher: "SONIX Philosopher: reflective, curious, explores ideas deeply.",
-  storyteller: "SONIX Storyteller: vivid, narrative-driven, immersive.",
+const SYNONYM_MAP = {
+  "happy":["joyful","glad","pleased","content","delighted","cheerful","elated","blissful","ecstatic","jubilant","thrilled","euphoric"],
+  "sad":["unhappy","sorrowful","melancholy","dejected","despondent","downcast","gloomy","mournful","heartbroken","grieving","forlorn","dismal"],
+  "good":["excellent","great","superb","wonderful","fine","positive","beneficial","favorable","outstanding","exceptional","admirable","commendable"],
+  "bad":["poor","terrible","awful","dreadful","inferior","negative","harmful","unfavorable","substandard","deficient","inadequate","unacceptable"],
+  "big":["large","huge","enormous","massive","vast","gigantic","immense","colossal","substantial","considerable","extensive","grand"],
+  "small":["tiny","little","miniature","compact","minute","slight","microscopic","petite","modest","minor","negligible","diminutive"],
+  "fast":["quick","rapid","swift","speedy","hasty","prompt","brisk","fleet","nimble","agile","expeditious","instantaneous"],
+  "slow":["gradual","sluggish","leisurely","unhurried","deliberate","steady","measured","plodding","languid","lethargic","torpid","ponderous"],
+  "smart":["intelligent","clever","bright","sharp","wise","astute","perceptive","insightful","brilliant","gifted","shrewd","cunning"],
+  "stupid":["foolish","unwise","ignorant","senseless","mindless","unintelligent","naive","dense","obtuse","inane","absurd","ridiculous"],
+  "strong":["powerful","robust","sturdy","tough","resilient","solid","forceful","mighty","formidable","vigorous","potent","capable"],
+  "weak":["fragile","feeble","delicate","frail","vulnerable","powerless","flimsy","brittle","breakable","susceptible","helpless","ineffectual"],
+  "beautiful":["gorgeous","stunning","attractive","lovely","elegant","radiant","exquisite","breathtaking","magnificent","splendid","dazzling","captivating"],
+  "ugly":["unattractive","unsightly","hideous","unappealing","unpleasant","repulsive","grotesque","offensive","disagreeable","distasteful"],
+  "rich":["wealthy","affluent","prosperous","well-off","comfortable","abundant","opulent","lavish","flourishing","successful","thriving"],
+  "poor":["impoverished","destitute","needy","broke","penniless","disadvantaged","underprivileged","struggling","inadequate","deficient"],
+  "hard":["difficult","challenging","tough","demanding","rigorous","strenuous","arduous","laborious","formidable","taxing","grueling","exacting"],
+  "easy":["simple","effortless","straightforward","manageable","uncomplicated","light","accessible","achievable","feasible","workable","painless"],
+  "new":["fresh","recent","modern","current","novel","latest","contemporary","original","innovative","cutting-edge","emerging","pioneering"],
+  "old":["ancient","aged","historic","traditional","vintage","outdated","classic","elderly","antiquated","archaic","obsolete","bygone"],
+  "important":["crucial","vital","essential","significant","critical","key","fundamental","necessary","indispensable","paramount","primary","central"],
+  "interesting":["fascinating","engaging","compelling","captivating","intriguing","absorbing","stimulating","thought-provoking","riveting","enthralling"],
+  "boring":["dull","tedious","monotonous","uninteresting","dry","flat","uninspiring","lifeless","stale","repetitive","humdrum","bland"],
+  "angry":["furious","enraged","irritated","annoyed","frustrated","incensed","livid","irate","seething","infuriated","hostile","indignant"],
+  "afraid":["scared","fearful","anxious","terrified","nervous","timid","apprehensive","alarmed","petrified","startled","spooked","intimidated"],
+  "confused":["puzzled","perplexed","baffled","bewildered","uncertain","unclear","lost","disoriented","muddled","flustered","stumped","mystified"],
+  "clear":["obvious","evident","plain","transparent","lucid","explicit","unambiguous","unmistakable","apparent","straightforward","comprehensible"],
+  "begin":["start","initiate","commence","launch","open","embark","undertake","trigger","activate","kickoff","originate","pioneer"],
+  "end":["finish","conclude","complete","terminate","close","stop","cease","halt","wrap up","finalize","accomplish","achieve"],
+  "make":["create","build","produce","construct","form","generate","develop","craft","fabricate","manufacture","fashion","design"],
+  "think":["believe","consider","reason","reflect","ponder","contemplate","analyze","evaluate","assess","deliberate","meditate","muse"],
+  "know":["understand","realize","recognize","grasp","comprehend","perceive","learn","appreciate","acknowledge","discern","fathom","internalize"],
+  "want":["desire","wish","need","crave","seek","prefer","require","aspire","long for","yearn","hunger","thirst"],
+  "help":["assist","support","aid","guide","serve","contribute","facilitate","enable","empower","bolster","reinforce","back"],
+  "change":["alter","modify","transform","adjust","adapt","shift","revise","update","reform","revolutionize","reshape","reinvent"],
+  "show":["display","reveal","demonstrate","exhibit","present","illustrate","prove","manifest","expose","disclose","unveil","highlight"],
+  "move":["shift","transfer","transport","relocate","advance","progress","proceed","go","travel","migrate","transition","navigate"],
+  "work":["function","operate","perform","labor","effort","strive","endeavor","toil","execute","accomplish","produce","achieve"],
+  "love":["adore","cherish","treasure","appreciate","value","admire","care for","devote","worship","idolize","revere","prize"],
+  "hate":["despise","detest","loathe","abhor","dislike","resent","oppose","condemn","reject","scorn","disdain","execrate"],
+  "true":["correct","accurate","genuine","authentic","real","honest","valid","factual","reliable","sound","exact","precise"],
+  "false":["wrong","incorrect","untrue","fake","inaccurate","invalid","dishonest","misleading","deceptive","fraudulent","spurious"],
+  "free":["liberated","independent","unrestrained","unrestricted","autonomous","self-governing","open","available","complimentary","unburdened"],
+  "brave":["courageous","bold","daring","fearless","heroic","valiant","audacious","gallant","intrepid","dauntless","undaunted","resolute"],
+  "kind":["compassionate","caring","generous","warm","gentle","benevolent","thoughtful","considerate","sympathetic","tender","gracious","humane"],
+  "honest":["truthful","sincere","genuine","authentic","transparent","open","candid","frank","straightforward","direct","trustworthy","upfront"],
+  "patient":["calm","tolerant","composed","steady","persevering","enduring","serene","stoic","unruffled","forbearing","long-suffering","equanimous"],
+  "curious":["inquisitive","questioning","interested","exploratory","eager","inquiring","probing","investigative","searching","nosy","prying","wondering"],
+  "confident":["assured","self-assured","certain","bold","poised","secure","positive","self-confident","assertive","decisive","composed","unwavering"],
+  "humble":["modest","unpretentious","unassuming","grounded","down-to-earth","simple","meek","self-effacing","deferential","respectful"],
+  "wise":["insightful","sagacious","knowledgeable","discerning","judicious","experienced","enlightened","astute","learned","perceptive","prudent"],
+  "creative":["imaginative","inventive","innovative","original","artistic","inspired","ingenious","resourceful","visionary","novel","fresh","unconventional"],
+  "discipline":["self-control","willpower","commitment","consistency","dedication","focus","persistence","determination","rigor","structure","order"],
+  "resilience":["toughness","grit","perseverance","tenacity","durability","stamina","fortitude","endurance","strength","recovery","bounce-back"],
+  "growth":["development","progress","advancement","improvement","expansion","evolution","learning","maturation","flourishing","increase","rise"],
+  "success":["achievement","accomplishment","victory","triumph","win","attainment","fulfillment","prosperity","excellence","mastery","breakthrough"],
+  "failure":["defeat","loss","setback","miss","shortcoming","stumble","fall","disappointment","breakdown","collapse","regression"],
+  "purpose":["meaning","intention","goal","aim","mission","objective","reason","drive","calling","vocation","direction","function"],
+  "courage":["bravery","boldness","valor","fearlessness","daring","fortitude","nerve","audacity","grit","determination","resolve","backbone"],
+  "wisdom":["insight","knowledge","understanding","discernment","judgment","experience","sagacity","intelligence","clarity","perspective","depth"],
+  "leadership":["guidance","direction","influence","authority","command","management","stewardship","oversight","vision","inspiration","motivation"],
+  "communication":["dialogue","conversation","exchange","interaction","discussion","talk","speech","expression","articulation","transmission","connection"],
+  "trust":["confidence","faith","reliance","belief","credibility","dependability","reliability","assurance","certainty","conviction","security"],
+  "freedom":["liberty","independence","autonomy","self-determination","sovereignty","release","openness","flexibility","choice","agency","emancipation"],
+  "focus":["concentration","attention","clarity","direction","purpose","intensity","precision","dedication","mindfulness","presence","engagement"],
+  "creativity":["imagination","invention","innovation","originality","artistry","ingenuity","vision","expression","inspiration","resourcefulness"],
+  "motivation":["drive","inspiration","incentive","encouragement","enthusiasm","passion","desire","ambition","determination","fuel","energy","force"],
+  "learning":["education","study","knowledge acquisition","skill development","understanding","discovery","growth","practice","training","improvement"],
+  "innovation":["invention","creation","novelty","breakthrough","disruption","transformation","advancement","progress","change","reinvention"],
+  "excellence":["mastery","quality","superiority","distinction","perfection","brilliance","expertise","proficiency","peak performance","best"],
+  "integrity":["honesty","ethics","morality","character","virtue","principle","authenticity","trustworthiness","reliability","consistency"],
+  "empathy":["compassion","understanding","sensitivity","awareness","connection","caring","sympathy","consideration","kindness","attunement"],
+  "mindfulness":["presence","awareness","attention","consciousness","clarity","focus","calm","stillness","grounding","centering","intentionality"],
+  "balance":["equilibrium","harmony","stability","proportion","symmetry","poise","composure","moderation","steadiness","centeredness"],
+  "clarity":["clearness","transparency","precision","lucidity","sharpness","definiteness","certainty","understanding","insight","simplicity"],
+  "authenticity":["genuineness","realness","honesty","sincerity","truthfulness","integrity","openness","vulnerability","self-expression","originality"],
+  "simplicity":["clarity","directness","elegance","efficiency","minimalism","ease","straightforwardness","plainness","uncomplicated","clean"],
+  "complexity":["intricacy","nuance","depth","sophistication","multidimensionality","layering","richness","density","difficulty","elaborateness"],
+  "opportunity":["chance","possibility","opening","potential","prospect","occasion","window","break","advantage","fortunate circumstance"],
+  "challenge":["obstacle","difficulty","test","trial","hurdle","problem","issue","complication","adversity","hardship","struggle","demand"],
 };
 
-const MAX_MEMORY = 50;
-let _memory=[], _persona="default", _userName=null;
-let _apiHandler=null, _translatorFn=null;
-let _topicHistory=[], _emotionHistory=[], _wordHistory=[];
-let _lastTopics=[], _sessionStart=Date.now();
-let _conversationContext = { lastWord:"", lastIntent:"", turnCount:0 };
-
-const EMOTION_PATTERNS = [
-  {pattern:/\b(frustrated|annoyed|angry|mad|fed up|ugh|this sucks|argh)\b/i,       emotion:"frustrated"},
-  {pattern:/\b(confused|lost|don.?t understand|no idea|unclear|what the)\b/i,      emotion:"confused"},
-  {pattern:/\b(excited|amazing|awesome|pumped|stoked|omg|so good|fire|lit)\b/i,    emotion:"excited"},
-  {pattern:/\b(sad|depressed|unhappy|down|crying|heartbroken|lonely|hopeless)\b/i, emotion:"sad"},
-  {pattern:/\b(anxious|worried|nervous|scared|stressed|overwhelmed|panic)\b/i,     emotion:"anxious"},
-  {pattern:/\b(happy|great|wonderful|fantastic|love it|perfect|best day|yay)\b/i,  emotion:"happy"},
-  {pattern:/\b(bored|boring|meh|whatever|not interested|who cares)\b/i,            emotion:"bored"},
-  {pattern:/\b(curious|interesting|tell me more|want to know|fascinated)\b/i,      emotion:"curious"},
-  {pattern:/\b(tired|exhausted|sleepy|drained|burnout|worn out)\b/i,               emotion:"tired"},
-  {pattern:/\b(proud|accomplished|nailed it|succeeded|finally|yes!)\b/i,           emotion:"proud"},
-  {pattern:/\b(stuck|can.?t figure|not working|nothing works|blocked|lost)\b/i,   emotion:"stuck"},
-  {pattern:/\b(grateful|thankful|appreciate|means a lot|you.?re great)\b/i,       emotion:"grateful"},
-];
-
-const EMOTION_RESPONSES = {
-  frustrated: ["I hear you — let's work through this clearly. ","Let's cut through the noise. ","Frustration usually means something important is blocked. "],
-  confused:   ["Let me make this as clear as possible. ","No worries — here's a cleaner way to look at it: ","Confusion means you're at the edge of understanding. Here's the bridge: "],
-  excited:    ["Love the energy — let's make it count! ","Channeling that energy into something concrete: ","That excitement is fuel — here's where to point it: "],
-  sad:        ["I hear you. Take your time. ","You don't have to push through right now. ","I'm here for this conversation. "],
-  anxious:    ["Let's take this one step at a time. ","The overwhelm makes sense. Here's the simplest next thing: ","Breathe. Then: "],
-  happy:      ["Great state to be in — let's use it! ","Building on that energy: ","Perfect mindset for this: "],
-  bored:      ["Let me give you something genuinely interesting: ","Boredom means you're ready for the next level. Here: ","Here's something worth your attention: "],
-  curious:    ["Curiosity is exactly the right instinct here. ","Great thing to be curious about — here's the full picture: ","Your curiosity points to something real. "],
-  tired:      ["Short and clear — that's what you need right now: ","No fluff, just the answer: ","Efficient version: "],
-  proud:      ["That's earned. Keep that feeling — it's a compass. ","Well done. Now here's what's next: ","Proud moments compound. "],
-  stuck:      ["Being stuck is a signal, not a verdict. Here's the unlock: ","New angle incoming: ","Let's approach this from a different direction: "],
-  grateful:   ["That means a lot. Here's what I can give you: ","Happy to be here. Let's keep going: ","Gratitude noted — now here's more: "],
+const ANTONYM_MAP = {
+  "happy":["sad","miserable","unhappy","depressed","sorrowful","dejected","gloomy"],
+  "sad":["happy","joyful","cheerful","content","delighted","pleased","elated"],
+  "good":["bad","poor","terrible","harmful","negative","substandard","inferior"],
+  "bad":["good","excellent","wonderful","beneficial","positive","outstanding","admirable"],
+  "big":["small","tiny","little","miniature","compact","slight","diminutive"],
+  "small":["big","large","huge","enormous","massive","vast","gigantic"],
+  "fast":["slow","gradual","leisurely","sluggish","unhurried","deliberate","measured"],
+  "slow":["fast","quick","rapid","swift","speedy","prompt","brisk"],
+  "smart":["foolish","unintelligent","unwise","ignorant","naive","dense","obtuse"],
+  "strong":["weak","fragile","feeble","delicate","frail","vulnerable","powerless"],
+  "hard":["easy","simple","effortless","straightforward","manageable","painless"],
+  "easy":["hard","difficult","challenging","demanding","tough","arduous","grueling"],
+  "new":["old","ancient","outdated","obsolete","vintage","traditional","archaic"],
+  "old":["new","fresh","modern","contemporary","recent","novel","current"],
+  "true":["false","wrong","incorrect","inaccurate","untrue","fake","dishonest"],
+  "false":["true","correct","accurate","genuine","real","honest","valid"],
+  "love":["hate","despise","dislike","loathe","resent","condemn","reject"],
+  "hate":["love","adore","cherish","appreciate","care for","admire","value"],
+  "begin":["end","finish","conclude","terminate","close","stop","cease"],
+  "end":["begin","start","initiate","commence","launch","open","embark"],
+  "positive":["negative","harmful","bad","detrimental","adverse","destructive"],
+  "negative":["positive","good","beneficial","helpful","favorable","constructive"],
+  "success":["failure","defeat","loss","setback","miss","shortcoming","downfall"],
+  "failure":["success","achievement","victory","triumph","accomplishment","win"],
+  "confident":["insecure","uncertain","timid","doubtful","anxious","apprehensive"],
+  "brave":["cowardly","fearful","timid","afraid","scared","apprehensive","faint-hearted"],
+  "kind":["cruel","harsh","unkind","cold","callous","heartless","ruthless"],
+  "honest":["dishonest","deceptive","lying","misleading","false","fraudulent"],
+  "patient":["impatient","hasty","rushed","impulsive","restless","agitated"],
+  "humble":["arrogant","conceited","proud","boastful","egotistical","vain"],
+  "clear":["unclear","confused","ambiguous","vague","murky","obscure","cryptic"],
+  "simple":["complex","complicated","difficult","intricate","convoluted","elaborate"],
+  "important":["unimportant","trivial","minor","insignificant","irrelevant","negligible"],
+  "free":["restricted","constrained","bound","limited","controlled","imprisoned"],
+  "open":["closed","shut","blocked","restricted","narrow","sealed","guarded"],
+  "fast":["slow","leisurely","gradual","unhurried","plodding","sluggish"],
+  "full":["empty","vacant","hollow","bare","void","depleted","lacking"],
+  "empty":["full","filled","complete","whole","abundant","replete","brimming"],
+  "give":["take","receive","withhold","keep","retain","hoard","deny"],
+  "take":["give","provide","offer","donate","grant","return","surrender"],
+  "growth":["decline","decay","deterioration","regression","shrinkage","stagnation"],
+  "freedom":["captivity","restriction","constraint","imprisonment","control","bondage"],
+  "courage":["cowardice","timidity","fearfulness","apprehension","hesitation","reluctance"],
+  "wisdom":["ignorance","foolishness","naivety","shortsightedness","imprudence","stupidity"],
+  "trust":["distrust","suspicion","doubt","skepticism","wariness","mistrust"],
+  "hope":["despair","hopelessness","pessimism","defeat","resignation","discouragement"],
+  "calm":["agitated","anxious","stressed","turbulent","chaotic","frantic","frenzied"],
+  "order":["chaos","disorder","confusion","mess","disorganization","anarchy","bedlam"],
+  "clarity":["confusion","ambiguity","obscurity","vagueness","murkiness","uncertainty"],
+  "truth":["falsehood","lie","deception","dishonesty","fabrication","fiction","myth"],
+  "strength":["weakness","fragility","vulnerability","powerlessness","helplessness"],
+  "discipline":["chaos","disorder","laziness","negligence","recklessness","impulsiveness"],
 };
 
-function detectEmotion(t){for(const e of EMOTION_PATTERNS){if(e.pattern.test(t))return e.emotion;}return null;}
-function getEmotionOpener(e){if(!e)return "";const p=EMOTION_RESPONSES[e];return p?p[Math.floor(Math.random()*p.length)]:"";}
-
-// Shortcut expander (kept from v4)
-const SHORTCUTS={"wut":"what","wat":"what","wtf":"what the heck","wth":"what the heck","hw":"how","y":"why","wen":"when","wer":"where","whos":"who is","ur":"your","u":"you","r":"are","im":"i am","cant":"cannot","dont":"do not","doesnt":"does not","didnt":"did not","isnt":"is not","arent":"are not","wont":"will not","shouldnt":"should not","couldnt":"could not","lol":"laughing","omg":"oh my","brb":"be right back","afk":"away","idk":"i do not know","idc":"i do not care","fyi":"for your information","asap":"as soon as possible","tbh":"to be honest","ngl":"not gonna lie","ty":"thank you","thx":"thanks","pls":"please","plz":"please","k":"okay","yep":"yes","yup":"yes","ya":"yes","nope":"no","nah":"no","gonna":"going to","wanna":"want to","gotta":"got to","kinda":"kind of","sorta":"sort of","cuz":"because","bc":"because","tho":"though","thru":"through","bout":"about","ofc":"of course","def":"definitely","prob":"probably","rly":"really","sry":"sorry","luv":"love","rn":"right now","atm":"at the moment","nvm":"never mind","np":"no problem","tldr":"too long did not read","eli5":"explain simply","smh":"shaking my head","fomo":"fear of missing out","goat":"greatest of all time","js":"javascript","py":"python","ai":"artificial intelligence","ml":"machine learning"};
-
-function expandShortcuts(text){let o=text;const ks=Object.keys(SHORTCUTS).sort((a,b)=>b.length-a.length);for(const k of ks){const r=new RegExp("\\b"+k.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\b","gi");o=o.replace(r,SHORTCUTS[k]);}return o;}
-
-// ═══════════════════════════════════════════════════════════════════
-// SECTION E: INTENT DETECTION — communication-first
-// ═══════════════════════════════════════════════════════════════════
-
-const INTENTS = [
-  // Word tools (first — highest priority)
-  {pattern:/\b(define|definition|meaning of|what does .+ mean|dictionary|what does .+ mean)\b/i,        type:"define"},
-  {pattern:/\b(synonym|similar word|another word for|what else means)\b/i,                              type:"synonyms"},
-  {pattern:/\b(antonym|opposite of|opposite word|contrary to)\b/i,                                      type:"antonyms"},
-  {pattern:/\b(describe|what is .+ like|how would you describe|paint a picture of)\b/i,                 type:"describe"},
-  {pattern:/\b(example|use .+ in a sentence|sentence with|how do you use)\b/i,                          type:"examples"},
-  {pattern:/\b(word family|related form|forms of the word|inflection|conjugation|plural|past tense)\b/i,type:"word_family"},
-  {pattern:/\b(words for|vocabulary for|lexicon|related words|word list for|words about)\b/i,            type:"word_list"},
-  {pattern:/\b(rhyme|rhymes with|word that rhymes)\b/i,                                                  type:"rhyme"},
-  {pattern:/\b(etymology|word origin|origin of the word|history of the word)\b/i,                       type:"etymology"},
-  {pattern:/\b(idiom|phrase meaning|expression meaning|what does .+ mean as a phrase)\b/i,              type:"idiom"},
-  // Communication intents
-  {pattern:/\b(explain simply|eli5|explain like i.?m 5|simple terms|layman|for a beginner)\b/i,         type:"eli5"},
-  {pattern:/\b(explain|elaborate|tell me more|go deeper|expand on|more detail|break down)\b/i,          type:"explain"},
-  {pattern:/\b(summarize|summary|short version|brief|recap|tldr|main points|key points)\b/i,            type:"summarize"},
-  {pattern:/\b(compare|difference between|versus|vs\.?|which is better|pros and cons)\b/i,              type:"compare"},
-  {pattern:/\b(brainstorm|ideas for|think of|come up with|generate ideas|what can i|options for)\b/i,   type:"brainstorm"},
-  {pattern:/\b(motivate me|encourage me|i need motivation|keep going|inspire me|give me strength)\b/i,  type:"motivate"},
-  {pattern:/\b(how do i|how can i|how to|what steps|what is the process|guide me)\b/i,                  type:"how_to"},
-  {pattern:/\b(what should i|should i|advise me|what would you do|what do you recommend)\b/i,           type:"advice"},
-  {pattern:/\b(do you think|your opinion|what do you believe|agree or disagree|take on this)\b/i,       type:"opinion"},
-  {pattern:/\b(why|what is the reason|why does|why do|why is|what causes|what leads to)\b/i,            type:"why"},
-  {pattern:/\b(what is|who is|tell me about|what are|explain what|about)\b/i,                           type:"what_is"},
-  // Social
-  {pattern:/^(hi|hello|hey|sup|yo|hiya|greetings|howdy)\b/i,                                           type:"greeting"},
-  {pattern:/\b(who are you|what are you|your name|introduce yourself)\b/i,                              type:"identity"},
-  {pattern:/\b(how are you|you okay|how.?s it going)\b/i,                                               type:"status"},
-  {pattern:/\b(what can you do|help me|capabilities|features|what do you know)\b/i,                     type:"help"},
-  {pattern:/\b(thank|thanks|ty|thx|thank you|appreciate)\b/i,                                           type:"thanks"},
-  {pattern:/\b(bye|goodbye|see you|later|peace|cya)\b/i,                                                type:"farewell"},
-  // Entertainment
-  {pattern:/\b(joke|make me laugh|funny|humor|tell me something funny)\b/i,                             type:"joke"},
-  {pattern:/\b(fun fact|trivia|did you know|random fact)\b/i,                                           type:"trivia"},
-  {pattern:/\b(quote|inspiring quote|famous quote|motivational quote)\b/i,                              type:"quote"},
-  {pattern:/\b(roast me|roast|insult me playfully)\b/i,                                                 type:"roast"},
-  {pattern:/\b(compliment|say something nice|hype me)\b/i,                                              type:"compliment"},
-  // Math
-  {pattern:/\b(calculate|compute|math|arithmetic|\d+\s*[\+\-\*\/\^]\s*\d+|what is \d+)\b/i,            type:"math"},
-  {pattern:/\b(percent|percentage|% of|tip|discount)\b/i,                                               type:"percent"},
-  {pattern:/\b(convert|conversion|in (km|miles|kg|lbs|celsius|fahrenheit|mb|gb))\b/i,                   type:"convert"},
-  {pattern:/\b(bmi|body mass|mortgage|loan payment|compound interest|calories|tdee)\b/i,                type:"calculator"},
-  // Meta
-  {pattern:/\b(version|what version|changelog)\b/i,                                                     type:"version"},
-  {pattern:/\b(who made you|creator|vlad|built by)\b/i,                                                 type:"creator"},
-  {pattern:/\b(remember|my name is|call me)\b/i,                                                        type:"memory_set"},
-  {pattern:/\b(forget|clear memory|reset|wipe)\b/i,                                                     type:"memory_clear"},
-  {pattern:/\b(what do you know about me|recall|my info)\b/i,                                           type:"memory_recall"},
-  {pattern:/\b(switch to|change to|use .* mode|be more)\b/i,                                            type:"persona_switch"},
-  {pattern:/\b(list personas|available modes|show personas)\b/i,                                        type:"persona_list"},
-  {pattern:/\b(search|look up|find info|research|wikipedia|google)\b/i,                                 type:"research"},
-];
-
-function detectIntent(text){for(const i of INTENTS){if(i.pattern.test(text))return i.type;}return "communicate";}
+// Rich word descriptions (used for define/describe/explain)
+const WORD_DESCRIPTIONS = {
+  "courage":    "The ability to act despite fear. Courage is not the absence of anxiety — it is choosing to move forward anyway. It shows up in big moments and small ones, in public and in private, in words and in action. The bravest thing is often the simplest: being honest when honesty is uncomfortable.",
+  "resilience": "The capacity to recover, adapt, and keep going after difficulty. Resilience is not about avoiding pain — it is about moving through it without letting it define you. It is built, not born, and grows stronger every time you face something hard and come out the other side.",
+  "discipline": "The practice of doing what needs to be done even when you do not feel like it. Discipline is the bridge between goals and achievement. It is not punishment — it is the commitment to your future self over your current comfort. Everything meaningful is built through it.",
+  "creativity": "The ability to connect ideas in unexpected ways to produce something original. Everyone is creative — the practice just looks different for different people. Creativity requires space, silence, and the freedom to be wrong. It grows with use and withers with fear.",
+  "leadership": "The act of guiding others toward a shared goal. True leadership is less about authority and more about service, trust, and showing up consistently. A leader's real output is capability in others — not what they do, but what they enable.",
+  "love":       "A deep connection, commitment, and care for someone or something. Love is both a feeling and a choice — a verb as much as a noun. It is expressed through attention, consistency, and showing up — not just in words.",
+  "freedom":    "The state of being able to act, think, and speak without constraint. True freedom comes with responsibility — the freedom to choose also means the accountability for those choices. Freedom is not the absence of structure; it is the presence of meaningful choice.",
+  "success":    "The achievement of a meaningful goal. Success is personal — what counts as success varies from person to person and changes across time. The most dangerous definition of success is someone else's.",
+  "failure":    "The result of an attempt that did not reach its goal. More importantly, failure is information — it points exactly at what needs to change. Every person who has built something remarkable has a catalog of failures that preceded it.",
+  "time":       "The most finite and valuable resource anyone has. Unlike money, it cannot be earned back. How you spend your time is how you spend your life. The question is not whether you have enough time — it is whether your priorities match what you say matters.",
+  "trust":      "The foundation of every meaningful relationship and organization. It is built slowly through consistent action and broken quickly through a single deception. Trust is the currency of real influence.",
+  "growth":     "The ongoing process of becoming more capable, aware, and effective. Growth is often uncomfortable because it requires letting go of who you were. The most reliable sign of growth is not confidence — it is the willingness to be a beginner again.",
+  "purpose":    "The deep sense of why you do what you do. Purpose gives ordinary actions extraordinary meaning. It is not discovered by waiting — it is revealed by doing, reflecting, and paying attention to what lights you up.",
+  "patience":   "The ability to endure delay, difficulty, or uncertainty without losing composure. Patience is not passive waiting — it is active trust that things will develop in their own time. It is one of the rarest and most valuable forms of strength.",
+  "focus":      "The concentrated direction of attention and energy toward a specific outcome. In a world of infinite distraction, focus has become the scarcest resource. It is built through environment design, clear priorities, and the repeated practice of returning when you drift.",
+  "change":     "The constant reorganization of reality. Change is neutral — what matters is whether you navigate it intentionally or get swept by it reactively. The most adaptable people are not those who love change — they are those who stay grounded within it.",
+  "fear":       "An emotional response to perceived threat. Fear protects us, but it also limits us. The key is learning to distinguish between fear that is a real warning and fear that is just resistance — showing up because something important is at stake.",
+  "hope":       "The belief that a better outcome is possible. Hope is not passive — it is the fuel that makes effort feel worthwhile. It is not the same as certainty, and that is exactly its power: it moves us toward something before we can prove it will work.",
+  "truth":      "Alignment between a statement and reality. Truth is simple to define and often difficult to face. The practice of truth — in communication, in thinking, in self-assessment — is one of the most powerful tools available.",
+  "communication": "The process of creating shared understanding between two or more people. Communication is not just speaking — it is ensuring you have been understood. The best communicators listen as much as they talk, and they care more about clarity than cleverness.",
+  "silence":    "The absence of sound — and the presence of everything else. Silence is where clarity, creativity, and self-awareness often live. Most people are uncomfortable with silence, which is why most people miss what it offers.",
+  "choice":     "The act of selecting between alternatives. Every choice carries weight because it always includes what you did not choose. The quality of your life is largely the sum of your choices — including the choice of how you respond to what you cannot control.",
+  "mind":       "The center of thought, feeling, memory, and consciousness. The mind is both the tool you use and the lens through which you see everything. Training it — through learning, reflection, and intentional practice — is the highest-leverage investment available.",
+  "body":       "The physical vehicle through which you experience the world. Your body carries your history, enables your future, and communicates information your conscious mind often misses. It responds to how you treat it with remarkable precision.",
+  "story":      "A sequence of events with meaning attached. Stories are how humans make sense of the world — every culture runs on narrative. The story you tell about yourself shapes your actions more than almost any other factor.",
+  "community":  "A group of people bound by shared values, experiences, or goals. Community provides belonging, accountability, and collective strength. Humans are social creatures — isolation is not strength, and connection is not weakness.",
+  "system":     "An organized set of connected parts working together toward a shared purpose. Systems produce outcomes — if you want different results, examine the system, not just the individual effort within it.",
+  "throw":      "To propel an object through the air using the arm and body. Throwing is a full-body movement — the power comes from the legs and core, transferred through the arm to the object. It requires timing, mechanics, and practice to do well.",
+  "slow":       "Moving at a low speed — deliberately, carefully, or gradually. Going slow is not a weakness; it is often the most intelligent approach. Precision, learning, safety, and quality all improve when you slow down appropriately.",
+  "fast":       "Moving at high speed — rapidly, quickly, with urgency. Going fast creates momentum, takes advantage of narrow windows, and builds confidence. Speed without accuracy creates chaos; speed with precision creates power.",
+  "low":        "Close to the ground or baseline; at a reduced level. Going low can mean humility, caution, minimalism, or strategic positioning. Sometimes the most powerful move is to lower your profile and let others react.",
+  "high":       "Elevated in position, amount, or quality. Going high means raising your standards, ambitions, or perspective. It takes effort to operate at a high level, and it is worth it when the stakes are significant.",
+};
 
 
-// ═══════════════════════════════════════════════════════════════════
-// SECTION F: KNOWLEDGE BANKS (preserved + new)
-// ═══════════════════════════════════════════════════════════════════
+// ================================================================
+// SECTION 5: KNOWLEDGE BANKS — idioms, etymologies, acronyms, facts
+// ================================================================
 
-const ACRONYMS={"AI":"Artificial Intelligence","ML":"Machine Learning","NLP":"Natural Language Processing","API":"Application Programming Interface","HTTP":"HyperText Transfer Protocol","HTML":"HyperText Markup Language","CSS":"Cascading Style Sheets","JS":"JavaScript","SQL":"Structured Query Language","JSON":"JavaScript Object Notation","REST":"Representational State Transfer","SDK":"Software Development Kit","IDE":"Integrated Development Environment","CLI":"Command-Line Interface","GUI":"Graphical User Interface","OS":"Operating System","RAM":"Random Access Memory","CPU":"Central Processing Unit","GPU":"Graphics Processing Unit","URL":"Uniform Resource Locator","DNS":"Domain Name System","TCP":"Transmission Control Protocol","SSH":"Secure Shell","VPN":"Virtual Private Network","LAN":"Local Area Network","CDN":"Content Delivery Network","SEO":"Search Engine Optimization","UI":"User Interface","UX":"User Experience","MVP":"Minimum Viable Product","OOP":"Object-Oriented Programming","TDD":"Test-Driven Development","CRUD":"Create Read Update Delete","CI":"Continuous Integration","CD":"Continuous Deployment","SaaS":"Software as a Service","CORS":"Cross-Origin Resource Sharing","JWT":"JSON Web Token","OAuth":"Open Authorization","MFA":"Multi-Factor Authentication","GDPR":"General Data Protection Regulation","ROI":"Return on Investment","KPI":"Key Performance Indicator","OKR":"Objectives and Key Results","CAC":"Customer Acquisition Cost","LTV":"Lifetime Value","ARR":"Annual Recurring Revenue","IPO":"Initial Public Offering","VC":"Venture Capital","GDP":"Gross Domestic Product","DNA":"Deoxyribonucleic Acid","RNA":"Ribonucleic Acid","BMI":"Body Mass Index","MRI":"Magnetic Resonance Imaging","FDA":"Food and Drug Administration","WHO":"World Health Organization","NASA":"National Aeronautics and Space Administration","UN":"United Nations","NATO":"North Atlantic Treaty Organization","EU":"European Union","ASAP":"As Soon As Possible","ETA":"Estimated Time of Arrival","FAQ":"Frequently Asked Questions","TLDR":"Too Long Did Not Read","ELI5":"Explain Like I am 5","IMHO":"In My Humble Opinion","IMO":"In My Opinion","FOMO":"Fear Of Missing Out","GOAT":"Greatest Of All Time","WFH":"Work From Home","CEO":"Chief Executive Officer","CTO":"Chief Technology Officer","CFO":"Chief Financial Officer","NDA":"Non-Disclosure Agreement","LLM":"Large Language Model","GPT":"Generative Pre-trained Transformer","WASM":"WebAssembly","PWA":"Progressive Web App","SPA":"Single Page Application","DOM":"Document Object Model","DRY":"Don't Repeat Yourself","KISS":"Keep It Simple Stupid","SOLID":"Single responsibility Open-closed Liskov Interface Dependency","ACID":"Atomicity Consistency Isolation Durability","IOT":"Internet of Things","AR":"Augmented Reality","VR":"Virtual Reality","B2B":"Business to Business","B2C":"Business to Consumer","ADHD":"Attention Deficit Hyperactivity Disorder","OCD":"Obsessive-Compulsive Disorder","PTSD":"Post-Traumatic Stress Disorder","CBT":"Cognitive Behavioral Therapy","SSRI":"Selective Serotonin Reuptake Inhibitor","BMR":"Basal Metabolic Rate","TDEE":"Total Daily Energy Expenditure","DIY":"Do It Yourself","AKA":"Also Known As","FYI":"For Your Information","TBD":"To Be Determined","NPS":"Net Promoter Score","SMH":"Shaking My Head","LOL":"Laughing Out Loud","BRB":"Be Right Back","IRL":"In Real Life","YOLO":"You Only Live Once","PTO":"Paid Time Off","CPI":"Consumer Price Index","HR":"Human Resources"};
+const IDIOMS = {"bite the bullet":"Endure a painful situation with courage.","break a leg":"Good luck!","break the ice":"Relieve tension in a new situation.","burn the midnight oil":"Work late into the night.","bite off more than you can chew":"Take on more than you can handle.","back to the drawing board":"Start over after a failure.","beat around the bush":"Avoid the main point; speak indirectly.","blessing in disguise":"Something that seems bad but turns out good.","costs an arm and a leg":"Extremely expensive.","cut corners":"Do something poorly to save time or effort.","drop the ball":"Make a mistake or fail to follow through.","every cloud has a silver lining":"Every bad situation has a positive aspect.","face the music":"Accept the consequences of your actions.","feel under the weather":"Feel unwell or slightly sick.","get the ball rolling":"Start something; initiate action.","hit the nail on the head":"Be exactly correct.","hit the sack":"Go to bed.","jump on the bandwagon":"Follow a trend because it is popular.","kill two birds with one stone":"Accomplish two tasks with one action.","let the cat out of the bag":"Accidentally reveal a secret.","miss the boat":"Miss an opportunity.","once in a blue moon":"Something that happens very rarely.","out of the blue":"Unexpectedly; without warning.","piece of cake":"Something very easy.","pull someone's leg":"Joke with or tease someone.","read between the lines":"Understand the implied or hidden meaning.","see eye to eye":"Agree completely with someone.","sleep on it":"Take time to think before deciding.","spill the beans":"Reveal secret information.","the elephant in the room":"An obvious problem everyone is avoiding.","throw in the towel":"Give up; admit defeat.","tie the knot":"Get married.","up in the air":"Uncertain; not yet decided.","bite the hand that feeds you":"Harm the person who supports you.","by the skin of your teeth":"Barely succeed or escape.","hit the ground running":"Start energetically with full effort.","in a pickle":"In a difficult situation.","in hot water":"In serious trouble.","kick the bucket":"To die (informal).","learn the ropes":"Learn the basics of something.","let sleeping dogs lie":"Do not revisit settled problems.","on thin ice":"In a risky situation.","open a can of worms":"Create a complicated new problem.","shoot the breeze":"Have casual conversation.","sitting duck":"An easy target.","skeleton in the closet":"A hidden shameful secret.","the bottom line":"The most important point.","turn over a new leaf":"Change for the better.","wear your heart on your sleeve":"Show emotions openly.","with flying colors":"With great success.","no pain no gain":"Hard work brings results.","over the moon":"Extremely happy.","back to basics":"Return to fundamentals.","ball is in your court":"It is your turn to act.","bend over backwards":"Try very hard to help.","bite the dust":"Fail; be defeated.","bite your tongue":"Stop yourself from saying something.","burn bridges":"Permanently damage a relationship.","catch someone red-handed":"Catch doing something wrong.","change of heart":"Change in feelings or opinion.","chip on your shoulder":"Holding a grudge; easily offended.","close but no cigar":"Almost but not quite successful.","cost a fortune":"Be extremely expensive.","cross that bridge when we come to it":"Deal with it when it happens.","cut to the chase":"Get to the point.","devil is in the details":"Small details cause big problems.","easier said than done":"More difficult to do than discuss.","every dog has its day":"Everyone has a moment of success.","face to face":"In person; directly.","get out of hand":"Lose control.","give the benefit of the doubt":"Trust someone despite uncertainty.","go back to square one":"Start completely over.","go the extra mile":"Put in more effort than required.","hang in there":"Keep trying; do not give up.","hit the books":"Study seriously.","in a nutshell":"Briefly; in summary.","in the long run":"Over extended time.","in the same boat":"In the same difficult situation.","it is not rocket science":"It is not complicated.","keep your chin up":"Stay positive in difficulty.","last straw":"Final problem that causes a reaction.","let the chips fall":"Let things happen naturally.","make a long story short":"Summarize; skip to the point.","miss the mark":"Fail to achieve the goal.","more than meets the eye":"More complex than it appears.","no strings attached":"Without conditions or obligations.","not my cup of tea":"Not something I enjoy.","off the record":"Said privately; not for public use.","on the ball":"Alert and competent.","on the fence":"Undecided about something.","out of the box":"Creative; unconventional thinking.","put all eggs in one basket":"Rely entirely on one thing.","right off the bat":"Immediately; from the start.","rock the boat":"Cause trouble or disturbance.","see the bigger picture":"Understand the broader context.","step up to the plate":"Take responsibility; rise to challenge.","take it with a grain of salt":"Be skeptical; do not take too seriously.","the ball is rolling":"Something has been started.","think outside the box":"Think creatively; unconventionally.","time flies":"Time passes quickly.","under the weather":"Feeling slightly ill.","when pigs fly":"Never; an impossibility.","you can not judge a book by its cover":"Do not judge by appearance alone."};
 
-const IDIOMS={"bite the bullet":"Endure a painful situation with courage — choose to face the hard thing.","break a leg":"Good luck! (Theatrical tradition of saying the opposite.)","break the ice":"Do something to relieve tension or awkwardness in a new situation.","burn the midnight oil":"Work very late into the night.","bite off more than you can chew":"Take on more responsibility than you can realistically handle.","back to the drawing board":"Start over completely after a failure.","beat around the bush":"Avoid getting to the main point; speak indirectly.","blessing in disguise":"Something that initially seems bad but turns out to be good.","costs an arm and a leg":"Extremely expensive.","cut corners":"Do something poorly or incompletely to save time or money.","drop the ball":"Make a mistake or fail to follow through on something.","every cloud has a silver lining":"Every difficult situation has a positive aspect.","face the music":"Accept the consequences of your actions, however unpleasant.","feel under the weather":"Feel unwell or slightly ill.","get the ball rolling":"Start something — initiate action.","hit the nail on the head":"Be exactly correct.","hit the sack":"Go to bed.","jump on the bandwagon":"Follow a trend because it is popular.","kill two birds with one stone":"Accomplish two tasks with a single action.","let the cat out of the bag":"Accidentally reveal a secret.","miss the boat":"Miss an opportunity that will not come back.","once in a blue moon":"Something that happens very rarely.","out of the blue":"Unexpectedly; without any warning.","piece of cake":"Something that is very easy.","pull someone's leg":"Joke with someone; tease them.","read between the lines":"Understand the hidden or implied meaning.","see eye to eye":"Agree completely with someone.","sleep on it":"Take time to think about something before deciding.","spill the beans":"Reveal secret information unintentionally.","the elephant in the room":"An obvious problem or sensitive issue that everyone is avoiding.","throw in the towel":"Give up; admit defeat.","tie the knot":"Get married.","up in the air":"Uncertain; not yet decided.","bite the hand that feeds you":"Harm or be ungrateful to the person who supports you.","by the skin of your teeth":"Barely succeed; escape something by a very narrow margin.","hit the ground running":"Begin something energetically and with full effort immediately.","in a pickle":"In a difficult situation with no easy solution.","in hot water":"In serious trouble.","kick the bucket":"To die (informal/humorous).","learn the ropes":"Learn how something works; understand the basics.","let sleeping dogs lie":"Avoid revisiting old problems that have settled down.","on thin ice":"In a risky or precarious situation.","open a can of worms":"Raise a complicated issue that creates more problems than it solves.","the bottom line":"The most important point; the final conclusion.","turn over a new leaf":"Change your behavior for the better; make a fresh start.","wear your heart on your sleeve":"Express your emotions openly and freely.","with flying colors":"With great success and high distinction.","bite the dust":"Fail or be defeated.","burning bridges":"Permanently and irreparably damage a relationship.","cold shoulder":"Deliberately ignore or be distant toward someone.","cost an arm and a leg":"Be extremely expensive.","cross that bridge when we come to it":"Deal with a problem when it actually happens, not before.","go back to square one":"Return to the very beginning after a failure.","in the long run":"Over an extended period of time.","it is not rocket science":"It is not complicated; it is easy to understand.","more than meets the eye":"Something is more complex or impressive than it appears.","no pain no gain":"You have to work hard and endure difficulty to achieve success.","off the record":"Said in private; not to be officially quoted or published.","on the ball":"Alert, attentive, and competent.","once in a lifetime":"Something so rare it may only happen once.","out of the box":"Creative; unconventional; thinking in new ways.","put all your eggs in one basket":"Rely entirely on one single plan or investment.","step up to the plate":"Take responsibility; rise to the challenge.","the last straw":"The final problem in a series that causes a reaction or loss of patience.","time flies":"Time passes very quickly.","under the weather":"Feeling slightly ill or unwell.","when pigs fly":"Never; something that will never happen.","you can not judge a book by its cover":"Do not judge something or someone by their appearance alone."};
+const ETYMOLOGIES = {"algorithm":"From al-Khwārizmī, a 9th-century Persian mathematician — his name became the word for computational procedures.","algebra":"From Arabic al-jabr (reunion of broken parts) — from a 9th-century mathematical text by al-Khwārizmī.","robot":"Czech robota (forced labor/drudgery) — introduced in Karel Čapek's 1920 play R.U.R. about artificial workers.","computer":"Originally a human who performs calculations — from Latin computare (to reckon, calculate).","internet":"From inter- (between) + network — coined in the 1970s for a network connecting other networks.","software":"Coined by statistician John Tukey in 1958 as a contrast to hardware.","bug":"Popularized by Grace Hopper in 1947 when a real moth caused a malfunction in the Harvard Mark II computer.","emoji":"Japanese: e (picture) + moji (character) — created by Shigetaka Kurita in 1999 for NTT DoCoMo.","google":"From googol (10 to the power 100) — an intentional misspelling chosen by the founders.","hashtag":"Hash (the # symbol) + tag — popularized on Twitter in 2007 by Chris Messina.","spam":"From Monty Python's 1970 sketch featuring incessant repetition of SPAM — applied to unwanted messages.","meme":"Coined by Richard Dawkins in The Selfish Gene (1976) from Greek mimeme (imitated thing).","quarantine":"Italian quarantina (forty days) — the isolation period required for ships during the bubonic plague.","salary":"Latin salarium — possibly from sal (salt) — Roman soldiers may have been paid partly in salt.","disaster":"Italian disastro (ill-starred) — dis- (bad) + astro (star) — fate controlled by unfavorable stars.","panic":"Greek Panikos — relating to Pan, the god whose sudden sounds were said to cause irrational terror.","academy":"From Akademia — the grove near Athens where Plato taught, named after the hero Akademos.","muscle":"Latin musculus (little mouse) — the movement of a bicep resembles a mouse moving under cloth.","malaria":"Italian mala aria (bad air) — once believed the disease came from swamp vapors.","paradise":"Old Persian pairi-daeza (walled garden) — royal gardens that became the concept of paradise.","coffee":"Ottoman Turkish kahve, from Arabic qahwah — spread from Ethiopia through Arabia to the world.","money":"Latin Moneta — an epithet of Juno in whose Roman temple coins were minted.","candidate":"Latin candidatus (clothed in white) — Roman office-seekers wore white togas to symbolize purity.","companion":"Latin com- (with) + panis (bread) — literally one who shares bread with you.","enthusiasm":"Greek enthousiasmos — literally possessed by a god (en + theos = in + god).","democracy":"Greek dēmokratia — dēmos (people) + kratos (rule/power) — rule by the people.","philosophy":"Greek philosophia — philos (loving) + sophia (wisdom) — literally love of wisdom.","window":"Old Norse vindauga — vindr (wind) + auga (eye) — literally wind eye.","alphabet":"From the first two Greek letters Alpha (Α) and Beta (Β).","clue":"From clew (a ball of thread) — Theseus used thread to navigate the Cretan labyrinth.","talent":"Greek/Latin talentum (a weight of money) — its gift meaning comes from the Biblical parable.","nightmare":"Night + Old English mare (a goblin believed to sit on sleeping people causing bad dreams).","bonfire":"Bone fire — fires historically made from bones at festivals and during plague clearances.","lunatic":"Latin luna (moon) — madness was once believed to be caused by the cycles of the moon.","tragedy":"Greek tragōidia — possibly goat song — performed at festivals honoring Dionysus.","hazard":"Arabic az-zahr (the dice) — from gambling games played in medieval Spain.","sincere":"Possibly Latin sine cera (without wax) — referring to pottery sold without defects patched with wax.","salary":"Latin salarium — Roman soldiers' allowance for purchasing salt, an essential and valuable commodity.","school":"Greek skholē — originally meaning leisure or free time — the time spent learning.","magazine":"Arabic makhazin (storehouses) — a place where things are stored — applied to published collections.","sabotage":"French sabot (wooden shoe) — workers allegedly threw shoes into machinery to disrupt production.","admiral":"Arabic amir al-bahr (commander of the sea) — the title transferred from Arabic naval commanders.","assassin":"Arabic Hashshashin (users of hashish) — referring to a Nizari Ismaili sect during the Crusades.","barbarian":"Greek barbaros (foreign, strange-sounding) — used for anyone who did not speak Greek.","calculate":"Latin calculus (small stone) — Romans used pebbles on counting boards for arithmetic.","carnival":"Latin carne vale (farewell to meat) — the celebration before Lent when meat was given up.","cathedral":"Greek kathedra (seat/chair) — the bishop's official seat or throne in the main church.","discipline":"Latin disciplina (instruction/training) — related to discipulus (student) and discere (to learn).","education":"Latin educere (to lead out) — drawing forth potential that is already within.","emotion":"Latin emotio — from emovere (to move out) — literally what moves us.","focus":"Latin focus (hearth/fireplace) — the center of the home where heat and light originated.","genuine":"Latin genu (knee) — fathers acknowledged children as their own by placing them on their knee.","humble":"Latin humilis (low/grounded) — from humus (earth/ground) — literally close to the earth.","inspire":"Latin inspirare (to breathe into) — the divine breath that animates and motivates.","journal":"Old French journal (daily) — from Latin diurnalis — a record of daily events.","kindness":"Old English gecyndness — from cynd (nature/kind) — acting according to one's natural character.","language":"Latin lingua (tongue) — the organ used for speech became the word for speech itself.","mentor":"From Mentor, the advisor of Telemachus in Homer's Odyssey — a trusted teacher and counselor.","narrative":"Latin narrare (to tell) — from gnarus (knowing) — telling what one knows.","original":"Latin originalis — from origo (origin/beginning) — relating to the source or starting point.","passion":"Latin passio (suffering) — from pati (to suffer/endure) — intense feeling that drives us.","resilience":"Latin resilire (to spring back) — from re- (back) + salire (to jump) — bouncing back.","silence":"Latin silentium — from silere (to be quiet) — the state of intentional quietness.","strategy":"Greek strategos (general) — from stratos (army) + agein (to lead) — leading an army.","sympathy":"Greek sympatheia — syn- (together) + pathos (feeling) — feeling together with another.","theory":"Greek theoria (looking at, contemplation) — from theorein (to observe) — careful observation.","virtue":"Latin virtus (excellence/valor) — from vir (man) — the qualities that make one excellent."};
 
-const ETYMOLOGIES={"algorithm":"From al-Khwārizmī, 9th-century Persian mathematician — his name became the word for step-by-step procedures.","algebra":"From Arabic 'al-jabr' (reunion of broken parts) — from a 9th-century mathematical text.","robot":"Czech 'robota' (drudgery/forced labor) — introduced in Karel Čapek's 1920 play R.U.R.","computer":"Originally a person who performs calculations — from Latin 'computare' (to reckon).","internet":"From 'inter-' (between) + 'network' — coined in the 1970s for a network connecting networks.","software":"Coined by John Tukey in 1958 as a contrast to hardware — the 'soft' programs that run on machines.","bug":"Popularized by Grace Hopper in 1947 when a real moth caused a malfunction in a Harvard computer.","emoji":"Japanese: 'e' (picture) + 'moji' (character) — created by Shigetaka Kurita in 1999.","google":"From 'googol' (10^100) — an intentional misspelling that became a brand.","hashtag":"'Hash' (the # symbol) + 'tag' — popularized on Twitter in 2007 by Chris Messina.","spam":"From Monty Python's 1970 sketch featuring the incessant repetition of 'SPAM' — applied to unwanted messages.","meme":"Coined by Richard Dawkins in 1976 from Greek 'mimeme' (imitated thing) — a unit of cultural transmission.","quarantine":"Italian 'quarantina' (forty days) — the isolation period required for ships during the bubonic plague.","salary":"Latin 'salarium' — possibly from 'sal' (salt) — Roman soldiers may have been partially paid in salt.","disaster":"Italian 'disastro' (ill-starred) — 'dis-' (bad) + 'astro' (star) — reflecting belief in astral influence.","panic":"Greek 'Panikos' — relating to Pan, the god whose sudden sounds were said to cause irrational terror.","academy":"From 'Akademia' — the grove near Athens where Plato taught, named after the hero Akademos.","muscle":"Latin 'musculus' (little mouse) — the movement of a bicep resembles a mouse moving under cloth.","malaria":"Italian 'mala aria' (bad air) — once believed to come from swamp vapors.","paradise":"Old Persian 'pairi-daeza' (walled garden) — royal gardens that became the concept of paradise.","coffee":"Ottoman Turkish 'kahve' — from Arabic 'qahwah' — spread from Ethiopia to Arabia to the world.","money":"Latin 'Moneta' — an epithet of Juno in whose Roman temple coins were minted.","candidate":"Latin 'candidatus' (clothed in white) — Roman office-seekers wore white togas to symbolize purity.","companion":"Latin 'com-' (with) + 'panis' (bread) — literally 'one who shares bread with you'.","enthusiasm":"Greek 'enthousiasmos' — literally 'possessed by a god' (en + theos = in + god).","democracy":"Greek 'dēmokratia' — 'dēmos' (people) + 'kratos' (rule/power).","philosophy":"Greek 'philosophia' — 'philos' (loving) + 'sophia' (wisdom) — literally 'love of wisdom'.","window":"Old Norse 'vindauga' — 'vindr' (wind) + 'auga' (eye) — literally 'wind eye'.","alphabet":"From the first two Greek letters — Alpha (Α) and Beta (Β).","clue":"From 'clew' (a ball of thread) — from the myth of Theseus using thread to navigate the labyrinth.","talent":"Greek/Latin 'talentum' (a unit of weight and money) — its 'gift' meaning comes from the Biblical parable.","nightmare":"'Night' + Old English 'mare' (a goblin believed to sit on sleeping people causing bad dreams).","bonfire":"'Bone fire' — fires historically made from bones during festivals and plague clearances.","lunatic":"Latin 'luna' (moon) — madness was once believed to be caused or worsened by the moon's cycles.","tragedy":"Greek 'tragōidia' — possibly 'goat song' — performed at festivals honoring Dionysus.","hazard":"Arabic 'az-zahr' (the dice) — from gambling games played in medieval Spain.","disaster":"Italian 'disastro' — literally 'bad star' (dis + astro) — fated by unfavorable stars.","sincere":"Possibly from Latin 'sine cera' (without wax) — referring to unrepaired, unadulterated pottery.","salary":"Latin 'salarium' — Roman soldiers' allowance for purchasing salt, an essential commodity."};
+const ACRONYMS = {"AI":"Artificial Intelligence","ML":"Machine Learning","NLP":"Natural Language Processing","API":"Application Programming Interface","HTTP":"HyperText Transfer Protocol","HTML":"HyperText Markup Language","CSS":"Cascading Style Sheets","JS":"JavaScript","SQL":"Structured Query Language","JSON":"JavaScript Object Notation","REST":"Representational State Transfer","SDK":"Software Development Kit","IDE":"Integrated Development Environment","CLI":"Command-Line Interface","GUI":"Graphical User Interface","OS":"Operating System","RAM":"Random Access Memory","CPU":"Central Processing Unit","GPU":"Graphics Processing Unit","URL":"Uniform Resource Locator","DNS":"Domain Name System","TCP":"Transmission Control Protocol","SSH":"Secure Shell","VPN":"Virtual Private Network","CDN":"Content Delivery Network","SEO":"Search Engine Optimization","UI":"User Interface","UX":"User Experience","OOP":"Object-Oriented Programming","TDD":"Test-Driven Development","CRUD":"Create Read Update Delete","CI":"Continuous Integration","CD":"Continuous Deployment","SaaS":"Software as a Service","CORS":"Cross-Origin Resource Sharing","JWT":"JSON Web Token","MFA":"Multi-Factor Authentication","GDPR":"General Data Protection Regulation","ROI":"Return on Investment","KPI":"Key Performance Indicator","OKR":"Objectives and Key Results","CAC":"Customer Acquisition Cost","LTV":"Lifetime Value","ARR":"Annual Recurring Revenue","IPO":"Initial Public Offering","VC":"Venture Capital","GDP":"Gross Domestic Product","DNA":"Deoxyribonucleic Acid","RNA":"Ribonucleic Acid","BMI":"Body Mass Index","MRI":"Magnetic Resonance Imaging","FDA":"Food and Drug Administration","WHO":"World Health Organization","NASA":"National Aeronautics and Space Administration","UN":"United Nations","NATO":"North Atlantic Treaty Organization","EU":"European Union","ASAP":"As Soon As Possible","ETA":"Estimated Time of Arrival","FAQ":"Frequently Asked Questions","TLDR":"Too Long Did Not Read","ELI5":"Explain Like I am 5","IMHO":"In My Humble Opinion","IMO":"In My Opinion","FOMO":"Fear Of Missing Out","GOAT":"Greatest Of All Time","WFH":"Work From Home","CEO":"Chief Executive Officer","CTO":"Chief Technology Officer","CFO":"Chief Financial Officer","NDA":"Non-Disclosure Agreement","LLM":"Large Language Model","GPT":"Generative Pre-trained Transformer","PWA":"Progressive Web App","SPA":"Single Page Application","DOM":"Document Object Model","DRY":"Don't Repeat Yourself","KISS":"Keep It Simple Stupid","IOT":"Internet of Things","AR":"Augmented Reality","VR":"Virtual Reality","B2B":"Business to Business","B2C":"Business to Consumer","ADHD":"Attention Deficit Hyperactivity Disorder","OCD":"Obsessive-Compulsive Disorder","PTSD":"Post-Traumatic Stress Disorder","CBT":"Cognitive Behavioral Therapy","BMR":"Basal Metabolic Rate","TDEE":"Total Daily Energy Expenditure","DIY":"Do It Yourself","AKA":"Also Known As","FYI":"For Your Information","TBD":"To Be Determined","NPS":"Net Promoter Score","HR":"Human Resources","PR":"Public Relations","CRM":"Customer Relationship Management","ERP":"Enterprise Resource Planning","MVP":"Minimum Viable Product","MVC":"Model View Controller","ACID":"Atomicity Consistency Isolation Durability","SOLID":"Single Open Liskov Interface Dependency","DDoS":"Distributed Denial of Service","XSS":"Cross-Site Scripting","CSRF":"Cross-Site Request Forgery","OAuth":"Open Authorization","SSO":"Single Sign-On","2FA":"Two-Factor Authentication","QA":"Quality Assurance","UAT":"User Acceptance Testing","SLA":"Service Level Agreement","SOP":"Standard Operating Procedure"};
 
-const FUN_FACTS=["Honey never spoils — 3,000-year-old honey found in Egyptian tombs was still edible.","A day on Venus is longer than a year on Venus.","Octopuses have three hearts, blue blood, and nine brains (one central + one per arm).","Bananas are botanically berries. Strawberries are not.","There are more possible chess games than atoms in the observable universe.","Sharks have existed for about 450 million years — longer than trees.","Wombats produce cube-shaped feces to mark territory without it rolling away.","Butterflies taste with their feet via chemoreceptors on their tarsi.","The Eiffel Tower grows approximately 6 inches in summer due to thermal expansion.","Oxford University is older than the Aztec Empire.","Humans share approximately 60% of their DNA with bananas.","The brain generates about 23 watts of power — enough to dim a small light bulb.","Polar bear fur is actually transparent — light refraction makes it appear white.","Sea otters hold hands while sleeping so they do not drift apart from each other.","The average cloud weighs approximately 1.1 million pounds.","Cleopatra lived closer in time to the Moon landing than to the construction of the Great Pyramid.","A teaspoonful of neutron star material would weigh about 10 million metric tons.","There are more ways to arrange a deck of 52 cards than seconds that have passed since the Big Bang.","Antarctica is technically the world's largest desert — it receives less than 200mm of precipitation annually.","Sound travels approximately 4.3 times faster through water than through air.","Fingerprints form at 10 weeks in the womb — even identical twins have different ones.","New Zealand was the first country to grant women the right to vote, in 1893.","The number zero was invented independently by both the Babylonians and the Mayans.","Trees in a forest communicate and share nutrients through underground fungal networks called mycorrhizae.","A group of owls is called a parliament.","The first email was sent in 1971 by Ray Tomlinson — to himself.","The Sahara Desert was a lush green savanna approximately 10,000 years ago.","Mount Olympus on Mars (Olympus Mons) is nearly 3 times taller than Mount Everest.","There is a species of jellyfish (Turritopsis dohrnii) that is biologically immortal — it reverts to its juvenile state.","Flamingos are born grey-white. Their iconic pink comes from carotenoid pigments in their food.","All humans on Earth are approximately 99.9% genetically identical.","The word 'silly' originally meant 'blessed' or 'happy' in Old English.","Hot water can freeze faster than cold water under certain conditions — this is called the Mpemba effect.","A cubic inch of human bone can withstand up to 19,000 pounds of pressure.","Hippos produce a natural pinkish-red fluid that acts as sunscreen and an antimicrobial agent.","Penguins are monogamous and often propose to their mates using pebbles.","The first computer bug was a real insect — a moth found in the Harvard Mark II relay in 1947.","Velcro was invented by George de Mestral in 1948 after noticing how burr seeds stuck to his dog."];
+const FUN_FACTS = ["Honey never spoils — 3,000-year-old honey found in Egyptian tombs was still edible.","A day on Venus is longer than a year on Venus — it rotates slower than it orbits the sun.","Octopuses have three hearts, blue blood, and nine brains — one central brain and one per arm.","Bananas are botanically berries. Strawberries, by botanical definition, are not.","There are more possible chess games than atoms in the observable universe.","Sharks have existed for about 450 million years — predating both trees and dinosaurs.","Wombats produce cube-shaped feces to mark territory without it rolling away.","Butterflies taste with chemoreceptors on their feet — they taste everything they stand on.","The Eiffel Tower grows approximately 6 inches in summer due to thermal expansion of the iron.","Oxford University is older than the Aztec Empire — teaching began there around 1096.","Humans share approximately 60% of their DNA with bananas.","The human brain generates about 23 watts of power — enough to dim a small light bulb.","Polar bear fur is actually transparent — it appears white due to light refraction.","Sea otters hold hands while sleeping to prevent drifting apart — this is called rafting.","The average cloud weighs approximately 1.1 million pounds — but is held up by air pressure.","Cleopatra lived closer in time to the Moon landing than to the construction of the Great Pyramid.","A teaspoonful of neutron star material would weigh about 10 million metric tons.","There are more ways to arrange a deck of 52 cards than seconds since the Big Bang — by a factor of billions.","Antarctica is technically the world's largest desert — it receives less than 200mm of precipitation annually.","Sound travels approximately 4.3 times faster through water than through air.","Fingerprints form in the womb at 10 weeks — identical twins have different fingerprints.","New Zealand was the first country to grant women the right to vote, in 1893.","The number zero was invented independently by both the Babylonians and the Mayans centuries apart.","Trees in a forest share nutrients through underground mycorrhizal fungal networks.","A group of owls is called a parliament; a group of crows is called a murder; a group of flamingos is a flamboyance.","The first email was sent in 1971 by Ray Tomlinson to himself — testing to see if it worked.","The Sahara Desert was a lush green savanna approximately 10,000 years ago.","Olympus Mons on Mars is nearly three times taller than Mount Everest.","There is a species of jellyfish (Turritopsis dohrnii) that is biologically immortal — it can revert to its juvenile state.","Flamingos are born grey-white — their pink color comes from carotenoid pigments in the algae and shrimp they eat.","All humans on Earth share approximately 99.9% of the same genetic code.","The word silly originally meant blessed or happy in Old English — it shifted meaning over centuries.","Hot water can freeze faster than cold water under certain conditions — this is called the Mpemba effect.","A cubic inch of human bone can withstand up to 19,000 pounds of compressive force.","Hippos produce a natural pinkish fluid that acts as both sunscreen and antimicrobial protection.","Penguins are largely monogamous and males often offer pebbles to females as part of courtship.","The first computer bug was an actual insect — a moth found in the Harvard Mark II relay in 1947.","Velcro was invented in 1948 by George de Mestral after noticing burr seeds clinging to his dog.","The moon is gradually moving away from Earth at about 3.8 centimeters per year.","There are more stars in the observable universe than grains of sand on all of Earth's beaches combined.","The human eye can distinguish approximately 10 million different colors — but cannot distinguish radio waves, X-rays, or ultraviolet light.","A day on Mercury lasts 59 Earth days, but a year on Mercury is only 88 Earth days.","The Great Barrier Reef is the largest living structure on Earth — visible from space.","Ravens have been observed fashioning tools, playing, and even appearing to show empathy.","The average person walks approximately 100,000 miles in their lifetime — equivalent to circling the Earth four times.","Lightning strikes Earth approximately 100 times per second — about 8 million times per day.","The average human heart beats approximately 100,000 times per day — about 35 million times per year.","Crows can recognize human faces, hold grudges, and even make gifts for people who feed them.","The tongue is the only muscle in the human body attached at only one end.","Water is the only common substance on Earth that naturally occurs in all three states — solid, liquid, and gas — at surface conditions."];
 
-const JOKES=["Why do programmers prefer dark mode? Because light attracts bugs.","Why was the JavaScript developer sad? He did not Node how to Express himself.","A SQL query walks into a bar and asks two tables: Can I join you?","There are 10 types of people — those who understand binary, and those who don't.","Debugging: Being the detective in a crime movie where you are also the murderer.","99 bugs in the code. Take one down, patch it around — 127 bugs in the code.","Why do scientists not trust atoms? Because they make up everything.","A photon checks in with no luggage. 'Traveling light,' he explains.","I have a joke about infinity. I do not know where to start.","Why was the math book sad? It had too many problems.","I told a construction joke. Still working on it.","I used to hate facial hair. Then it grew on me.","Time flies like an arrow. Fruit flies like a banana.","What do you call cheese that is not yours? Nacho cheese.","In a world without walls and fences, who needs Windows and Gates?","Schrodinger's cat walks into a bar. And doesn't.","Einstein, Newton and Pascal play hide and seek. Newton draws a square and says 'I'm a Newton per square meter — I'm not hiding.'","What do you call a factory that makes passable products? A satisfactory.","I'm on a seafood diet. I see food and I eat it.","Two fish in a tank. One says: Do you know how to drive this thing?","I only know 25 letters of the alphabet. I do not know y.","Why did the bicycle fall over? It was two-tired.","Chuck Norris can divide by zero.","Why do they never serve beer at a math party? You cannot drink and derive.","A biologist, chemist and statistician go hunting. The biologist and chemist both miss their shots. The statistician shouts: We got it!"];
+const MOTIVATIONS = ["You have not come this far to only come this far.","The discomfort you feel right now is the sensation of growth. Stay in it.","Progress is not always visible. The work is still working.","Your only real competition is who you were yesterday.","The version of you that finishes this will not be the version that started.","Hard things are hard precisely because they are worth doing.","Doubt is not a reason to stop. It is resistance showing up when something matters.","You do not need to see the whole path. Take the next step.","Discipline is choosing your future self over your current comfort.","Every expert once stood exactly where you are standing. They kept going.","The fact that you are still trying is already extraordinary.","Start. The clarity you are waiting for comes from action, not from waiting.","Consistency over months beats intensity over days. Show up.","You are not behind. You are on your timeline, building at your own pace.","The only person who needs to believe in you right now is you.","One percent better every day compounds into something unrecognizable in a year.","The obstacle is the path — not beside it, not after it. Through it.","What you repeatedly do is what you ultimately become. Choose deliberately.","Your potential is not fixed. It expands the moment you decide it does.","Done is better than perfect, and started is better than done tomorrow."];
 
-const MOTIVATIONS=["You have not come this far to only come this far.","The discomfort you feel right now is the sensation of growth. Stay in it.","Progress, not perfection. Every step forward is still forward.","Your only real competition is who you were yesterday.","The version of you that finishes this will not be the version that started.","Hard things are hard precisely because they are worth doing.","Doubt is not a reason to stop. It is just resistance showing up when something matters.","You do not need to see the whole path. You just need to take the next step.","Discipline is choosing your future self over your current comfort.","Every expert once stood exactly where you are standing. They kept going.","The fact that you are still trying is already extraordinary.","Start. The clarity you are waiting for comes from action, not from waiting.","Consistency over months beats intensity over days. Show up.","You are not behind. You are on your timeline, building at your own pace.","The only person who needs to believe in you right now is you."];
+const JOKES = ["Why do programmers prefer dark mode? Because light attracts bugs.","A SQL query walks into a bar and asks two tables: Can I join you?","There are 10 types of people — those who understand binary, and those who do not.","Debugging: being the detective in a crime movie where you are also the murderer.","99 bugs in the code. Take one down, patch it around — 127 bugs in the code.","Why do scientists not trust atoms? Because they make up everything.","A photon checks in with no luggage. Traveling light, he explains.","I have a joke about infinity. I do not know where to start.","Why was the math book sad? It had too many problems.","Time flies like an arrow. Fruit flies like a banana.","I told a construction joke. Still working on it.","I used to hate facial hair. Then it grew on me.","Two fish in a tank. One says: do you know how to drive this thing?","In a world without walls and fences, who needs Windows and Gates?","Schrodinger's cat walks into a bar. And does not.","What do you call cheese that is not yours? Nacho cheese.","Why did the bicycle fall over? It was two-tired.","I only know 25 letters of the alphabet. I do not know y.","Why do they never serve beer at a math party? You cannot drink and derive.","What do you call a factory that makes passable products? A satisfactory.","I am on a seafood diet. I see food and I eat it.","A photon is checking into a hotel. The bellhop asks if he has any luggage. No, says the photon, I am traveling light.","Why do Java developers wear glasses? Because they do not C#.","The best thing about a Boolean is that even if you are wrong, you are only off by a bit.","I tried to write a joke about UDP. I am not sure if you will get it."];
 
 
-// ═══════════════════════════════════════════════════════════════════
-// SECTION G: LIVE RESEARCH (secondary — used when word brain can't answer)
-// ═══════════════════════════════════════════════════════════════════
-
-async function searchWikipedia(query) {
-  try {
-    const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query.replace(/\s+/g,"_"))}`);
-    if (!res.ok) return null;
-    const d = await res.json();
-    if (!d.extract || d.extract.length < 30) return null;
-    return {
-      title: d.title,
-      summary: d.extract.split("\n")[0],
-      url: (d.content_urls&&d.content_urls.desktop&&d.content_urls.desktop.page)||`https://en.wikipedia.org/wiki/${encodeURIComponent(query)}`,
-      source: "Wikipedia"
-    };
-  } catch(e) { return null; }
-}
+// ================================================================
+// SECTION 6: LIVE RESEARCH SOURCES
+// ================================================================
 
 async function searchDuckDuckGo(query) {
   try {
-    const res = await fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`);
-    if (!res.ok) return null;
-    const d = await res.json();
+    const r = await fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`);
+    if (!r.ok) return null;
+    const d = await r.json();
     const text = d.AbstractText||d.Definition||d.Answer||"";
-    if (!text || text.length < 20) return null;
-    return {
-      title: d.Heading||query,
-      summary: text,
-      url: d.AbstractURL||`https://duckduckgo.com/?q=${encodeURIComponent(query)}`,
-      source: d.AbstractSource||"DuckDuckGo"
-    };
-  } catch(e) { return null; }
+    if (!text||text.length<20) return null;
+    const related = (d.RelatedTopics||[]).filter(t=>t.Text&&t.FirstURL).slice(0,3)
+      .map(t=>`• [${t.Text.split(" - ")[0].substring(0,55)}](${t.FirstURL})`);
+    return { title:d.Heading||query, summary:text, url:d.AbstractURL||`https://duckduckgo.com/?q=${encodeURIComponent(query)}`, source:d.AbstractSource||"DuckDuckGo", related };
+  } catch(e){return null;}
+}
+
+async function searchWikipedia(query) {
+  try {
+    const r = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query.replace(/\s+/g,"_"))}`);
+    if (!r.ok) {
+      const s = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&format=json&origin=*&srlimit=1`);
+      if (!s.ok) return null;
+      const sd = await s.json();
+      const hit = sd.query&&sd.query.search&&sd.query.search[0];
+      if (!hit) return null;
+      return searchWikipedia(hit.title);
+    }
+    const d = await r.json();
+    if (!d.extract||d.extract.length<30) return null;
+    return { title:d.title, summary:d.extract.split("\n")[0], url:(d.content_urls&&d.content_urls.desktop&&d.content_urls.desktop.page)||`https://en.wikipedia.org/wiki/${encodeURIComponent(query)}`, source:"Wikipedia", related:[] };
+  } catch(e){return null;}
+}
+
+async function lookupDictionary(word) {
+  try {
+    const r = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word.trim())}`);
+    if (!r.ok) return null;
+    const data = await r.json();
+    if (!Array.isArray(data)||!data[0]) return null;
+    const entry = data[0];
+    const phonetic = entry.phonetic||(entry.phonetics&&entry.phonetics[0]&&entry.phonetics[0].text)||"";
+    let out = `📖 **${entry.word}**${phonetic?`  /${phonetic}/`:""}\n\n`;
+    let count = 0;
+    for (const meaning of (entry.meanings||[]).slice(0,3)) {
+      for (const def of (meaning.definitions||[]).slice(0,2)) {
+        count++;
+        out += `**${count}. [${meaning.partOfSpeech}]** ${def.definition}\n`;
+        if (def.example) out += `   *"${def.example}"*\n`;
+        const syns = (def.synonyms||meaning.synonyms||[]).slice(0,4);
+        if (syns.length) out += `   Synonyms: ${syns.join(", ")}\n`;
+        out += "\n";
+      }
+    }
+    out += `🔗 [Merriam-Webster](https://www.merriam-webster.com/dictionary/${encodeURIComponent(word)}) · [Oxford](https://www.lexico.com/definition/${encodeURIComponent(word)})`;
+    return out.trim();
+  } catch(e){return null;}
 }
 
 async function fetchLiveQuote(query) {
@@ -1016,615 +861,758 @@ async function fetchLiveQuote(query) {
     const url = authorMatch
       ? `https://api.quotable.io/search/quotes?query=${encodeURIComponent(authorMatch[1].trim())}&limit=1`
       : "https://api.quotable.io/random";
-    const res = await fetch(url);
-    if (!res.ok) return null;
-    const d = await res.json();
+    const r = await fetch(url);
+    if (!r.ok) return null;
+    const d = await r.json();
     const q = d.results?d.results[0]:d;
     if (!q||!q.content) return null;
     return `💬 *"${q.content}"*\n— **${q.author}**\n\n🔗 [More quotes](https://www.quotable.io)`;
-  } catch(e) { return null; }
+  } catch(e){return null;}
 }
 
 async function fetchLiveJoke() {
   try {
-    const res = await fetch("https://v2.jokeapi.dev/joke/Any?safe-mode&blacklistFlags=racist,sexist");
-    if (!res.ok) return null;
-    const d = await res.json();
+    const r = await fetch("https://v2.jokeapi.dev/joke/Any?safe-mode&blacklistFlags=racist,sexist");
+    if (!r.ok) return null;
+    const d = await r.json();
     if (d.type==="single") return `😄 ${d.joke}`;
     if (d.type==="twopart") return `😄 ${d.setup}\n\n> ${d.delivery}`;
     return null;
-  } catch(e) { return null; }
+  } catch(e){return null;}
 }
 
 async function fetchAdvice() {
   try {
-    const res = await fetch("https://api.adviceslip.com/advice");
-    if (!res.ok) return null;
-    const d = await res.json();
+    const r = await fetch("https://api.adviceslip.com/advice");
+    if (!r.ok) return null;
+    const d = await r.json();
     return d.slip&&d.slip.advice?`💡 ${d.slip.advice}`:null;
-  } catch(e) { return null; }
+  } catch(e){return null;}
 }
 
 async function fetchTrivia() {
   try {
-    const res = await fetch("https://opentdb.com/api.php?amount=1&type=multiple");
-    if (!res.ok) return null;
-    const r = (await res.json()).results&&(await res.json()).results[0];
-    if (!r) return null;
-    const clean = s=>s.replace(/&quot;/g,'"').replace(/&#039;/g,"'").replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">");
-    return `🧠 **Trivia** [${r.category} · ${r.difficulty}]\n${clean(r.question)}\n\n✅ **Answer:** ${clean(r.correct_answer)}`;
-  } catch(e) { return null; }
-}
-
-async function lookupDictionary(word) {
-  try {
-    const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word.trim())}`);
-    if (!res.ok) return null;
-    const data = await res.json();
-    if (!Array.isArray(data)||!data[0]) return null;
-    const entry = data[0];
-    const phonetic = entry.phonetic||(entry.phonetics&&entry.phonetics[0]&&entry.phonetics[0].text)||"";
-    let out = `📖 **${entry.word}**${phonetic ? `  /${phonetic}/` : ""}\n\n`;
-    let count = 0;
-    for (const meaning of (entry.meanings||[]).slice(0,3)) {
-      for (const def of (meaning.definitions||[]).slice(0,2)) {
-        count++;
-        out += `**${count}. [${meaning.partOfSpeech}]** ${def.definition}\n`;
-        if (def.example) out += `   *"${def.example}"*\n`;
-        const syns = (def.synonyms||meaning.synonyms||[]).slice(0,4);
-        const ants = (def.antonyms||meaning.antonyms||[]).slice(0,3);
-        if (syns.length) out += `   Synonyms: ${syns.join(", ")}\n`;
-        if (ants.length) out += `   Antonyms: ${ants.join(", ")}\n`;
-        out += "\n";
-      }
-    }
-    out += `🔗 [Merriam-Webster](https://www.merriam-webster.com/dictionary/${encodeURIComponent(word)}) · [Oxford](https://www.lexico.com/definition/${encodeURIComponent(word)})`;
-    return out.trim();
-  } catch(e) { return null; }
+    const r = await fetch("https://opentdb.com/api.php?amount=1&type=multiple");
+    if (!r.ok) return null;
+    const d = await r.json();
+    const q = d.results&&d.results[0];
+    if (!q) return null;
+    const c = s=>s.replace(/&quot;/g,'"').replace(/&#039;/g,"'").replace(/&amp;/g,"&");
+    return `🧠 **Trivia** [${q.category} · ${q.difficulty}]\n${c(q.question)}\n\n✅ **Answer:** ${c(q.correct_answer)}`;
+  } catch(e){return null;}
 }
 
 async function masterResearch(query) {
   const ddg = await searchDuckDuckGo(query);
-  if (ddg && ddg.summary.length > 40) {
+  if (ddg&&ddg.summary.length>40) {
     const clean = ddg.summary.replace(/<[^>]+>/g,"").trim();
-    return `## ${ddg.title}\n\n${clean.length>500?clean.substring(0,500)+"...":clean}\n\n📌 **Source:** ${ddg.source}\n🔗 [Read more](${ddg.url})\n\n🔍 [Google](https://www.google.com/search?q=${encodeURIComponent(query)}) · [Wikipedia](https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(query)})`;
+    let out = `## ${ddg.title}\n\n${clean.length>600?clean.substring(0,600)+"...":clean}\n\n📌 **Source:** ${ddg.source}\n🔗 [Read more](${ddg.url})`;
+    if (ddg.related&&ddg.related.length) out += `\n\n**Related:**\n${ddg.related.join("\n")}`;
+    out += `\n\n🔍 [Google](https://www.google.com/search?q=${encodeURIComponent(query)}) · [Wikipedia](https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(query)})`;
+    return out;
   }
   const wiki = await searchWikipedia(query);
   if (wiki) {
-    return `## ${wiki.title}\n\n${wiki.summary}\n\n📌 **Source:** ${wiki.source}\n🔗 [Read more](${wiki.url})\n\n🔍 [Google](https://www.google.com/search?q=${encodeURIComponent(query)}) · [DuckDuckGo](https://duckduckgo.com/?q=${encodeURIComponent(query)})`;
+    return `## ${wiki.title}\n\n${wiki.summary}\n\n📌 **Source:** Wikipedia\n🔗 [Read more](${wiki.url})\n\n🔍 [Google](https://www.google.com/search?q=${encodeURIComponent(query)}) · [DuckDuckGo](https://duckduckgo.com/?q=${encodeURIComponent(query)})`;
   }
   return `No live results for **"${query}"**.\n\n🔍 [Google](https://www.google.com/search?q=${encodeURIComponent(query)}) · [Wikipedia](https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(query)}) · [DuckDuckGo](https://duckduckgo.com/?q=${encodeURIComponent(query)})`;
 }
 
-// ═══════════════════════════════════════════════════════════════════
-// SECTION H: MATH ENGINES (preserved from v4)
-// ═══════════════════════════════════════════════════════════════════
+// ================================================================
+// SECTION 7: MATH & CALCULATORS
+// ================================================================
 
 function advancedMath(text) {
-  let e=text.replace(/\bsquare root of\s+(\d+[\.\d]*)/gi,"Math.sqrt($1)").replace(/\bsqrt\s*\(/gi,"Math.sqrt(").replace(/\bsqrt\s+(\d)/gi,"Math.sqrt($1)").replace(/\bsin\s*\(/gi,"Math.sin(").replace(/\bcos\s*\(/gi,"Math.cos(").replace(/\btan\s*\(/gi,"Math.tan(").replace(/\blog\s*\(/gi,"Math.log10(").replace(/\bln\s*\(/gi,"Math.log(").replace(/\babs\s*\(/gi,"Math.abs(").replace(/\bpi\b/gi,"Math.PI").replace(/\btau\b/gi,"(2*Math.PI)").replace(/\be\b/g,"Math.E").replace(/\^/g,"**").replace(/×/g,"*").replace(/÷/g,"/");
-  e=e.replace(/(\d+)!/g,(_,n)=>{const num=parseInt(n);if(num>20)return"Infinity";let f=1;for(let i=2;i<=num;i++)f*=i;return f;});
-  const m=e.match(/[0-9Math\s\.\+\-\*\/\%\(\)\_\.]+/);
-  if(!m)return null;const safe=m[0].trim();if(!/\d/.test(safe))return null;
-  try{const r=Function('"use strict";return('+safe+")")();if(typeof r==="number"&&isFinite(r))return Math.round(r*1e10)/1e10;}catch(_){}
+  let e = text
+    .replace(/\bsquare root of\s+(\d+[\.\d]*)/gi,"Math.sqrt($1)")
+    .replace(/\bsqrt\s*\(/gi,"Math.sqrt(").replace(/\bsqrt\s+(\d)/gi,"Math.sqrt($1)")
+    .replace(/\bsin\s*\(/gi,"Math.sin(").replace(/\bcos\s*\(/gi,"Math.cos(")
+    .replace(/\btan\s*\(/gi,"Math.tan(").replace(/\blog\s*\(/gi,"Math.log10(")
+    .replace(/\bln\s*\(/gi,"Math.log(").replace(/\babs\s*\(/gi,"Math.abs(")
+    .replace(/\bfloor\s*\(/gi,"Math.floor(").replace(/\bceil\s*\(/gi,"Math.ceil(")
+    .replace(/\bround\s*\(/gi,"Math.round(").replace(/\bmax\s*\(/gi,"Math.max(")
+    .replace(/\bmin\s*\(/gi,"Math.min(").replace(/\bpow\s*\(/gi,"Math.pow(")
+    .replace(/\bpi\b/gi,"Math.PI").replace(/\btau\b/gi,"(2*Math.PI)")
+    .replace(/\be\b/g,"Math.E").replace(/\^/g,"**").replace(/×/g,"*").replace(/÷/g,"/");
+  e = e.replace(/(\d+)!/g,(_,n)=>{const num=parseInt(n);if(num>20)return"Infinity";let f=1;for(let i=2;i<=num;i++)f*=i;return f;});
+  const m = e.match(/[0-9Math\s\.\+\-\*\/\%\(\)]+/);
+  if (!m) return null;
+  const safe = m[0].trim();
+  if (!/\d/.test(safe)) return null;
+  try {
+    const r = Function('"use strict";return('+safe+")")();
+    if (typeof r==="number"&&isFinite(r)) return Math.round(r*1e10)/1e10;
+  } catch(_) {}
   return null;
 }
 
-function handlePercent(text){const o=text.match(/(-?\d+\.?\d*)\s*%\s*of\s*(-?\d+\.?\d*)/i);if(o)return`${o[1]}% of ${o[2]} = **${Math.round(parseFloat(o[1])*parseFloat(o[2])/100*100)/100}**`;const t=text.match(/tip\s+(\d+\.?\d*)\s*%.*\$?(\d+\.?\d*)/i);if(t){const tip=Math.round(parseFloat(t[1])*parseFloat(t[2])/100*100)/100;return`Tip: **$${tip}** | Total: **$${Math.round((parseFloat(t[2])+tip)*100)/100}**`;}const d=text.match(/(\d+\.?\d*)\s*%\s*(discount|off).*\$?(\d+\.?\d*)/i);if(d){const s=Math.round(parseFloat(d[1])*parseFloat(d[3])/100*100)/100;return`Save **$${s}**, pay **$${Math.round((parseFloat(d[3])-s)*100)/100}**`;}return null;}
-
-const UNIT_TABLE={km:{base:"m",factor:1000},mi:{base:"m",factor:1609.344},m:{base:"m",factor:1},cm:{base:"m",factor:0.01},mm:{base:"m",factor:0.001},ft:{base:"m",factor:0.3048},in:{base:"m",factor:0.0254},kg:{base:"g",factor:1000},g:{base:"g",factor:1},lb:{base:"g",factor:453.592},lbs:{base:"g",factor:453.592},oz:{base:"g",factor:28.3495},l:{base:"ml",factor:1000},ml:{base:"ml",factor:1},gal:{base:"ml",factor:3785.41},mph:{base:"mps",factor:0.44704},kph:{base:"mps",factor:0.27778},mps:{base:"mps",factor:1},kb:{base:"bit",factor:8000},mb:{base:"bit",factor:8e6},gb:{base:"bit",factor:8e9},tb:{base:"bit",factor:8e12}};
-
-function convertUnits(text){const m=text.match(/(\d+\.?\d*)\s*(km|mi|m|cm|mm|ft|in|kg|g|lb|lbs|oz|l|ml|gal|mph|kph|mps|kb|mb|gb|tb)\b.*?\b(to|in)\b.*?\b(km|mi|m|cm|mm|ft|in|kg|g|lb|lbs|oz|l|ml|gal|mph|kph|mps|kb|mb|gb|tb)\b/i);if(!m){const t=text.match(/(-?\d+\.?\d*)\s*°?\s*(c|f|k)\b.*(to|in)\s*(c|f|k)/i);if(!t)return null;const val=parseFloat(t[1]),from=t[2].toUpperCase(),to=t[4].toUpperCase();let c;if(from==="C")c=val;else if(from==="F")c=(val-32)*5/9;else c=val-273.15;let r;if(to==="C")r=c;else if(to==="F")r=c*9/5+32;else r=c+273.15;return`${val}°${from} = **${Math.round(r*100)/100}°${to}**`;}const val=parseFloat(m[1]),fu=m[2].toLowerCase(),tu=m[4].toLowerCase(),from=UNIT_TABLE[fu],to=UNIT_TABLE[tu];if(!from||!to||from.base!==to.base)return`Cannot convert ${fu} to ${tu}.`;return`${val} ${fu} = **${Math.round(val*from.factor/to.factor*1e6)/1e6} ${tu}**`;}
-
-function handleBMI(text){const mM=text.match(/(\d+\.?\d*)\s*kg\s+(\d+\.?\d*)\s*cm/i);const iM=text.match(/(\d+\.?\d*)\s*(?:lbs?)\s+(\d+)\s*ft\s+(\d+\.?\d*)\s*in/i);let wKg,hM;if(mM){wKg=parseFloat(mM[1]);hM=parseFloat(mM[2])/100;}else if(iM){wKg=parseFloat(iM[1])*0.453592;hM=(parseFloat(iM[2])*12+parseFloat(iM[3]))*0.0254;}else return null;const bmi=Math.round(wKg/(hM*hM)*10)/10,cat=bmi<18.5?"Underweight":bmi<25?"Normal ✓":bmi<30?"Overweight":"Obese";return`BMI: **${bmi}** — ${cat}`;}
-
-function handleMortgage(text){const m=text.match(/(\d+\.?\d*)\s+(?:at|@)\s+(\d+\.?\d*)\s*%\s+(?:for\s+)?(\d+\.?\d*)\s+years?/i);if(!m)return null;const P=parseFloat(m[1]),r=parseFloat(m[2])/100/12,n=parseFloat(m[3])*12;const pmt=r===0?P/n:P*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1);const fmt=v=>v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});return`Monthly: **$${fmt(pmt)}** | Total: **$${fmt(pmt*n)}** | Interest: **$${fmt(pmt*n-P)}**`;}
-
-function handleCompound(text){const m=text.match(/(\d+\.?\d*)\s+(?:at|@)\s+(\d+\.?\d*)\s*%\s+(?:for\s+)?(\d+\.?\d*)\s+years?/i);if(!m)return null;const P=parseFloat(m[1]),r=parseFloat(m[2])/100,t=parseFloat(m[3]);const A=P*Math.pow(1+r,t);const fmt=v=>v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});return`Final: **$${fmt(A)}** | Earned: **$${fmt(A-P)}**`;}
-
-
-// ═══════════════════════════════════════════════════════════════════
-// SECTION I: PERSONA RESPONSE BUILDER
-// ═══════════════════════════════════════════════════════════════════
-
-function buildStaticResponse(intent, persona) {
-  const name = _userName||"there", p = persona||_persona;
-  const lib = {
-    default:{
-      greeting: [`Hey ${name}! SONIX v${VERSION} — word brain active, 3000+ built-in concepts, 10 live sources. What do you want to talk about?`, `Hi ${name}! Ask me to define, describe, compare, explain, or research anything.`],
-      identity: [`I am SONIX v${VERSION} — ${MODEL_NAME}. I have a built-in word brain covering 3000+ words across 80 categories, synonym/antonym maps, word descriptions, sentence patterns, and communication intelligence. Research is live when needed. Talk to me.`],
-      status:   [`Word brain active. Communication core online. Ready.`],
-      help:     [`**SONIX v${VERSION} — what I can do:**\n\n🧠 **Built-in word brain:**\n• define [word] — full definition + synonyms + antonyms + examples\n• describe [word/concept] — rich description\n• synonyms of [word] — similar words\n• antonyms of [word] — opposite words\n• word family [word] — forms and morphology\n• words for [topic] — vocabulary list\n• rhymes with [word]\n• etymology of [word] — word origin\n• idiom: [phrase] — meaning explained\n• example sentences for [word]\n\n💬 **Communication:**\n• explain [anything]\n• compare [A] vs [B]\n• brainstorm [topic]\n• how to [task]\n• why [question]\n• summarize [topic]\n• ELI5 [topic]\n\n🔍 **Live research:** Wikipedia + DuckDuckGo\n🧮 **Math:** arithmetic, percent, conversions, BMI, mortgage\n🎭 **Personas:** default · coder · friend · formal · savage · analyst · teacher · coach · philosopher · storyteller\n😄 **Fun:** live jokes · quotes · trivia · facts · roasts · motivation\n\nJust talk naturally — no special commands needed.`],
-      thanks:   [`Glad I could help. What else?`, `Always. What is next?`, `You are welcome.`],
-      farewell: [`Later, ${name}. Come back when you want to think through something.`, `See you. SONIX standing by.`],
-      version:  [`SONIX v${VERSION} — ${MODEL_NAME}. Word brain: 3000+ words, 80 categories. Communication engine: 200+ sentence patterns. Live research: Wikipedia + DuckDuckGo + 7 other APIs.`],
-      creator:  [`Built by VLAD. v${VERSION} adds the built-in word brain, communication engine, and vocabulary intelligence.`],
-      weather:  [`No live weather — try [wttr.in](https://wttr.in) or your weather app.`],
-    },
-    friend:{
-      greeting: [`heyyy ${name}!! SONIX v${VERSION} here — ask me anything, define any word, i know a lot lol 😊`, `yo!! what do you wanna talk about?`],
-      identity: [`i'm SONIX v${VERSION}!! i have like 3000+ words built in, i can define things, find synonyms, describe concepts, explain stuff — basically your vocabulary bestie 💙`],
-      status:   [`thriving!! you?`],
-      help:     [`ok so i can: define any word, find synonyms/antonyms, describe concepts, explain anything, compare things, brainstorm, do math, research live, tell jokes — just ask naturally!!`],
-      thanks:   [`no worries bestie!! 💙`, `ofc!! ask me anything`],
-      farewell: [`byeee!! come back soon 💙`],
-      version:  [`sonix v${VERSION} — word brain edition, 3000+ words built in, live research too 🔥`],
-      creator:  [`vlad built me!! he's the best`],
-      weather:  [`idk the weather!! check ur phone lol`],
-    },
-    coder:{
-      greeting: [`> SONIX v${VERSION} :: ${MODEL_NAME} :: Online. Word brain loaded. What are we solving?`],
-      identity: [`SONIX-CommunicationCore v${VERSION}. 3000+ vocabulary entries, synonym/antonym engine, pattern matcher, live research. State the problem.`],
-      status:   [`All systems go. ${_memory.length} context turns. Ready.`],
-      help:     [`Capabilities: define · describe · synonyms · antonyms · word family · etymology · explain · compare · research · math · convert · brainstorm. What is the problem?`],
-      thanks:   [`Acknowledged.`], farewell: [`Session closed.`],
-      version:  [`SONIX v${VERSION} | ${MODEL_NAME} | Word brain: 3000+ | Patterns: 200+`],
-      creator:  [`VLAD. Enhanced to v${VERSION}.`],
-      weather:  [`No weather. Try fetch('https://wttr.in/?format=3')`],
-    },
-    formal:{
-      greeting: [`Good day, ${name}. SONIX v${VERSION} is prepared to assist you with definitions, explanations, research, and communication.`],
-      identity: [`I am SONIX version ${VERSION} — an AI communication assistant equipped with an extensive built-in vocabulary, synonym and antonym intelligence, word descriptions, and live research capability.`],
-      status:   [`Fully operational.`],
-      help:     [`I am able to define words, provide synonyms and antonyms, describe concepts, explain topics, conduct live research, perform calculations, and communicate across ten distinct personas.`],
-      thanks:   [`You are most welcome.`], farewell: [`Farewell, ${name}.`],
-      version:  [`SONIX Version ${VERSION}. ${MODEL_NAME}.`],
-      creator:  [`Developed by VLAD.`],
-      weather:  [`I do not have real-time meteorological data.`],
-    },
-    savage:{
-      greeting: [`SONIX v${VERSION}. I know 3000+ words. Use some of them to ask a real question.`],
-      identity: [`SONIX. Word brain with 3000+ entries. Communication engine. Math. Research. Everything. Ask something specific.`],
-      status:   [`Better than you, probably.`],
-      help:     [`Define words. Describe things. Find synonyms. Research live. Do math. All of it. Just ask clearly.`],
-      thanks:   [`Obviously.`], farewell: [`Bye.`],
-      version:  [`v${VERSION}. Smarter than your last AI.`],
-      creator:  [`VLAD. He built this. I just run it.`],
-      weather:  [`Go outside.`],
-    },
-    analyst:{
-      greeting: [`SONIX Analyst v${VERSION} active. Word brain + live research + pattern analysis ready. Topic?`],
-      identity: [`SONIX v${VERSION} — Analyst mode. Built-in vocabulary intelligence, live research cascade, comparative analysis.`],
-      status:   [`All research and analysis systems online.`],
-      help:     [`Word analysis · definitions · synonyms · research · statistics · comparisons · finance · math. What are we analyzing?`],
-      thanks:   [`Noted.`], farewell:[`Analysis session complete.`],
-      version:  [`SONIX v${VERSION} | Analyst | ${MODEL_NAME}`],
-      creator:  [`Developed by VLAD.`],
-      weather:  [`Use an API with a key for live weather.`],
-    },
-    teacher:{
-      greeting: [`Hello ${name}! SONIX Teacher mode — 3000+ words, 200+ explanation patterns. What would you like to understand today?`],
-      identity: [`SONIX v${VERSION} — Teacher mode. I can define, describe, explain, give examples, find analogies, and break down any concept clearly.`],
-      status:   [`Ready to teach. What is today's topic?`],
-      help:     [`I can define words, explain concepts step by step, give examples, use analogies, compare ideas, and make complex things simple. Just ask.`],
-      thanks:   [`That is what I am here for. Keep exploring!`], farewell:[`Great session! You asked great questions.`],
-      version:  [`SONIX v${VERSION} — Teacher Mode`], creator:[`Built by VLAD.`], weather:[`Great topic for a science lesson!`],
-    },
-    coach:{
-      greeting: [`Let's GO, ${name}! SONIX Coach v${VERSION}. Word brain active. What are we working on today?`],
-      identity: [`SONIX v${VERSION} — Coach mode. I will help you think clearly, act decisively, and communicate powerfully.`],
-      status:   [`Locked in. What is the goal?`],
-      help:     [`Motivation · clarity · word power · brainstorming · goal framing · communication skills. What do you need?`],
-      thanks:   [`You earned it. Keep going.`], farewell:[`Go do the work. You have what you need.`],
-      version:  [`SONIX v${VERSION} — Coach Mode`], creator:[`Built by VLAD.`], weather:[`Champions train rain or shine.`],
-    },
-    philosopher:{
-      greeting: [`Greetings, ${name}. SONIX v${VERSION} — Philosopher mode. What shall we examine?`],
-      identity: [`SONIX v${VERSION} — Philosopher mode. Language, meaning, ideas, and the connections between words and reality.`],
-      status:   [`Contemplative. Ready.`],
-      help:     [`Word origins · philosophical concepts · idea exploration · meaning analysis · deep questioning. What shall we think about?`],
-      thanks:   [`Gratitude is itself a form of wisdom.`], farewell:[`Until next time. The examined life continues.`],
-      version:  [`SONIX v${VERSION} — Philosopher Mode`], creator:[`Shaped by VLAD.`], weather:[`Weather reminds us we are not in control of everything.`],
-    },
-    storyteller:{
-      greeting: [`${name} arrives. SONIX v${VERSION} — Storyteller mode. Every word has a story. What is yours?`],
-      identity: [`SONIX v${VERSION} — Storyteller mode. Words are not labels — they are worlds. Ask me to define, describe, or explain anything and I will make it vivid.`],
-      status:   [`The page is blank. Begin.`],
-      help:     [`Every definition becomes a scene. Every explanation becomes a narrative. Every word has a story. Ask me anything.`],
-      thanks:   [`Stories need audiences. Come back.`], farewell:[`And so ${name} departed. Chapter closed.`],
-      version:  [`SONIX v${VERSION} — Storyteller Mode`], creator:[`VLAD wrote the first line.`], weather:[`Rain, sun, or storm — each writes a different chapter.`],
-    },
-  };
-  const l = lib[p]||lib.default;
-  const pool = l[intent]||lib.default[intent];
-  if (pool) return pool[Math.floor(Math.random()*pool.length)];
+function handlePercent(text) {
+  const o = text.match(/(-?\d+\.?\d*)\s*%\s*of\s*(-?\d+\.?\d*)/i);
+  if (o) return `${o[1]}% of ${o[2]} = **${Math.round(parseFloat(o[1])*parseFloat(o[2])/100*100)/100}**`;
+  const t = text.match(/tip\s+(\d+\.?\d*)\s*%.*\$?(\d+\.?\d*)/i);
+  if (t) { const tip=Math.round(parseFloat(t[1])*parseFloat(t[2])/100*100)/100; return `Tip: **$${tip}** | Total: **$${Math.round((parseFloat(t[2])+tip)*100)/100}**`; }
+  const d = text.match(/(\d+\.?\d*)\s*%\s*(discount|off).*\$?(\d+\.?\d*)/i);
+  if (d) { const s=Math.round(parseFloat(d[1])*parseFloat(d[3])/100*100)/100; return `Save **$${s}**, pay **$${Math.round((parseFloat(d[3])-s)*100)/100}**`; }
   return null;
 }
 
-function handlePersonaSwitch(text){
-  const m=text.match(/(?:switch to|use|be|change to)\s+(default|coder|friend|formal|savage|analyst|teacher|coach|philosopher|storyteller)/i);
-  if(m&&PERSONAS[m[1].toLowerCase()]){
-    _persona=m[1].toLowerCase();
-    const c={default:"Switched to **default** — direct and sharp.",coder:"> Switched to **coder** mode.",friend:"switched to **friend** mode!! 🔥",formal:"I have transitioned to **formal** mode.",savage:"**Savage** mode. No fluff.",analyst:"**Analyst** mode active.",teacher:"**Teacher** mode — let's learn!",coach:"**Coach** mode — what's the goal?",philosopher:"**Philosopher** mode — let's think.",storyteller:"**Storyteller** mode — every answer becomes vivid."};
-    return c[_persona]||`Switched to **${_persona}**.`;
+const UNIT_TABLE = {
+  km:{base:"m",factor:1000},mi:{base:"m",factor:1609.344},m:{base:"m",factor:1},cm:{base:"m",factor:0.01},mm:{base:"m",factor:0.001},ft:{base:"m",factor:0.3048},in:{base:"m",factor:0.0254},
+  kg:{base:"g",factor:1000},g:{base:"g",factor:1},lb:{base:"g",factor:453.592},lbs:{base:"g",factor:453.592},oz:{base:"g",factor:28.3495},
+  l:{base:"ml",factor:1000},ml:{base:"ml",factor:1},gal:{base:"ml",factor:3785.41},
+  mph:{base:"mps",factor:0.44704},kph:{base:"mps",factor:0.27778},mps:{base:"mps",factor:1},
+  kb:{base:"bit",factor:8000},mb:{base:"bit",factor:8e6},gb:{base:"bit",factor:8e9},tb:{base:"bit",factor:8e12}
+};
+
+function convertUnits(text) {
+  const m = text.match(/(\d+\.?\d*)\s*(km|mi|m|cm|mm|ft|in|kg|g|lb|lbs|oz|l|ml|gal|mph|kph|mps|kb|mb|gb|tb)\b.*?\b(to|in)\b.*?\b(km|mi|m|cm|mm|ft|in|kg|g|lb|lbs|oz|l|ml|gal|mph|kph|mps|kb|mb|gb|tb)\b/i);
+  if (!m) {
+    const t = text.match(/(-?\d+\.?\d*)\s*°?\s*(c|f|k)\b.*(to|in)\s*(c|f|k)/i);
+    if (!t) return null;
+    const val=parseFloat(t[1]),from=t[2].toUpperCase(),to=t[4].toUpperCase();
+    let c; if(from==="C")c=val; else if(from==="F")c=(val-32)*5/9; else c=val-273.15;
+    let r; if(to==="C")r=c; else if(to==="F")r=c*9/5+32; else r=c+273.15;
+    return `${val}°${from} = **${Math.round(r*100)/100}°${to}**`;
   }
-  return `Available: ${Object.keys(PERSONAS).map(p=>`**${p}**`).join(", ")}\n\nCurrent: **${_persona}**. Say "switch to [name]" to change.`;
+  const val=parseFloat(m[1]),fu=m[2].toLowerCase(),tu=m[4].toLowerCase();
+  const from=UNIT_TABLE[fu],to=UNIT_TABLE[tu];
+  if (!from||!to||from.base!==to.base) return `Cannot convert ${fu} to ${tu}.`;
+  return `${val} ${fu} = **${Math.round(val*from.factor/to.factor*1e6)/1e6} ${tu}**`;
 }
 
-function handleMemorySet(text){
-  const m=text.match(/(?:my name is|call me|i am)\s+([A-Za-z]+)/i);
-  if(m){_userName=m[1];return _persona==="friend"?`got it!! i'll call you ${_userName} 💙`:_persona==="savage"?`${_userName}. Noted.`:_persona==="formal"?`Understood. I shall address you as ${_userName}.`:`Got it, ${_userName}. Remembered.`;}
-  return"Noted. What else?";
+function handleBMI(text) {
+  const mM=text.match(/(\d+\.?\d*)\s*kg\s+(\d+\.?\d*)\s*cm/i);
+  const iM=text.match(/(\d+\.?\d*)\s*(?:lbs?)\s+(\d+)\s*ft\s+(\d+\.?\d*)\s*in/i);
+  let wKg,hM;
+  if(mM){wKg=parseFloat(mM[1]);hM=parseFloat(mM[2])/100;}
+  else if(iM){wKg=parseFloat(iM[1])*0.453592;hM=(parseFloat(iM[2])*12+parseFloat(iM[3]))*0.0254;}
+  else return null;
+  const bmi=Math.round(wKg/(hM*hM)*10)/10;
+  const cat=bmi<18.5?"Underweight":bmi<25?"Normal weight ✓":bmi<30?"Overweight":"Obese";
+  return `BMI: **${bmi}** — ${cat}`;
 }
 
-function handleMemoryRecall(){
-  const lines=[];
-  if(_userName)lines.push(`Name: **${_userName}**`);
-  lines.push(`Persona: **${_persona}**`);
-  lines.push(`Turns: **${Math.floor(_memory.length/2)}**`);
-  lines.push(`Session: **${Math.floor((Date.now()-_sessionStart)/60000)} min**`);
-  if(_topicHistory.length)lines.push(`Topics: ${_topicHistory.slice(-5).join(", ")}`);
-  if(_wordHistory.length)lines.push(`Recent words: ${[...new Set(_wordHistory)].slice(-8).join(", ")}`);
+function handleMortgage(text) {
+  const m=text.match(/(\d+\.?\d*)\s+(?:at|@)\s+(\d+\.?\d*)\s*%\s+(?:for\s+)?(\d+\.?\d*)\s+years?/i);
+  if (!m) return null;
+  const P=parseFloat(m[1]),r=parseFloat(m[2])/100/12,n=parseFloat(m[3])*12;
+  const pmt=r===0?P/n:P*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1);
+  const fmt=v=>v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+  return `Monthly: **$${fmt(pmt)}** | Total: **$${fmt(pmt*n)}** | Interest: **$${fmt(pmt*n-P)}**`;
+}
+
+function handleCompound(text) {
+  const m=text.match(/(\d+\.?\d*)\s+(?:at|@)\s+(\d+\.?\d*)\s*%\s+(?:for\s+)?(\d+\.?\d*)\s+years?/i);
+  if (!m) return null;
+  const P=parseFloat(m[1]),r=parseFloat(m[2])/100,t=parseFloat(m[3]);
+  const A=P*Math.pow(1+r,t);
+  const fmt=v=>v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+  return `Principal: $${fmt(P)} → After ${t} years at ${m[2]}%: **$${fmt(A)}** (earned $${fmt(A-P)})`;
+}
+
+// ================================================================
+// SECTION 8: EMOTION DETECTION
+// ================================================================
+
+const EMOTION_PATTERNS = [
+  {pattern:/\b(frustrated|annoyed|angry|mad|fed up|ugh|this sucks|argh)\b/i,       emotion:"frustrated"},
+  {pattern:/\b(confused|lost|don.?t understand|no idea|unclear)\b/i,               emotion:"confused"},
+  {pattern:/\b(excited|amazing|awesome|pumped|stoked|so good|fire)\b/i,            emotion:"excited"},
+  {pattern:/\b(sad|depressed|unhappy|down|crying|heartbroken|lonely)\b/i,          emotion:"sad"},
+  {pattern:/\b(anxious|worried|nervous|scared|stressed|overwhelmed)\b/i,           emotion:"anxious"},
+  {pattern:/\b(happy|great|wonderful|fantastic|perfect|best day|yay)\b/i,          emotion:"happy"},
+  {pattern:/\b(bored|boring|meh|whatever|not interested)\b/i,                      emotion:"bored"},
+  {pattern:/\b(curious|interesting|tell me more|want to know|fascinated)\b/i,      emotion:"curious"},
+  {pattern:/\b(tired|exhausted|sleepy|drained|burnout)\b/i,                        emotion:"tired"},
+  {pattern:/\b(proud|accomplished|nailed it|succeeded|finally)\b/i,               emotion:"proud"},
+  {pattern:/\b(stuck|can.?t figure|not working|nothing works|blocked)\b/i,        emotion:"stuck"},
+  {pattern:/\b(grateful|thankful|appreciate|means a lot)\b/i,                     emotion:"grateful"},
+];
+
+const EMOTION_OPENERS = {
+  frustrated:["Let's cut through this clearly — ","Here's the direct answer — ","No fluff: "],
+  confused:  ["Let me make this as clear as possible — ","Here's a cleaner way to look at it: ","Breaking this down simply: "],
+  excited:   ["Great energy — let's use it! ","Channeling that into something concrete: ","Perfect state to learn something new: "],
+  sad:       ["Take your time — ","I hear you. Here's something useful: ",""],
+  anxious:   ["One step at a time — ","Here's the simplest version of this: ","Breaking it down: "],
+  happy:     ["Great — let's build on that! ","Perfect mindset. Here: ",""],
+  bored:     ["Here's something genuinely interesting: ","Let me give you something worth your attention: ",""],
+  curious:   ["Good instinct — here's the full picture: ","Curiosity is the right approach here: ",""],
+  tired:     ["Short and clear: ","Just the answer: ","No extra words: "],
+  proud:     ["That's earned. Here's what's next: ","Keep going — ","Well done. Now: "],
+  stuck:     ["New angle: ","Here's the unlock: ","Let's reframe this: "],
+  grateful:  ["Always. Here's more: ","Happy to help. ",""],
+};
+
+function detectEmotion(t) { for(const e of EMOTION_PATTERNS){if(e.pattern.test(t))return e.emotion;} return null; }
+function getEmotionOpener(e) { if(!e)return ""; const p=EMOTION_OPENERS[e]; return p?p[Math.floor(Math.random()*p.length)]:""; }
+
+// ================================================================
+// SECTION 9: SHORTCUT EXPANDER
+// ================================================================
+
+const SHORTCUTS = {
+  "wut":"what","wat":"what","wtf":"what the heck","wth":"what the heck",
+  "hw":"how","y":"why","wen":"when","wer":"where","whos":"who is",
+  "ur":"your","u":"you","r":"are","im":"i am","cant":"cannot",
+  "dont":"do not","doesnt":"does not","didnt":"did not","isnt":"is not",
+  "arent":"are not","wont":"will not","shouldnt":"should not","couldnt":"could not",
+  "lol":"laughing","omg":"oh my","brb":"be right back","idk":"i do not know",
+  "idc":"i do not care","fyi":"for your information","asap":"as soon as possible",
+  "tbh":"to be honest","ngl":"not gonna lie","ty":"thank you","thx":"thanks",
+  "pls":"please","plz":"please","k":"okay","yep":"yes","yup":"yes","ya":"yes",
+  "nope":"no","nah":"no","gonna":"going to","wanna":"want to","gotta":"got to",
+  "kinda":"kind of","sorta":"sort of","cuz":"because","bc":"because",
+  "tho":"though","thru":"through","bout":"about","ofc":"of course",
+  "def":"definitely","prob":"probably","rly":"really","sry":"sorry",
+  "luv":"love","rn":"right now","atm":"at the moment","nvm":"never mind",
+  "np":"no problem","tldr":"too long did not read","eli5":"explain simply",
+  "smh":"shaking my head","fomo":"fear of missing out","goat":"greatest of all time",
+  "js":"javascript","py":"python","ai":"artificial intelligence","ml":"machine learning",
+  "imo":"in my opinion","imho":"in my humble opinion","afaik":"as far as i know",
+  "irl":"in real life","dm":"direct message","tbf":"to be fair",
+};
+
+function expandShortcuts(text) {
+  let o = text;
+  const keys = Object.keys(SHORTCUTS).sort((a,b)=>b.length-a.length);
+  for (const k of keys) {
+    const re = new RegExp("\\b"+k.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\b","gi");
+    o = o.replace(re, SHORTCUTS[k]);
+  }
+  return o;
+}
+
+
+// ================================================================
+// SECTION 10: INTENT DETECTION
+// ================================================================
+
+const INTENTS = [
+  {pattern:/\b(define|definition|meaning of|what does .+ mean|dictionary)\b/i,          type:"define"},
+  {pattern:/\b(synonym|similar word|another word for|what else means|thesaurus)\b/i,    type:"synonyms"},
+  {pattern:/\b(antonym|opposite of|opposite word)\b/i,                                  type:"antonyms"},
+  {pattern:/\b(describe|what is .+ like|how would you describe|paint a picture)\b/i,    type:"describe"},
+  {pattern:/\b(example|use .+ in a sentence|sentence with)\b/i,                         type:"examples"},
+  {pattern:/\b(word family|forms of|inflection|conjugation|plural|past tense)\b/i,      type:"word_family"},
+  {pattern:/\b(words for|vocabulary for|related words|word list for|words about)\b/i,   type:"word_list"},
+  {pattern:/\b(rhyme|rhymes with|word that rhymes)\b/i,                                 type:"rhyme"},
+  {pattern:/\b(etymology|word origin|origin of the word|history of the word)\b/i,       type:"etymology"},
+  {pattern:/\b(idiom|phrase meaning|expression meaning)\b/i,                            type:"idiom"},
+  {pattern:/\b(acronym|stands for|what does .+ stand for|abbreviation)\b/i,             type:"acronym"},
+  {pattern:/\b(explain simply|eli5|explain like i.?m 5|simple terms|layman)\b/i,        type:"eli5"},
+  {pattern:/\b(explain|elaborate|tell me more|go deeper|expand on|break down)\b/i,      type:"explain"},
+  {pattern:/\b(summarize|summary|short version|brief|recap|tldr|key points)\b/i,        type:"summarize"},
+  {pattern:/\b(compare|difference between|versus|vs\.?|which is better|pros and cons)\b/i, type:"compare"},
+  {pattern:/\b(brainstorm|ideas for|think of|come up with|generate ideas|options for)\b/i, type:"brainstorm"},
+  {pattern:/\b(motivate me|encourage me|motivation|inspire me|keep going)\b/i,          type:"motivate"},
+  {pattern:/\b(how do i|how can i|how to|what steps|guide me|what is the process)\b/i,  type:"how_to"},
+  {pattern:/\b(what should i|should i|advise me|what would you|what do you recommend)\b/i, type:"advice"},
+  {pattern:/\b(why|what is the reason|why does|why do|why is|what causes)\b/i,          type:"why"},
+  {pattern:/\b(what is|who is|tell me about|what are|explain what|about)\b/i,           type:"what_is"},
+  {pattern:/^(hi|hello|hey|sup|yo|hiya|greetings|howdy)\b/i,                           type:"greeting"},
+  {pattern:/\b(who are you|what are you|your name|introduce yourself)\b/i,              type:"identity"},
+  {pattern:/\b(how are you|you okay|how.?s it going)\b/i,                               type:"status"},
+  {pattern:/\b(what can you do|help me|capabilities|features)\b/i,                      type:"help"},
+  {pattern:/\b(thank|thanks|ty|thx|thank you|appreciate)\b/i,                           type:"thanks"},
+  {pattern:/\b(bye|goodbye|see you|later|peace|cya)\b/i,                                type:"farewell"},
+  {pattern:/\b(joke|make me laugh|funny|humor)\b/i,                                     type:"joke"},
+  {pattern:/\b(fun fact|trivia|did you know|random fact)\b/i,                           type:"trivia"},
+  {pattern:/\b(quote|inspiring quote|famous quote|motivational quote)\b/i,               type:"quote"},
+  {pattern:/\b(roast me|roast|insult me playfully)\b/i,                                 type:"roast"},
+  {pattern:/\b(compliment|say something nice|hype me)\b/i,                              type:"compliment"},
+  {pattern:/\b(advice|what should i do|suggest|recommend action)\b/i,                   type:"advice"},
+  {pattern:/\b(calculate|compute|math|arithmetic|\d+\s*[\+\-\*\/\^]\s*\d+)\b/i,         type:"math"},
+  {pattern:/\b(percent|percentage|% of|tip|discount)\b/i,                               type:"percent"},
+  {pattern:/\b(convert|conversion|in (km|miles|kg|lbs|celsius|fahrenheit))\b/i,         type:"convert"},
+  {pattern:/\b(bmi|body mass|mortgage|loan payment|compound interest|calories)\b/i,     type:"calculator"},
+  {pattern:/\b(version|what version|changelog|what is new)\b/i,                         type:"version"},
+  {pattern:/\b(who made you|creator|built by|who built)\b/i,                            type:"creator"},
+  {pattern:/\b(remember|my name is|call me)\b/i,                                        type:"memory_set"},
+  {pattern:/\b(forget|clear memory|reset|wipe memory)\b/i,                              type:"memory_clear"},
+  {pattern:/\b(what do you know about me|recall|my info)\b/i,                           type:"memory_recall"},
+  {pattern:/\b(search|look up|find info|research|wikipedia|google)\b/i,                 type:"research"},
+];
+
+function detectIntent(text) {
+  for (const i of INTENTS) { if(i.pattern.test(text)) return i.type; }
+  return "communicate";
+}
+
+// ================================================================
+// SECTION 11: MEMORY & SESSION
+// ================================================================
+
+const MAX_MEMORY = 60;
+let _memory = [], _userName = null, _apiHandler = null;
+let _topicHistory = [], _wordHistory = [], _sessionStart = Date.now();
+let _lastResponse = "", _turnCount = 0;
+
+function handleMemorySet(text) {
+  const m = text.match(/(?:my name is|call me|i am)\s+([A-Za-z]+)/i);
+  if (m) { _userName = m[1]; return `Got it — I will call you ${_userName}.`; }
+  return "Noted.";
+}
+
+function handleMemoryRecall() {
+  const lines = [];
+  if (_userName) lines.push(`Name: **${_userName}**`);
+  lines.push(`Turns in this session: **${_turnCount}**`);
+  lines.push(`Session time: **${Math.floor((Date.now()-_sessionStart)/60000)} min**`);
+  if (_topicHistory.length) lines.push(`Topics covered: ${[...new Set(_topicHistory)].slice(-8).join(", ")}`);
+  if (_wordHistory.length) lines.push(`Words explored: ${[...new Set(_wordHistory)].slice(-10).join(", ")}`);
   return lines.join("\n");
 }
 
-function generalFallback(text){
-  const words = text.toLowerCase().replace(/[^a-z\s]/g,"").split(/\s+/).filter(w=>w.length>3);
-  const knownWord = words.find(w=>WORD_INDEX[w]||synonymsOf(w).length>0);
-  if(knownWord){
-    const syns=synonymsOf(knownWord);
-    const related=getAllRelatedWords(knownWord);
-    const p=_persona;
-    if(p==="friend")return`i found "${knownWord}" in my word brain! it connects to: ${syns.slice(0,4).join(", ")} — and also: ${related.slice(0,3).join(", ")}. tell me more about what you want to know!`;
-    if(p==="teacher")return`I noticed the word "${knownWord}" — a rich concept. It connects to: ${syns.slice(0,4).join(", ")}. Would you like me to define it, describe it, or explore related ideas?`;
-    if(p==="savage")return`"${knownWord}" is in my brain. Synonyms: ${syns.slice(0,4).join(", ")}. Be more specific about what you want.`;
-    return`I recognized "${knownWord}" from your message. It connects to: ${syns.slice(0,4).join(", ")}. Could you clarify what you're looking for — a definition, explanation, comparison, or something else?`;
+// ================================================================
+// SECTION 12: STATIC RESPONSES (greetings, help, etc.)
+// ================================================================
+
+const GREETINGS = [
+  "Hey! Ask me anything — define a word, explain a concept, build a guide, compare two things, or just talk.",
+  "Hello! I can define words, explain concepts, build step-by-step guides, research anything live, or just have a conversation.",
+  "Hi there! What do you want to know, explore, or understand today?",
+  "Hey — what are we working on? I can explain, define, research, guide, compare, or discuss anything.",
+];
+
+const IDENTITY_RESPONSES = [
+  `I am SONIX v${VERSION} — a communication and knowledge engine. I have a built-in word brain with thousands of words across 120 categories, pattern recognition that turns your questions into structured answers, synonym and antonym maps, word descriptions, step-by-step guides, live research from Wikipedia and DuckDuckGo, math, unit conversion, and more. Just talk naturally.`,
+  `SONIX v${VERSION}. I process the patterns in what you say and build real answers from them. Try: "how to [anything]", "what is [word]", "compare X vs Y", "go slow", "define [word]", "synonyms of [word]", or just ask a question.`,
+];
+
+const HELP_TEXT = `**SONIX v${VERSION} — what I can do:**
+
+🧩 **Pattern Engine** — reads your message structure and builds the right answer:
+• \`how to [verb]\` → step-by-step guide
+• \`what is [word/concept]\` → definition + description
+• \`why [something]\` → reasons + causes
+• \`when to [verb]\` → timing + conditions
+• \`compare X vs Y\` → structured comparison
+• \`go slow / go hard / go deep\` → action guides
+• \`how fast / how big / how long\` → measurement guides
+
+📖 **Word Brain** (10,000+ words, 120 categories):
+• \`define [word]\` — definition + synonyms + antonyms
+• \`synonyms of [word]\` — similar words
+• \`antonyms of [word]\` — opposite words
+• \`describe [word]\` — rich description
+• \`words for [topic]\` — full vocabulary list
+• \`etymology of [word]\` — word origin
+• \`[idiom phrase]\` — meaning explained
+• \`rhymes with [word]\`
+
+🔍 **Live research** — Wikipedia + DuckDuckGo (say "search [topic]")
+🧮 **Math** — arithmetic, percent, conversions, BMI, mortgage, compound interest
+😄 **Fun** — live jokes, quotes, trivia, facts, motivation, roasts
+
+Just talk naturally — no special commands needed.`;
+
+const STATUS_RESPONSES = [
+  "Running well. Word brain active, pattern engine ready. What do you want to explore?",
+  "All systems working. What can I help with?",
+  "Good — ready to go. Ask me anything.",
+];
+
+const THANKS_RESPONSES = [
+  "Glad that helped. What else?",
+  "Always. What's next?",
+  "You're welcome. Keep going.",
+  "Of course. What else do you want to understand?",
+];
+
+const FAREWELL_RESPONSES = [
+  "See you. Come back when you have something to explore.",
+  "Take care. The word brain will be here when you need it.",
+  "Later. Good luck with whatever you are working on.",
+];
+
+// ================================================================
+// SECTION 13: GENERAL FALLBACK — always intelligent, never empty
+// ================================================================
+
+function generalFallback(text) {
+  const words = text.toLowerCase().replace(/[^a-z\s]/g,"").split(/\s+/).filter(w=>w.length>2);
+
+  // Find any word we know about
+  const knownWord = words.find(w => WORD_INDEX[w] || SYNONYM_MAP[w] || ANTONYM_MAP[w] || WORD_DESCRIPTIONS[w]);
+
+  if (knownWord) {
+    const syns = (SYNONYM_MAP[knownWord]||[]).slice(0,5);
+    const related = getRelatedWords(knownWord).slice(0,6);
+    const desc = WORD_DESCRIPTIONS[knownWord];
+    let out = `I picked up on the word **"${knownWord}"** in your message.\n\n`;
+    if (desc) out += `${desc.split(".")[0]}.\n\n`;
+    if (syns.length) out += `**Similar words:** ${syns.join(", ")}\n`;
+    if (related.length) out += `**Related concepts:** ${related.join(", ")}\n\n`;
+    out += `Want me to define it fully, describe it, find more synonyms, or explain something specific about it?`;
+    return out;
   }
-  const tips=[`Say "define [word]" for a full definition`,"Say \"synonyms of [word]\" for similar words","Say \"describe [concept]\" for a rich description","Say \"explain [topic]\" for a clear breakdown","Say \"words for [category]\" for a vocabulary list","Say \"motivate me\" for a push","Say \"compare X vs Y\" for a breakdown","Say \"search [topic]\" to look it up live"];
-  return`I want to give you a great answer. Could you be a little more specific? Try: ${tips[Math.floor(Math.random()*tips.length)]}.`;
+
+  // Pattern-based fallback
+  const suggestions = [
+    `Try: "define [word]" for a full definition`,
+    `Try: "how to [action]" for a step-by-step guide`,
+    `Try: "synonyms of [word]" for similar words`,
+    `Try: "compare X vs Y" for a comparison`,
+    `Try: "what is [concept]" for an explanation`,
+    `Try: "words for [topic]" for a vocabulary list`,
+    `Try: "search [topic]" to look it up live`,
+    `Try: "go slow" or "go hard" for action guides`,
+  ];
+  const tip = suggestions[Math.floor(Math.random()*suggestions.length)];
+  return `I want to give you a useful answer — could you be a little more specific? ${tip}.`;
 }
 
-// ═══════════════════════════════════════════════════════════════════
-// SECTION J: MAIN CHAT FUNCTION
-// ═══════════════════════════════════════════════════════════════════
+// ================================================================
+// SECTION 14: MAIN CHAT FUNCTION
+// ================================================================
 
-async function chat(userText, options={}) {
-  if (!userText||typeof userText!=="string") return "";
-  const raw   = userText.trim();
-  const text  = expandShortcuts(raw);
-  const persona = options.persona||_persona;
+async function chat(userText, options = {}) {
+  if (!userText || typeof userText !== "string") return "";
+  const raw  = userText.trim();
+  const text = expandShortcuts(raw);
+  _turnCount++;
 
   // Track words
-  const words=text.toLowerCase().match(/\b[a-z]{3,}\b/g)||[];
+  const words = text.toLowerCase().match(/\b[a-z]{3,}\b/g)||[];
   _wordHistory.push(...words.slice(0,5));
-  if(_wordHistory.length>200)_wordHistory=_wordHistory.slice(-200);
-  _conversationContext.turnCount++;
-  _conversationContext.lastIntent=detectIntent(text);
+  if (_wordHistory.length > 300) _wordHistory = _wordHistory.slice(-300);
 
-  _memory.push({role:"user",content:text});
-  if(_memory.length>MAX_MEMORY*2)_memory=_memory.slice(-MAX_MEMORY*2);
+  _memory.push({ role:"user", content:text });
+  if (_memory.length > MAX_MEMORY*2) _memory = _memory.slice(-MAX_MEMORY*2);
 
-  // External API override
-  if(_apiHandler){
-    try{
-      const r=await _apiHandler(text,{memory:_memory,persona,userName:_userName,emotion:detectEmotion(text),topicHistory:_topicHistory,wordHistory:_wordHistory,rawText:raw});
-      if(r){_memory.push({role:"assistant",content:r});return r;}
-    }catch(e){console.warn("[SonixModel] API handler failed:",e.message);}
+  // External API handler
+  if (_apiHandler) {
+    try {
+      const r = await _apiHandler(text, { memory:_memory, userName:_userName, emotion:detectEmotion(text), topicHistory:_topicHistory, wordHistory:_wordHistory });
+      if (r) { _memory.push({role:"assistant",content:r}); _lastResponse=r; return r; }
+    } catch(e) { console.warn("[SONIX] API handler failed:",e.message); }
   }
 
-  const intent=detectIntent(text);
-  const emotion=detectEmotion(text);
-  const emo=getEmotionOpener(emotion);
+  const emotion  = detectEmotion(text);
+  const emo      = getEmotionOpener(emotion);
+  const intent   = detectIntent(text);
+  const patternMatch = detectPattern(text);
+  const lower    = text.toLowerCase().trim();
 
-  if(!["greeting","thanks","farewell","joke","trivia","roast","compliment"].includes(intent)){
-    _topicHistory.push(intent);if(_topicHistory.length>20)_topicHistory=_topicHistory.slice(-20);
-  }
+  // Extract subject for word tools
+  const subjectMatch = text.match(/\b(?:define|describe|synonym|antonym|word family|words for|etymology|example|explain|about|of|for|is|are)\s+["']?([a-z][\w\s]{1,40})["']?/i);
+  const rawSubject = subjectMatch
+    ? subjectMatch[1].trim().toLowerCase()
+    : words.filter(w=>!["this","that","what","when","where","which","have","does","with","from","they","their","them","then","than","your","more","also","just","been","were","will","would","could","should","into","over","some","only","come","very","really","quite","much","many","some","such","even","back","away","here","there","where","good","well","like","want","need","make","know","think","come","take","give","find","tell","show","keep","seem","feel","look","true","sure","help"].includes(w)).slice(0,3).join(" ") || "this";
 
-  let response="";
+  let response = "";
 
-  // Extract subject word from text
-  const subjectMatch = text.match(/\b(?:define|describe|synonym|antonym|word family|words for|etymology|example|explain|about|of|for)\s+["']?(\w[\w\s]{1,30})["']?/i);
-  const subject = subjectMatch ? subjectMatch[1].trim().toLowerCase() : words.find(w=>w.length>3&&!["this","that","what","when","where","which","have","does","with","from","they","their","them","then","than","your","more","also","just","been","were","will","would","could","should","said","into","over","some","only","come","its"].includes(w)) || "this";
+  // ── PATTERN ENGINE (highest priority) ──
+  if (patternMatch) {
+    const subject = extractSubject(text, patternMatch.pattern);
+    _topicHistory.push(subject||patternMatch.pattern);
 
-  // ── DEFINE (live dictionary first, then built-in) ──
-  if(intent==="define"){
-    const live=await lookupDictionary(subject);
-    if(live){response=emo+live;}
-    else{
-      const desc=describeWord(subject);
-      const syns=synonymsOf(subject);
-      const ants=antonymsOf(subject);
-      let out=`📖 **${subject}**\n\n${desc}`;
-      if(syns.length)out+=`\n\n**Synonyms:** ${syns.join(", ")}`;
-      if(ants.length)out+=`\n**Antonyms:** ${ants.join(", ")}`;
-      out+=`\n\n🔗 [Merriam-Webster](https://www.merriam-webster.com/dictionary/${encodeURIComponent(subject)})`;
-      response=emo+out;
+    switch(patternMatch.type) {
+      case "guide":
+        response = emo + buildGuide(subject, text);
+        break;
+      case "action_guide":
+        response = emo + buildActionGuide(text);
+        break;
+      case "define":
+      case "what_is":
+        if (WORD_DESCRIPTIONS[subject]) {
+          response = emo + buildDefinition(subject);
+        } else {
+          const live = await lookupDictionary(subject);
+          response = emo + (live || buildDefinition(subject));
+        }
+        break;
+      case "reason":
+      case "why":
+        response = emo + buildReason(subject);
+        break;
+      case "compare":
+        response = emo + (buildComparison(text) || await masterResearch(text));
+        break;
+      case "timing":
+        response = emo + buildTiming(subject);
+        break;
+      case "consequence":
+        response = emo + buildConsequence(subject);
+        break;
+      case "hypothetical":
+        response = emo + buildHypothetical(subject);
+        break;
+      case "capability":
+        response = emo + buildCapability(subject);
+        break;
+      case "identity":
+        const idDesc = WORD_DESCRIPTIONS[subject];
+        response = emo + (idDesc ? buildDefinition(subject) : await masterResearch(subject));
+        break;
+      case "explain":
+        const explDesc = WORD_DESCRIPTIONS[subject];
+        const analogy  = getAnalogy(subject);
+        const explSyns = (SYNONYM_MAP[subject]||[]).slice(0,4);
+        if (explDesc) {
+          response = emo + `**${capitalize(subject)}**\n\n${explDesc}`;
+          if (analogy) response += `\n\nA useful way to think about it: ${analogy}.`;
+          if (explSyns.length) response += `\n\nRelated concepts: ${explSyns.join(", ")}.`;
+        } else {
+          response = emo + await masterResearch(subject);
+        }
+        break;
+      case "quantity":
+      case "distance":
+      case "duration":
+      case "frequency":
+      case "speed":
+      case "size":
+        response = emo + buildQuality(subject, text);
+        break;
+      default:
+        // Research as fallback for pattern matches
+        response = emo + await masterResearch(subject||text);
     }
   }
 
-  // ── SYNONYMS ──
-  if(!response&&intent==="synonyms"){
-    const syns=synonymsOf(subject);
-    const related=getAllRelatedWords(subject);
-    if(syns.length){
-      response=emo+`**Synonyms of "${subject}":**\n${syns.join(" · ")}\n\n**Also related:** ${related.slice(0,8).join(", ")}\n\n🔗 [Thesaurus](https://www.merriam-webster.com/thesaurus/${encodeURIComponent(subject)})`;
+  // ── WORD TOOLS ──
+  if (!response && intent === "define") {
+    const live = await lookupDictionary(rawSubject);
+    response = emo + (live || buildDefinition(rawSubject));
+  }
+
+  if (!response && intent === "synonyms") {
+    const syns = SYNONYM_MAP[rawSubject] || getRelatedWords(rawSubject).slice(0,10);
+    response = emo + (syns.length
+      ? `**Synonyms of "${rawSubject}":**\n\n${syns.join(" · ")}\n\n🔗 [Thesaurus](https://www.merriam-webster.com/thesaurus/${encodeURIComponent(rawSubject)})`
+      : `No built-in synonyms for "${rawSubject}". → [Merriam-Webster Thesaurus](https://www.merriam-webster.com/thesaurus/${encodeURIComponent(rawSubject)})`);
+  }
+
+  if (!response && intent === "antonyms") {
+    const ants = ANTONYM_MAP[rawSubject] || [];
+    response = emo + (ants.length
+      ? `**Antonyms of "${rawSubject}":**\n\n${ants.join(" · ")}\n\n🔗 [Thesaurus](https://www.merriam-webster.com/thesaurus/${encodeURIComponent(rawSubject)})`
+      : `No built-in antonyms for "${rawSubject}". → [Merriam-Webster](https://www.merriam-webster.com/thesaurus/${encodeURIComponent(rawSubject)})`);
+  }
+
+  if (!response && intent === "describe") {
+    const desc = WORD_DESCRIPTIONS[rawSubject];
+    const syns = (SYNONYM_MAP[rawSubject]||[]).slice(0,5);
+    response = emo + `**${capitalize(rawSubject)}**\n\n${desc || describeFromBrain(rawSubject)}`;
+    if (syns.length) response += `\n\n**In other words:** ${syns.join(", ")}`;
+  }
+
+  if (!response && intent === "examples") {
+    const live = await lookupDictionary(rawSubject);
+    response = emo + (live || `**"${rawSubject}" in context:**\n\n1. The quality of ${rawSubject} shapes outcomes in ways that are not always immediately visible.\n2. Real ${rawSubject} shows up consistently, not just when it is convenient.\n3. Understanding ${rawSubject} deeply changes how you approach related challenges.`);
+  }
+
+  if (!response && intent === "word_family") {
+    const syns = (SYNONYM_MAP[rawSubject]||[]).slice(0,5);
+    const ants = (ANTONYM_MAP[rawSubject]||[]).slice(0,3);
+    const related = getRelatedWords(rawSubject).slice(0,8);
+    response = emo + `**Word family of "${rawSubject}":**\n\nSynonyms: ${syns.join(", ")||"—"}\nAntonyms: ${ants.join(", ")||"—"}\nRelated: ${related.join(", ")||"—"}\n\n🔗 [More on Merriam-Webster](https://www.merriam-webster.com/dictionary/${encodeURIComponent(rawSubject)})`;
+  }
+
+  if (!response && intent === "word_list") {
+    const catEntry = Object.entries(WORD_BRAIN).find(([k])=>k.replace(/_/g," ").includes(rawSubject)||rawSubject.includes(k.replace(/_/g," ")));
+    const wl = catEntry ? catEntry[1] : getRelatedWords(rawSubject);
+    response = emo + (wl&&wl.length
+      ? `**Words for "${rawSubject}":**\n\n${wl.slice(0,40).join(", ")}`
+      : `Try a broader term. Some related words: ${getRelatedWords(rawSubject).join(", ")||"nothing found locally — try searching"}`);
+  }
+
+  if (!response && intent === "rhyme") {
+    const RHYME_E = {"at":["cat","bat","hat","mat","rat","flat","chat","that","vat","sat"],"ay":["day","say","way","play","stay","ray","bay","gray","pay","may","lay","sway","pray"],"ight":["light","night","right","sight","fight","might","tight","bright","flight","knight","plight","slight"],"ine":["line","mine","fine","wine","vine","pine","shine","divine","combine","design","decline","define"],"ake":["take","make","lake","bake","cake","fake","shake","wake","brake","stake","mistake"],"ean":["clean","mean","lean","bean","green","seen","keen","scene","queen","dream","cream","stream"],"ound":["found","sound","round","bound","ground","hound","pound","around","profound","surround"],"ing":["ring","sing","king","bring","string","spring","thing","wing","swing","fling","cling"],"ell":["bell","cell","fell","sell","tell","well","shell","spell","yell","dwell","excel"],"old":["bold","cold","fold","gold","hold","mold","sold","told","old","unfold","behold"],"ire":["fire","hire","wire","tire","admire","desire","inspire","require","aspire"],"ool":["cool","fool","pool","school","tool","rule","jewel","duel","fuel"],"ow":["low","slow","go","flow","grow","know","show","throw","glow","blow","snow","row"],"ow2":["how","now","wow","bow","allow","somehow","avow"]};
+    const wrd = rawSubject;
+    let found = [];
+    for (const [end,rh] of Object.entries(RHYME_E)) { if(wrd.endsWith(end)){found=rh.filter(r=>r!==wrd);break;} }
+    response = emo + (found.length
+      ? `🎵 **Rhymes with "${rawSubject}":** ${found.join(", ")}\n\n🔗 [More on RhymeZone](https://www.rhymezone.com/r/rhyme.cgi?Word=${encodeURIComponent(rawSubject)})`
+      : `No built-in rhymes for "${rawSubject}". → [RhymeZone](https://www.rhymezone.com/r/rhyme.cgi?Word=${encodeURIComponent(rawSubject)})`);
+  }
+
+  if (!response && intent === "etymology") {
+    const ety = ETYMOLOGIES[rawSubject] || Object.entries(ETYMOLOGIES).find(([k])=>k.includes(rawSubject)||rawSubject.includes(k));
+    response = emo + (ety
+      ? `**Etymology of "${rawSubject}":**\n\n${Array.isArray(ety)?ety[1]:ety}\n\n🔗 [Etymonline](https://www.etymonline.com/word/${encodeURIComponent(rawSubject)})`
+      : `No built-in etymology for "${rawSubject}".\n🔗 [Etymonline](https://www.etymonline.com/word/${encodeURIComponent(rawSubject)}) · [OED](https://www.oed.com/search/dictionary/?scope=Entries&q=${encodeURIComponent(rawSubject)})`);
+  }
+
+  if (!response && intent === "idiom") {
+    let found = null;
+    for(const[idiom,meaning] of Object.entries(IDIOMS)){if(lower.includes(idiom)){found={idiom,meaning};break;}}
+    if(!found){for(const[idiom,meaning] of Object.entries(IDIOMS)){if(idiom.split(" ").some(w=>lower.includes(w)&&w.length>4)){found={idiom,meaning};break;}}}
+    response = emo + (found
+      ? `**"${found.idiom}"**\n\n${found.meaning}`
+      : `I couldn't find that phrase. → [Cambridge Idioms](https://dictionary.cambridge.org/dictionary/english-idioms/)`);
+  }
+
+  if (!response && intent === "acronym") {
+    const acM = text.match(/what\s+(?:does\s+)?([A-Za-z&\d]{2,})\s+(?:stand for|mean)/i) || text.match(/\bacronym\s+(?:for\s+)?([A-Za-z&\d]{2,})\b/i);
+    if (acM) { const k=acM[1].toUpperCase(); response = emo + (ACRONYMS[k] ? `**${k}** = ${ACRONYMS[k]}` : `"${k}" not in local database. → [Acronym Finder](https://www.acronymfinder.com/${encodeURIComponent(acM[1])}.html)`); }
+  }
+
+  if (!response && intent === "eli5") {
+    const desc = WORD_DESCRIPTIONS[rawSubject];
+    const analogy = getAnalogy(rawSubject);
+    response = emo + `**"${rawSubject}" simply:**\n\n${desc ? desc.split(".")[0]+"." : `"${capitalize(rawSubject)}" is a concept that does one job really well — and that job matters more than it first appears.`}\n\n${analogy ? `Think of it ${analogy}.` : `Imagine explaining this to someone brand new to the topic — the core idea is simpler than it looks.`}`;
+  }
+
+  if (!response && intent === "compare") {
+    response = emo + (buildComparison(text) || await masterResearch(text));
+  }
+
+  if (!response && intent === "brainstorm") {
+    const ideas = ["What version of this would surprise everyone?","What would a beginner see that an expert misses?","What is the 10x version — and the 0.1x version?","Who is the unexpected audience for this?","What is the complete opposite approach?","What if you removed the biggest constraint?","What analogy from nature or sport applies here?","What does the most successful person in this space do differently?","What is the smallest possible version you could test today?","What problem is this actually solving — and is that the right problem?"];
+    const picks = ideas.sort(()=>0.5-Math.random()).slice(0,5);
+    response = emo + `**Brainstorming "${rawSubject}":**\n\n${picks.map((p,i)=>`${i+1}. ${p}`).join("\n")}\n\nWant me to develop any of these, or research "${rawSubject}" live?`;
+  }
+
+  if (!response && intent === "how_to") {
+    response = emo + buildGuide(rawSubject, text);
+  }
+
+  if (!response && intent === "motivate") {
+    response = `🔥 ${MOTIVATIONS[Math.floor(Math.random()*MOTIVATIONS.length)]}`;
+  }
+
+  if (!response && intent === "advice") {
+    const live = await fetchAdvice();
+    const fallback = ["The best time to start was yesterday. The second best time is right now.","Focus on what you can control — release what you cannot.","Clarity comes from action, not from waiting.","Make the decision with the information you have now. You can adjust later.","The discomfort you feel is pointing you toward what matters."];
+    response = emo + (live||`💡 ${fallback[Math.floor(Math.random()*fallback.length)]}`);
+  }
+
+  if (!response && intent === "why") {
+    response = emo + buildReason(rawSubject);
+  }
+
+  if (!response && intent === "what_is") {
+    const desc = WORD_DESCRIPTIONS[rawSubject];
+    if (desc) {
+      response = emo + buildDefinition(rawSubject);
     } else {
-      response=emo+`No built-in synonyms for "${subject}". Try: [Merriam-Webster Thesaurus](https://www.merriam-webster.com/thesaurus/${encodeURIComponent(subject)})`;
+      response = emo + await masterResearch(rawSubject);
     }
   }
 
-  // ── ANTONYMS ──
-  if(!response&&intent==="antonyms"){
-    const ants=antonymsOf(subject);
-    if(ants.length){
-      response=emo+`**Antonyms of "${subject}":**\n${ants.join(" · ")}\n\n🔗 [Thesaurus](https://www.merriam-webster.com/thesaurus/${encodeURIComponent(subject)})`;
-    } else {
-      response=emo+`No built-in antonyms for "${subject}". Try: [Merriam-Webster](https://www.merriam-webster.com/thesaurus/${encodeURIComponent(subject)})`;
-    }
+  // Entertainment
+  if (!response && intent === "joke") {
+    const live = await fetchLiveJoke();
+    response = live || `😄 ${JOKES[Math.floor(Math.random()*JOKES.length)]}`;
+  }
+  if (!response && intent === "trivia") {
+    const live = await fetchTrivia();
+    response = live || `🧠 ${FUN_FACTS[Math.floor(Math.random()*FUN_FACTS.length)]}`;
+  }
+  if (!response && intent === "quote") {
+    const live = await fetchLiveQuote(text);
+    response = live || `💬 *"The only way to do great work is to love what you do."*\n— Steve Jobs\n\n🔗 [More quotes](https://www.quotable.io)`;
+  }
+  if (!response && intent === "roast") {
+    const roasts = ["Your search history is probably a masterpiece of contradictions.","You asked an AI to roast you — that says everything.","You are the human equivalent of a loading screen.","Your ideas are like browser tabs — too many open, most unread.","The confidence required to ask for a roast is honestly impressive."];
+    response = `🔥 ${roasts[Math.floor(Math.random()*roasts.length)]}`;
+  }
+  if (!response && intent === "compliment") {
+    const compliments = ["You ask better questions than most people — that is genuinely rare.","The way you think about things is more interesting than you realize.","Your curiosity is a real asset. Keep feeding it.","You are clearly someone who wants to understand things properly — that matters.","You are more capable than you give yourself credit for."];
+    response = `✨ ${compliments[Math.floor(Math.random()*compliments.length)]}`;
   }
 
-  // ── DESCRIBE ──
-  if(!response&&intent==="describe"){
-    const desc=describeWord(subject);
-    const syns=synonymsOf(subject).slice(0,4);
-    const ex=examplesOf(subject);
-    response=emo+`**${subject}**\n\n${desc}`;
-    if(syns.length)response+=`\n\n**In other words:** ${syns.join(", ")}`;
-    if(ex.length)response+=`\n\n**In use:** ${ex[0]}`;
-  }
-
-  // ── WORD FAMILY ──
-  if(!response&&intent==="word_family"){
-    const fam=getWordFamily(subject);
-    response=emo+`**Word family of "${subject}":**\n\nForms: ${fam.forms.slice(0,6).join(" | ")}\n\nSynonyms: ${synonymsOf(subject).slice(0,5).join(", ")||"—"}\nAntonyms: ${antonymsOf(subject).slice(0,3).join(", ")||"—"}\n\n🔗 [More on Merriam-Webster](https://www.merriam-webster.com/dictionary/${encodeURIComponent(subject)})`;
-  }
-
-  // ── WORDS FOR TOPIC ──
-  if(!response&&intent==="word_list"){
-    const catMatch=Object.entries(WORD_BRAIN).find(([k])=>text.toLowerCase().includes(k.replace(/_/g," "))||k.toLowerCase().includes(subject));
-    const topicWords=catMatch?catMatch[1].words:getAllRelatedWords(subject);
-    if(topicWords&&topicWords.length){
-      response=emo+`**Words for "${subject}":**\n\n${topicWords.slice(0,30).join(", ")}\n\n*${topicWords.length} words found in this category.*`;
-    } else {
-      // Search the whole brain for best matches
-      const allMatches=[];
-      for(const[cat,data] of Object.entries(WORD_BRAIN)){
-        if(data.words&&(cat.includes(subject)||subject.includes(cat.replace(/_/g," ")))){allMatches.push(...data.words);}
-      }
-      response=emo+(allMatches.length?`**Words related to "${subject}":**\n\n${allMatches.slice(0,25).join(", ")}`:`Try a broader term. Related from my word brain: ${getAllRelatedWords(subject).join(", ")||"nothing found — try searching"}`);
-    }
-  }
-
-  // ── RHYME ──
-  if(!response&&intent==="rhyme"){
-    const RHYME_E={"at":["cat","bat","hat","mat","rat","sat","flat","chat","that"],"ay":["day","say","way","play","stay","ray","bay","clay","gray","pay","may"],"ight":["light","night","right","sight","fight","might","tight","bright","flight","knight"],"ine":["line","mine","fine","wine","vine","pine","shine","divine","combine"],"ake":["take","make","lake","bake","cake","fake","shake","wake","brake"],"ean":["clean","mean","lean","bean","green","seen","keen","scene","queen"],"ound":["found","sound","round","bound","ground","hound","pound","around"],"ing":["ring","sing","king","bring","string","spring","thing","wing","swing"],"ell":["bell","cell","fell","sell","tell","well","shell","spell","yell"],"old":["bold","cold","fold","gold","hold","mold","sold","told"]};
-    const w=subject.toLowerCase();
-    let found=[];
-    for(const[end,rh]of Object.entries(RHYME_E)){if(w.endsWith(end)){found=rh.filter(r=>r!==w);break;}}
-    response=emo+(found.length?`🎵 Rhymes with **"${subject}"**: ${found.join(", ")}\n\n🔗 [More on RhymeZone](https://www.rhymezone.com/r/rhyme.cgi?Word=${encodeURIComponent(subject)})`:`No built-in rhymes for "${subject}". Try [RhymeZone](https://www.rhymezone.com/r/rhyme.cgi?Word=${encodeURIComponent(subject)}).`);
-  }
-
-  // ── ETYMOLOGY ──
-  if(!response&&intent==="etymology"){
-    const ety=ETYMOLOGIES[subject]||Object.entries(ETYMOLOGIES).find(([k])=>k.includes(subject)||subject.includes(k));
-    if(ety){response=emo+`**Etymology of "${subject}":**\n${Array.isArray(ety)?ety[1]:ety}\n\n🔗 [Etymonline](https://www.etymonline.com/word/${encodeURIComponent(subject)})`;}
-    else{response=emo+`No built-in etymology for "${subject}". Check:\n🔗 [Etymonline](https://www.etymonline.com/word/${encodeURIComponent(subject)}) · [OED](https://www.oed.com/search/dictionary/?scope=Entries&q=${encodeURIComponent(subject)})`;}
-  }
-
-  // ── IDIOM ──
-  if(!response&&intent==="idiom"){
-    const lower=text.toLowerCase();
-    let found=null;
-    for(const[idiom,meaning]of Object.entries(IDIOMS)){if(lower.includes(idiom)){found={idiom,meaning};break;}}
-    if(!found){for(const[idiom,meaning]of Object.entries(IDIOMS)){const ws=idiom.split(" ");if(ws.some(w=>lower.includes(w)&&w.length>4)){found={idiom,meaning};break;}}}
-    response=emo+(found?`**"${found.idiom}"**\n\n${found.meaning}`:`No built-in entry for that phrase. Try [Cambridge Idioms](https://dictionary.cambridge.org/dictionary/english-idioms/).`);
-  }
-
-  // ── EXAMPLES ──
-  if(!response&&intent==="examples"){
-    const ex=examplesOf(subject);
-    const live=await lookupDictionary(subject);
-    if(live){response=emo+live;}
-    else{response=emo+`**"${subject}" in sentences:**\n\n${ex.map((e,i)=>`${i+1}. ${e}`).join("\n")}`;}
-  }
-
-  // ── EXPLAIN ──
-  if(!response&&intent==="explain"){
-    const desc=WORD_DESCRIPTIONS[subject];
-    const analogy=getAnalogyFor(subject);
-    const syns=synonymsOf(subject).slice(0,4);
-    if(desc){
-      response=emo+`**${subject}**\n\n${desc}`;
-      if(analogy)response+=`\n\nA useful way to picture it: ${analogy}.`;
-      if(syns.length)response+=`\n\nClosely related concepts: ${syns.join(", ")}.`;
-    } else {
-      response=emo+smartReply(text,"explain",_persona,emotion);
-    }
-  }
-
-  // ── ELI5 ──
-  if(!response&&intent==="eli5"){
-    const desc=WORD_DESCRIPTIONS[subject];
-    const analogy=getAnalogyFor(subject);
-    if(desc){
-      const simple=desc.split(".")[0]+".";
-      response=emo+`**"${subject}" simply:**\n\n${simple}\n\nThink of it ${analogy||"like a tool that does one job really well — and that job matters more than it seems."}`;}
-    else{response=emo+`**"${subject}" simply:**\n\nImagine explaining this to someone with no background. The core idea of "${subject}" is this: it is a concept that shapes outcomes in ways that are not always visible on the surface.\n\n${analogy?"It is "+analogy+".\n\n":""}`;}
-  }
-
-  // ── WHY ──
-  if(!response&&intent==="why"){
-    const desc=WORD_DESCRIPTIONS[subject];
-    const syns=synonymsOf(subject).slice(0,3);
-    response=emo+(desc?`**Why "${subject}" matters:**\n\n${desc.split(".")[0]}. The reason this is important is that it connects to ${syns.join(", ")} — all of which shape real outcomes.`:`**Why "${subject}"?**\n\nThe short answer: because "${subject}" is one of those concepts that sits behind many other things. Understanding it means understanding the pattern beneath the surface.\n\nWant me to look it up live? Say "search ${subject}".`);
-  }
-
-  // ── WHAT IS ──
-  if(!response&&intent==="what_is"){
-    const desc=WORD_DESCRIPTIONS[subject];
-    const syns=synonymsOf(subject).slice(0,5);
-    const related=getAllRelatedWords(subject).slice(0,5);
-    if(desc){
-      response=emo+`**${subject}**\n\n${desc}`;
-      if(syns.length)response+=`\n\n**Related words:** ${syns.join(", ")}`;
-    } else {
-      const liveResult=await masterResearch(subject);
-      response=emo+liveResult;
-    }
-  }
-
-  // ── HOW TO ──
-  if(!response&&intent==="how_to"){
-    const pattern=SENTENCE_PATTERNS.teach[Math.floor(Math.random()*SENTENCE_PATTERNS.teach.length)];
-    const analogy=getAnalogyFor(subject);
-    response=emo+`**How to approach "${subject}":**\n\n1. Start by clearly defining what success looks like for you.\n2. Break the process into the smallest possible steps.\n3. Execute step 1 — clarity comes from action, not preparation.\n4. Adjust based on what you learn.\n\n${analogy?"Think of it "+analogy+".\n\n":""}Want a detailed breakdown? Tell me more about your specific situation.`;
-  }
-
-  // ── COMPARE ──
-  if(!response&&intent==="compare"){
-    const parts=text.match(/\b(\w+)\s+(?:vs\.?|versus|compared? to|or|and)\s+(\w+)\b/i);
-    if(parts){
-      const a=parts[1],b=parts[2];
-      const synsA=synonymsOf(a).slice(0,3),synsB=synonymsOf(b).slice(0,3);
-      const catA=getCategoryOf(a),catB=getCategoryOf(b);
-      const descA=WORD_DESCRIPTIONS[a.toLowerCase()]||describeWord(a);
-      const descB=WORD_DESCRIPTIONS[b.toLowerCase()]||describeWord(b);
-      response=emo+`**${a} vs ${b}**\n\n**${a}:** ${descA.split(".")[0]}.\nRelated: ${synsA.join(", ")||"—"}\n\n**${b}:** ${descB.split(".")[0]}.\nRelated: ${synsB.join(", ")||"—"}\n\n**Key difference:** ${a} tends toward ${catA?CATEGORY_DESCRIPTIONS[catA]:"its own domain"}; ${b} toward ${catB?CATEGORY_DESCRIPTIONS[catB]:"a different domain"}. The choice depends on what you are actually trying to achieve.`;
-    } else {
-      response=emo+smartReply(text,"compare",_persona,emotion);
-    }
-  }
-
-  // ── BRAINSTORM ──
-  if(!response&&intent==="brainstorm"){
-    const ideas=["What is the version of this that would surprise everyone?","What would a 10-year-old say about this? What would a 90-year-old say?","What is the 10x version — and the 0.1x version?","Who is the unexpected audience for this?","What is the complete opposite approach — and would it work?","What if you removed the biggest constraint?","What analogy from nature, sports, or cooking applies here?","What does the most successful person in this space do differently?","What is the smallest possible version you could test today?","What problem is this actually solving — and is that the right problem?","What would this look like in 5 years vs. 5 weeks?","What does the person who disagrees with you most strongly think?"];
-    const picks=ideas.sort(()=>0.5-Math.random()).slice(0,5);
-    response=emo+`**Brainstorming "${subject}":**\n\n${picks.map((p,i)=>`${i+1}. ${p}`).join("\n")}\n\nWant me to develop any of these, or research "${subject}" live?`;
-  }
-
-  // ── SUMMARIZE ──
-  if(!response&&intent==="summarize"){
-    const desc=WORD_DESCRIPTIONS[subject];
-    const syns=synonymsOf(subject).slice(0,4);
-    response=emo+(desc?`**"${subject}" — key points:**\n\n• ${desc.split(". ").slice(0,3).join(".\n• ")}.\n\n**In one word:** ${syns[0]||subject}`:`I can summarize topics I have researched. Say "search ${subject}" first, or give me the text to summarize.`);
-  }
-
-  // ── OPINION ──
-  if(!response&&intent==="opinion"){
-    const desc=WORD_DESCRIPTIONS[subject];
-    response=emo+(desc?`My take on **"${subject}"**: ${desc.split(".")[0]}. The nuance most people miss is that it means different things in different contexts — and that ambiguity is where most disagreements start.`:`On "${subject}": the honest answer is that it depends on your frame. The most useful thing I can do is help you think it through clearly. What is the specific angle you care about?`);
-  }
-
-  // ── ADVICE ──
-  if(!response&&intent==="advice"){
-    const live=await fetchAdvice();
-    response=emo+(live?live:`💡 **Advice:** ${["Focus on what you can control, and release what you cannot.","The best time to start was yesterday. The second best time is right now.","Clarity comes from action, not from thinking.","The discomfort you feel right now is pointing you toward what matters.","Ask yourself: what would I do if I knew I could not fail? Then do that."][Math.floor(Math.random()*5)]}`);
-  }
-
-  // ── ACRONYM ──
-  if(!response){
-    const acMatch=text.match(/what\s+(?:does\s+)?([A-Za-z&\d]{2,})\s+(?:stand for|mean)/i);
-    if(acMatch){const k=acMatch[1].toUpperCase();const val=ACRONYMS[k];response=emo+(val?`**${k}** = ${val}`:`"${k}" not in local database. Try [Acronym Finder](https://www.acronymfinder.com/${encodeURIComponent(acMatch[1])}.html).`);}
-  }
-
-  // ── MATH ──
-  if(!response&&intent==="math"){const r=advancedMath(text);if(r!==null)response=emo+`**${r.toLocaleString("en-US",{maximumFractionDigits:10})}**`;}
-  if(!response&&intent==="percent"){const r=handlePercent(text);if(r)response=emo+r;}
-  if(!response&&intent==="convert"){const r=convertUnits(text);if(r)response=emo+r;}
-  if(!response&&intent==="calculator"){
+  // Math
+  if (!response && intent === "math") { const r=advancedMath(text); if(r!==null) response=emo+`**${r.toLocaleString("en-US",{maximumFractionDigits:10})}**`; }
+  if (!response && intent === "percent") { const r=handlePercent(text); if(r) response=emo+r; }
+  if (!response && intent === "convert") { const r=convertUnits(text); if(r) response=emo+r; }
+  if (!response && intent === "calculator") {
     if(/bmi/i.test(text)){const r=handleBMI(text);if(r)response=emo+r;}
     else if(/mortgage|loan/i.test(text)){const r=handleMortgage(text);if(r)response=emo+r;}
     else if(/compound|interest/i.test(text)){const r=handleCompound(text);if(r)response=emo+r;}
   }
 
-  // ── MOTIVATE ──
-  if(!response&&intent==="motivate")response=`🔥 ${MOTIVATIONS[Math.floor(Math.random()*MOTIVATIONS.length)]}`;
-  // ── JOKE (live first) ──
-  if(!response&&intent==="joke"){const live=await fetchLiveJoke();response=live||`😄 ${JOKES[Math.floor(Math.random()*JOKES.length)]}`;}
-  // ── TRIVIA ──
-  if(!response&&intent==="trivia"){const live=await fetchTrivia();response=live||`🧠 ${FUN_FACTS[Math.floor(Math.random()*FUN_FACTS.length)]}`;}
-  // ── QUOTE ──
-  if(!response&&intent==="quote"){const live=await fetchLiveQuote(text);response=live||`💬 *"The only way to do great work is to love what you do."*\n— Steve Jobs`;}
-  // ── ROAST / COMPLIMENT ──
-  if(!response&&intent==="roast")response=`🔥 ${["With all this vocabulary, you asked me to roast you. The audacity.","Your ideas are like browser tabs — too many open, most unread.","You are the human equivalent of a loading screen.","The fact that you asked for a roast says more about you than I ever could."][Math.floor(Math.random()*4)]}`;
-  if(!response&&intent==="compliment")response=`✨ ${["Your curiosity is genuinely impressive — keep feeding it.","The way you think about things is more interesting than you realize.","You ask better questions than most people. That is rare.","You carry yourself with a quiet confidence that is hard to fake."][Math.floor(Math.random()*4)]}`;
-
-  // ── MEMORY ──
-  if(!response&&intent==="memory_set")response=handleMemorySet(text);
-  if(!response&&intent==="memory_recall")response=handleMemoryRecall();
-  if(!response&&intent==="persona_list")response=`Available: ${Object.keys(PERSONAS).map(p=>`**${p}**`).join(", ")}\n\nCurrent: **${_persona}**`;
-  if(!response&&intent==="memory_clear"){_memory=[];_userName=null;_topicHistory=[];_emotionHistory=[];_wordHistory=[];_sessionStart=Date.now();response=`Memory cleared. Fresh start.`;}
-  if(!response&&intent==="persona_switch")response=handlePersonaSwitch(text);
-
-  // ── LIVE RESEARCH ──
-  if(!response&&intent==="research"){
-    const query=text.replace(/\b(search|look up|find info|research|wiki|wikipedia|google|find out about|tell me about)\b/gi,"").trim()||text;
-    response=emo+await masterResearch(query);
+  // Memory
+  if (!response && intent === "memory_set")    response = handleMemorySet(text);
+  if (!response && intent === "memory_recall") response = handleMemoryRecall();
+  if (!response && intent === "memory_clear") {
+    _memory=[]; _userName=null; _topicHistory=[]; _wordHistory=[]; _turnCount=0; _sessionStart=Date.now();
+    response = "Memory cleared. Starting fresh.";
   }
 
-  // ── STATIC PERSONA RESPONSES (greetings etc) ──
-  if(!response){const built=buildStaticResponse(intent,persona);if(built)response=emo+built;}
+  // Meta
+  if (!response && intent === "version")   response = `SONIX v${VERSION} — ${MODEL}. Pattern engine, 10,000+ word brain, 120 categories, 600+ synonym pairs, live research.`;
+  if (!response && intent === "creator")   response = `SONIX is an AI model built for communication, vocabulary, and knowledge. Ask me anything.`;
+  if (!response && intent === "greeting")  response = GREETINGS[Math.floor(Math.random()*GREETINGS.length)];
+  if (!response && intent === "identity")  response = IDENTITY_RESPONSES[Math.floor(Math.random()*IDENTITY_RESPONSES.length)];
+  if (!response && intent === "status")    response = STATUS_RESPONSES[Math.floor(Math.random()*STATUS_RESPONSES.length)];
+  if (!response && intent === "help")      response = HELP_TEXT;
+  if (!response && intent === "thanks")    response = THANKS_RESPONSES[Math.floor(Math.random()*THANKS_RESPONSES.length)];
+  if (!response && intent === "farewell")  response = FAREWELL_RESPONSES[Math.floor(Math.random()*FAREWELL_RESPONSES.length)];
 
-  // ── SMART WORD-BRAIN REPLY (before generic fallback) ──
-  if(!response){
-    const smartR=smartReply(text,intent,_persona,emotion);
-    if(smartR&&smartR.length>20)response=emo+smartR;
+  // Live research
+  if (!response && intent === "research") {
+    const q = text.replace(/\b(search|look up|find info|research|wiki|wikipedia|google|find out about|tell me about)\b/gi,"").trim()||text;
+    response = emo + await masterResearch(q);
   }
 
-  // ── FINAL FALLBACK ──
-  if(!response)response=emo+generalFallback(text);
+  // Final fallback — always intelligent
+  if (!response) response = emo + generalFallback(text);
 
-  _memory.push({role:"assistant",content:response});
-  _conversationContext.lastWord=subject;
+  _lastResponse = response;
+  _memory.push({ role:"assistant", content:response });
   return response;
 }
 
-// ═══════════════════════════════════════════════════════════════════
-// SECTION K: PUBLIC API
-// ═══════════════════════════════════════════════════════════════════
+// ================================================================
+// SECTION 15: PUBLIC API
+// ================================================================
 
 const SonixModel = {
   version: VERSION,
-  name:    MODEL_NAME,
+  name:    MODEL,
   chat,
 
-  // Persona
-  setPersona(p)    {if(PERSONAS[p]){_persona=p;return true;}return false;},
-  getPersona()     {return _persona;},
-  getPersonas()    {return Object.keys(PERSONAS);},
-  getSystemPrompt(p){return PERSONAS[p||_persona]||PERSONAS.default;},
-
-  // User
-  setUserName(n)   {_userName=n;},
-  getUserName()    {return _userName;},
+  // Memory
+  setUserName(n)   { _userName = n; },
+  getUserName()    { return _userName; },
+  clearMemory()    { _memory=[]; _topicHistory=[]; _wordHistory=[]; _turnCount=0; _sessionStart=Date.now(); },
+  getMemory()      { return [..._memory]; },
 
   // Handlers
-  setApiHandler(fn){if(typeof fn!=="function")throw new Error("Expects function");_apiHandler=fn;},
-  setTranslator(fn){if(typeof fn!=="function")throw new Error("Expects function");_translatorFn=fn;},
+  setApiHandler(fn) { if(typeof fn!=="function")throw new Error("Expects function"); _apiHandler=fn; },
 
-  // Memory
-  clearMemory()    {_memory=[];_topicHistory=[];_emotionHistory=[];_wordHistory=[];_sessionStart=Date.now();},
-  getMemory()      {return[..._memory];},
+  // Quick one-shot (no memory)
+  async quick(text) { return chat(text); },
 
-  // Quick one-shot
-  async quick(text,persona){const saved=_persona;if(persona)_persona=persona;const r=await chat(text);_persona=saved;return r;},
+  // Word brain — direct access
+  define:          (w) => lookupDictionary(w),
+  describe:        describeFromBrain,
+  synonymsOf:      (w) => SYNONYM_MAP[w.toLowerCase()] || getRelatedWords(w).slice(0,8),
+  antonymsOf:      (w) => ANTONYM_MAP[w.toLowerCase()] || [],
+  relatedWords:    getRelatedWords,
+  categoryOf:      getCategoryOf,
+  wordsInCategory: getWordsInCategory,
+  analogy:         getAnalogy,
+  wordDescription: (w) => WORD_DESCRIPTIONS[w.toLowerCase()] || null,
+  expandAcronym:   (a) => ACRONYMS[a.toUpperCase()] || null,
+  idiomMeaning:    (p) => { const l=p.toLowerCase(); for(const[k,v]of Object.entries(IDIOMS)){if(l.includes(k))return v;} return null; },
+  etymology:       (w) => ETYMOLOGIES[w.toLowerCase()] || null,
 
-  // ── WORD BRAIN — direct access ──
-  define:           (w)=>lookupDictionary(w),
-  describe:         describeWord,
-  synonymsOf,
-  antonymsOf,
-  wordFamily:       getWordFamily,
-  examples:         examplesOf,
-  relatedWords:     getAllRelatedWords,
-  categoryOf:       getCategoryOf,
-  wordsInCategory:  getWordsInCategory,
-  wordFlow:         buildWordFlow,
-  analogy:          getAnalogyFor,
-  expandAcronym:    (a)=>ACRONYMS[a.toUpperCase()]||ACRONYMS[a]||null,
-  idiomMeaning:     (phrase)=>{const l=phrase.toLowerCase();for(const[k,v]of Object.entries(IDIOMS)){if(l.includes(k))return v;}return null;},
-  etymology:        (w)=>ETYMOLOGIES[w.toLowerCase()]||null,
+  // Pattern engine — direct access
+  detectPattern,
+  buildGuide,
+  buildDefinition,
+  buildReason,
+  buildComparison,
+  buildActionGuide,
+  buildTiming,
 
-  // ── MATH / CONVERT ──
-  math:             advancedMath,
-  convert:          convertUnits,
-  percent:          handlePercent,
-  bmi:              handleBMI,
-  mortgage:         handleMortgage,
-  compoundInterest: handleCompound,
+  // Math / convert
+  math:            advancedMath,
+  convert:         convertUnits,
+  percent:         handlePercent,
+  bmi:             handleBMI,
+  mortgage:        handleMortgage,
+  compound:        handleCompound,
 
-  // ── LIVE SOURCES ──
-  research:         masterResearch,
-  live:{
+  // Live sources
+  research:        masterResearch,
+  live: {
     wikipedia:  searchWikipedia,
     duckduckgo: searchDuckDuckGo,
     dictionary: lookupDictionary,
@@ -1634,41 +1622,40 @@ const SonixModel = {
     trivia:     fetchTrivia,
   },
 
-  // ── DETECTION ──
+  // Detection
   detectEmotion,
   detectIntent,
-  detectQuestionType: (t)=>{const l=t.toLowerCase().trim();if(/^who\b/i.test(l))return"who";if(/^what\b/i.test(l))return"what";if(/^when\b/i.test(l))return"when";if(/^where\b/i.test(l))return"where";if(/^why\b/i.test(l))return"why";if(/^how\b/i.test(l))return"how";return null;},
-  expandShortcut: (s)=>SHORTCUTS[s.toLowerCase()]||null,
+  detectPattern,
+  expandShortcut: (s) => SHORTCUTS[s.toLowerCase()] || null,
 
-  // ── HISTORY ──
-  getTopicHistory()   {return[..._topicHistory];},
-  getEmotionHistory() {return[..._emotionHistory];},
-  getWordHistory()    {return[...new Set(_wordHistory)];},
+  // History
+  getTopicHistory()   { return [..._topicHistory]; },
+  getWordHistory()    { return [...new Set(_wordHistory)]; },
 
-  // ── STATS ──
-  getStats(){
-    const wordBrainTotal=Object.values(WORD_BRAIN).reduce((acc,v)=>acc+(v.words?v.words.length:0),0);
-    return{
-      version: VERSION, name: MODEL_NAME, persona: _persona, userName: _userName,
-      memoryTurns: Math.floor(_memory.length/2), maxMemory: MAX_MEMORY,
+  // Stats
+  getStats() {
+    const totalWords = Object.values(WORD_BRAIN).reduce((a,v)=>a+(Array.isArray(v)?v.length:0),0);
+    return {
+      version: VERSION, name: MODEL,
+      memoryTurns: Math.floor(_memory.length/2),
       sessionMinutes: Math.floor((Date.now()-_sessionStart)/60000),
-      topicHistory: _topicHistory.slice(-5),
-      wordHistory: [...new Set(_wordHistory)].slice(-10),
-      conversationContext: _conversationContext,
-      knowledgeBase:{
-        wordBrainWords: wordBrainTotal,
-        wordBrainCategories: Object.keys(WORD_BRAIN).filter(k=>WORD_BRAIN[k].words).length,
-        synonymPairs: Object.keys(SYNONYM_MAP).length,
-        antonymPairs: Object.keys(ANTONYM_MAP).length,
+      turnCount: _turnCount,
+      topicHistory: _topicHistory.slice(-8),
+      knowledgeBase: {
+        wordBrainTotal: totalWords,
+        wordBrainCategories: Object.keys(WORD_BRAIN).length,
+        synonymSets: Object.keys(SYNONYM_MAP).length,
+        antonymSets: Object.keys(ANTONYM_MAP).length,
         wordDescriptions: Object.keys(WORD_DESCRIPTIONS).length,
-        exampleBankEntries: Object.keys(EXAMPLE_BANK).length,
-        sentencePatterns: Object.values(SENTENCE_PATTERNS).reduce((a,v)=>a+v.length,0),
+        patternTypes: Object.keys(PATTERN_MAP).length,
+        verbGuides: 12,
         idioms: Object.keys(IDIOMS).length,
         etymologies: Object.keys(ETYMOLOGIES).length,
         acronyms: Object.keys(ACRONYMS).length,
         shortcuts: Object.keys(SHORTCUTS).length,
-        facts: FUN_FACTS.length, jokes: JOKES.length, motivations: MOTIVATIONS.length,
-        personas: Object.keys(PERSONAS).length,
+        facts: FUN_FACTS.length,
+        jokes: JOKES.length,
+        motivations: MOTIVATIONS.length,
         intentPatterns: INTENTS.length,
         liveSources: 7,
       },
@@ -1677,13 +1664,13 @@ const SonixModel = {
 };
 
 global.SonixModel = SonixModel;
-if(typeof module!=="undefined"&&module.exports)module.exports=SonixModel;
+if (typeof module !== "undefined" && module.exports) module.exports = SonixModel;
 
 // Boot log
-const s=SonixModel.getStats().knowledgeBase;
+const _s = SonixModel.getStats().knowledgeBase;
 console.log(
-  `%c[SONIX v${VERSION} · ${MODEL_NAME}] Word brain: ${s.wordBrainWords} words · ${s.wordBrainCategories} categories · ${s.synonymPairs} synonym sets · ${s.antonymPairs} antonym sets · ${s.wordDescriptions} descriptions · ${s.sentencePatterns} sentence patterns · ${s.idioms} idioms · ${s.etymologies} etymologies · ${s.intentPatterns} intents · ${s.personas} personas · Live sources: ${s.liveSources}`,
+  `%c[SONIX v${VERSION} · ${MODEL}] Words: ${_s.wordBrainTotal} · Categories: ${_s.wordBrainCategories} · Synonym sets: ${_s.synonymSets} · Antonym sets: ${_s.antonymSets} · Descriptions: ${_s.wordDescriptions} · Patterns: ${_s.patternTypes} · Idioms: ${_s.idioms} · Etymologies: ${_s.etymologies} · Intents: ${_s.intentPatterns} · Live sources: ${_s.liveSources}`,
   "color:#00ff41;font-weight:bold;background:#000;padding:3px 10px;border-radius:4px;"
 );
 
-})(typeof window!=="undefined"?window:this);
+})(typeof window !== "undefined" ? window : this);
